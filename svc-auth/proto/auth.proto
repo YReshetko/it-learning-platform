@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+enum UserRole {
+  ADMIN = 0;
+  MANAGER = 1;
+  TEACHER = 2;
+  STUDENT = 3;
+}
+
+message AuthUser {
+  string id = 1;
+  string keycloak_id = 2;
+  string login = 3;
+  string first_name = 4;
+  string last_name = 5;
+  string email = 6;
+  repeated UserRole roles = 7;
+}
+
+message CreateAuthUserRequest {
+  AuthUser user = 1;
+}
+
+message CreateAuthUserResponse {
+  AuthUser user = 1;
+}
+
+service AuthService {
+  rpc CreateUser(CreateAuthUserRequest) returns (CreateAuthUserResponse){}
+}

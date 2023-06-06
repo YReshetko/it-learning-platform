@@ -1,0 +1,85 @@
+version: '3.1'
+
+networks:
+  backend:
+
+services:
+  db:
+    image: db-academy
+    container_name: db-academy
+    build: ./db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5432:5432
+  keyclock:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: keyklocak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+    ports:
+      - 8247:8080
+  users-migration:
+    build: ./svc-users/db-migration
+    image: users-migration
+    container_name: users-migration
+    environment:
+      USER_NAME: users
+      USER_PASSWORD: users
+      DB_NAME: users
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      - db
+  users:
+    image: svc-users
+    container_name: svc-users
+    build:
+      context: .
+      dockerfile: ./svc-users/Dockerfile
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER_NAME: users
+      DB_USER_PASSWORD: users
+      DB_NAME: users
+      GRPC_HOST: localhost
+      GRPC_PORT: 3000
+      GRPC_NETWORK: tcp4
+    depends_on:
+      - users-migration
+  auth:
+    image: svc-auth
+    container_name: svc-auth
+    build:
+      context: .
+      dockerfile: ./svc-auth/Dockerfile
+    environment:
+      USERS_HOST: users
+      USERS_PORT: 3000
+      KEYCLOAK_HOST: keyclock
+      KEYCLOAK_PORT: 8080
+      KEYCLOAK_REALM: it-academy
+      KEYCLOAK_CLIENT_ID: academy
+      KEYCLOAK_CLIENT_SECRET: 9v1wwWEJsyYMZF7AGXYZlWP0cNnIGAh0
+      GRPC_HOST: localhost
+      GRPC_PORT: 3000
+      GRPC_NETWORK: tcp4
+  api:
+    image: api-app
+    container_name: api-app
+    build:
+      context: .
+      dockerfile: ./api-app/Dockerfile
+    environment:
+      HTTP_HOST: localhost
+      HTTP_PORT: 9000
+      AUTH_HOST: auth
+      AUTH_PORT: 3000
+    ports:
+      - 9000:9000

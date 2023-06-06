@@ -1,0 +1,1 @@
+curl -i   -H 'Content-Type: application/json' -H 'Authorization: Bearer skjdfskjdfkdsfkds' -d '{"login":"new_user", "first_name":"John", "last_name":"Doe", "email":"test1@gmail.com", "roles":["STUDENT"]}'  localhost:9000/api/v1/auth/user

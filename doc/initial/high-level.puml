@@ -1,0 +1,84 @@
+@startuml
+'https://plantuml.com/component-diagram
+[api-management] -right--> [svc-users]
+[api-management] -right--> [svc-management]
+[svc-users] -down[hidden]- [svc-management]
+
+[api-students] -right--> [svc-groups]
+[svc-management] -down--> [svc-groups]
+[api-teachers] -right--> [svc-groups]
+
+[api-management] -down[hidden]- [api-students]
+[api-students] -down[hidden]- [api-teachers]
+
+[svc-management] -down--> [svc-tasks]
+[svc-groups] -right--> [svc-tasks]
+[svc-groups] -right--> [svc-notifications]
+[svc-tasks] -down[hidden]- [svc-notifications]
+[svc-management] -down--> [svc-courses]
+
+[svc-tasks] -right--> [svc-courses]
+[svc-tasks] -right--> [svc-solutions]
+[svc-courses] -down[hidden]- [svc-solutions]
+
+HTTP - [api-teachers]
+HTTP - [api-students]
+HTTP - [api-management]
+
+note top of [svc-users]
+    Храним данные о пользователях:
+        - почта
+        - телефон
+        - креды
+        - роли
+end note
+
+note right of [svc-management]
+    Отвечает за настройку:
+        - групп
+        - курса для группы
+        - расписания
+        - настройку выдачи заданий и т.д.
+end note
+
+note right of [svc-courses]
+    Хранение данных курсов
+        - темы
+        - задания
+        - презентации (материал) лекций
+    По этим данным будет настраиваться
+    конкретный курс в [svc-tasks]
+end note
+
+note bottom of [svc-tasks]
+    Отвечает за настройку
+    конкретного курса
+    для группы студентов
+    Так же содержит данные
+    о решенных каждым
+    студентом задании,
+    всех их версий и ревью
+end note
+
+note left of [svc-notifications]
+    Отправка писем преподаваетлю
+    когда студент сдал задания
+    Отправка писем студенту
+    когда преподаватель сделал
+    ревью
+end note
+
+note left of [svc-groups]
+    Хранение групп
+        - список студентов
+        - препод
+        - ссылка на курс в [svc-tasks]
+        - расписание (контролирует выдачу заданий)
+end note
+
+note right of [svc-solutions]
+    Хранение исходного кода решений
+    без каких либо привязок к
+    студентам, группам и т.д.
+end note
+@enduml
