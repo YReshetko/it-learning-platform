@@ -21,6 +21,7 @@ type Router struct {
 
 func (r Router) Init(engine *gin.Engine) {
 	engine.POST("/api/v1/auth/user", protected(r.authHandler.CreateUser, r.authService, []auth.Role{auth.ADMIN}))
+	engine.POST("/api/v1/auth/users", protected(r.authHandler.CreateUsers, r.authService, []auth.Role{auth.ADMIN}))
 
 }
 

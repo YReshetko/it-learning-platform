@@ -1,0 +1,22 @@
+/*Стиль для обнуения дефолтного стиля браузера*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+}
+
+.App {
+    width: 800px;
+}
+
+.post {
+    display: flex;
+    padding: 15px;
+    margin: 15px;
+    border: 2px solid green;
+}

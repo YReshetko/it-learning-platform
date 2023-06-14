@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/YReshetko/it-academy-cources/api-app/internal/clients"
 	"github.com/YReshetko/it-academy-cources/svc-auth/pb/auth"
 	rest "net/http"
@@ -18,6 +19,34 @@ type Auth struct {
 }
 
 func (a *Auth) CreateUser(context http.Context, user models.AuthUser) (models.AuthResponse, http.Status) {
+	err := a.createUser(context, user)
+	if err != nil {
+		return models.AuthResponse{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to create user",
+		}
+	}
+
+	return models.AuthResponse{}, http.Status{StatusCode: rest.StatusOK}
+}
+
+func (a *Auth) CreateUsers(context http.Context, users models.AuthUsers) (models.AuthResponse, http.Status) {
+	for i, user := range users.Users {
+		err := a.createUser(context, user)
+		if err != nil {
+			return models.AuthResponse{}, http.Status{
+				Error:      err,
+				StatusCode: rest.StatusInternalServerError,
+				Message:    fmt.Sprintf("unable to create %d user", i+1),
+			}
+		}
+	}
+
+	return models.AuthResponse{}, http.Status{StatusCode: rest.StatusOK}
+}
+
+func (a *Auth) createUser(context http.Context, user models.AuthUser) error {
 	_, err := a.client.CreateUser(context.GinCtx.Request.Context(), &auth.CreateAuthUserRequest{
 		User: &auth.AuthUser{
 			Login:     user.Login,
@@ -29,12 +58,7 @@ func (a *Auth) CreateUser(context http.Context, user models.AuthUser) (models.Au
 	})
 
 	if err != nil {
-		return models.AuthResponse{}, http.Status{
-			Error:      err,
-			StatusCode: rest.StatusInternalServerError,
-			Message:    "unable to create user",
-		}
+		return fmt.Errorf("unable to create user")
 	}
-
-	return models.AuthResponse{}, http.Status{StatusCode: rest.StatusOK}
+	return nil
 }

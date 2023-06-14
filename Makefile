@@ -1,4 +1,4 @@
-GO_BUILD_SERVICES = svc-users svc-auth api-app
+GO_BUILD_SERVICES = svc-users svc-auth api-app ui-app
 
 .PHONY: go-build
 go-build:

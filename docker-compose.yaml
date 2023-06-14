@@ -83,3 +83,13 @@ services:
       AUTH_PORT: 3000
     ports:
       - 9000:9000
+  ui:
+    image: ui-app
+    container_name: ui-app
+    build:
+      context: .
+      dockerfile: ./gw-academy/Dockerfile
+    ports:
+      - 8080:8080
+      - 8081:8081
+

@@ -25,3 +25,7 @@ type AuthUser struct {
 
 type AuthResponse struct {
 }
+
+type AuthUsers struct {
+	Users []AuthUser `json:"users"`
+}
