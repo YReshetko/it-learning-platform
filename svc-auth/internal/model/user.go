@@ -24,6 +24,8 @@ const (
 	STUDENT Role = "STUDENT"
 )
 
+var AllRoles = []Role{ADMIN, MANAGER, TEACHER, STUDENT}
+
 func (r Roles) ToStringPtr() []string {
 	l := len(r)
 	if l == 0 {

@@ -59,3 +59,43 @@ func mapRoles(roles []auth.UserRole) model.Roles {
 	}
 	return out
 }
+
+func (h *Handler) AccessTokenExchange(ctx context.Context, rq *auth.AccessTokenExchangeRequest) (*auth.AccessTokenExchangeResponse, error) {
+	ok, err := h.keycloakClient.ValidateAccessToken(ctx, rq.AccessToken.GetToken())
+	if err != nil {
+		fmt.Println("unable to validate access token", err.Error())
+		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Internal, "unable to validate access token")
+	}
+	if !ok {
+		fmt.Println("invalid token: ", rq.AccessToken)
+		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Unauthenticated, "invalid access token")
+	}
+
+	keycloakUserId, roles, err := h.keycloakClient.GetUserIDAndRoles(ctx, rq.AccessToken.GetToken())
+	if err != nil {
+		fmt.Println("unable to get user ID and role from keycloak", err.Error())
+		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Unauthenticated, "unable to authorize user")
+	}
+
+	user, err := h.userClient.FindUserByExternalID(ctx, &users.FindUserByExternalIDRequest{ExternalId: keycloakUserId.String()})
+	if err != nil {
+		fmt.Println("unable to get user ID by external user ID", err.Error())
+		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Unauthenticated, "unable to authorize user")
+	}
+
+	var userRoles []auth.UserRole
+	for _, role := range roles {
+		r, ok := auth.UserRole_value[string(role)]
+		if !ok {
+			fmt.Printf("WARNING! model role %s does not match any pb roles \n", role)
+		}
+		userRoles = append(userRoles, auth.UserRole(r))
+	}
+
+	return &auth.AccessTokenExchangeResponse{
+		UserInfo: &auth.UserInfo{
+			Id:    user.User.Id,
+			Roles: userRoles,
+		},
+	}, nil
+}

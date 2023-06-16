@@ -1,21 +1,39 @@
 package authorization
 
 import (
+	"github.com/YReshetko/it-academy-cources/api-app/internal/clients"
 	rest "github.com/YReshetko/it-academy-cources/api-app/internal/http"
+	"github.com/YReshetko/it-academy-cources/svc-auth/pb/auth"
 	"github.com/google/uuid"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"net/http"
 	"strings"
 )
 
+// Service @Constructor
 type Service struct {
+	client clients.AuthClient
 }
 
-func (s Service) verifyToken(token string) (bool, error) {
-	return true, nil
-}
+func (s Service) getUserRoles(ctx context.Context, token string) (uuid.UUID, []Role, error) {
+	userInfo, err := s.client.AccessTokenExchange(ctx, &auth.AccessTokenExchangeRequest{AccessToken: &auth.AccessToken{Token: token}})
+	if err != nil {
+		return uuid.UUID{}, nil, err
+	}
+	userId, err := uuid.Parse(userInfo.GetUserInfo().GetId())
+	if err != nil {
+		return uuid.UUID{}, nil, err
+	}
 
-func (s Service) getUserRoles(token string) (uuid.UUID, []Role, error) {
-	return uuid.UUID{}, []Role{ADMIN}, nil
+	userRoles := userInfo.GetUserInfo().GetRoles()
+	roles := make([]Role, len(userRoles))
+	for i, role := range userRoles {
+		roles[i] = Role(auth.UserRole_name[int32(role)])
+	}
+
+	return userId, roles, nil
 }
 
 func Authenticate[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs]) rest.HandlerFunc[Rq, Rs] {
@@ -38,28 +56,35 @@ func Authenticate[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs]) rest.HandlerFunc[
 func Authorize[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs], service Service, roles []Role) rest.HandlerFunc[Rq, Rs] {
 	return func(context rest.Context, request Rq) (Rs, rest.Status) {
 		var rs Rs
-		ok, err := service.verifyToken(context.AccessToken)
+		userId, userRoles, err := service.getUserRoles(context.Context(), context.AccessToken)
 		if err != nil {
-			return rs, rest.Status{
-				Error:      err,
-				StatusCode: http.StatusInternalServerError,
-				Message:    "unable to authorize user",
+			s, ok := status.FromError(err)
+			if !ok {
+				return rs, rest.Status{
+					Error:      err,
+					StatusCode: http.StatusInternalServerError,
+					Message:    "unable to verify user role",
+				}
 			}
-		}
-		if !ok {
-			return rs, rest.Status{
-				Error:      nil,
-				StatusCode: http.StatusUnauthorized,
-				Message:    "invalid token",
-			}
-		}
-
-		userID, userRoles, err := service.getUserRoles(context.AccessToken)
-		if err != nil {
-			return rs, rest.Status{
-				Error:      err,
-				StatusCode: http.StatusInternalServerError,
-				Message:    "unable to verify user roles",
+			switch s.Code() {
+			case codes.Unauthenticated:
+				return rs, rest.Status{
+					Error:      err,
+					StatusCode: http.StatusUnauthorized,
+					Message:    "invalid token",
+				}
+			case codes.Internal:
+				return rs, rest.Status{
+					Error:      err,
+					StatusCode: http.StatusInternalServerError,
+					Message:    "unable to authorize user",
+				}
+			default:
+				return rs, rest.Status{
+					Error:      err,
+					StatusCode: http.StatusInternalServerError,
+					Message:    "unknown error",
+				}
 			}
 		}
 
@@ -71,7 +96,7 @@ func Authorize[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs], service Service, rol
 			}
 		}
 
-		context.UserID = userID
+		context.UserID = userId
 		return fn(context, request)
 	}
 }

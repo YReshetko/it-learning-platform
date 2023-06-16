@@ -18,7 +18,7 @@ func main() {
 	auth := handlers.NewAuth(authClient)
 	r := routes.NewRouter(
 		routes.WithAuthHandler(auth),
-		routes.WithAuthService(authorization.Service{}),
+		routes.WithAuthService(authorization.NewService(authClient)),
 	)
 	r.Init(server.Engine)
 

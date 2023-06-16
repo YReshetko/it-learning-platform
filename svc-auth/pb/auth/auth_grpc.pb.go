@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AuthService_CreateUser_FullMethodName = "/AuthService/CreateUser"
+	AuthService_CreateUser_FullMethodName          = "/AuthService/CreateUser"
+	AuthService_AccessTokenExchange_FullMethodName = "/AuthService/AccessTokenExchange"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateAuthUserRequest, opts ...grpc.CallOption) (*CreateAuthUserResponse, error)
+	AccessTokenExchange(ctx context.Context, in *AccessTokenExchangeRequest, opts ...grpc.CallOption) (*AccessTokenExchangeResponse, error)
 }
 
 type authServiceClient struct {
@@ -46,11 +48,21 @@ func (c *authServiceClient) CreateUser(ctx context.Context, in *CreateAuthUserRe
 	return out, nil
 }
 
+func (c *authServiceClient) AccessTokenExchange(ctx context.Context, in *AccessTokenExchangeRequest, opts ...grpc.CallOption) (*AccessTokenExchangeResponse, error) {
+	out := new(AccessTokenExchangeResponse)
+	err := c.cc.Invoke(ctx, AuthService_AccessTokenExchange_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
 	CreateUser(context.Context, *CreateAuthUserRequest) (*CreateAuthUserResponse, error)
+	AccessTokenExchange(context.Context, *AccessTokenExchangeRequest) (*AccessTokenExchangeResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedAuthServiceServer struct {
 
 func (UnimplementedAuthServiceServer) CreateUser(context.Context, *CreateAuthUserRequest) (*CreateAuthUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+}
+func (UnimplementedAuthServiceServer) AccessTokenExchange(context.Context, *AccessTokenExchangeRequest) (*AccessTokenExchangeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AccessTokenExchange not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -92,6 +107,24 @@ func _AuthService_CreateUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_AccessTokenExchange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccessTokenExchangeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).AccessTokenExchange(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_AccessTokenExchange_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).AccessTokenExchange(ctx, req.(*AccessTokenExchangeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateUser",
 			Handler:    _AuthService_CreateUser_Handler,
+		},
+		{
+			MethodName: "AccessTokenExchange",
+			Handler:    _AuthService_AccessTokenExchange_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

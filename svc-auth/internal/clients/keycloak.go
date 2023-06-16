@@ -2,10 +2,13 @@ package clients
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/Nerzal/gocloak/v13"
 	"github.com/YReshetko/it-academy-cources/svc-auth/internal/config"
 	"github.com/YReshetko/it-academy-cources/svc-auth/internal/model"
+	"github.com/google/uuid"
 	"math/rand"
 	"time"
 )
@@ -83,6 +86,53 @@ func (kc *KeycloakClient) CreateUser(ctx context.Context, user model.User) (stri
 	}
 
 	return keycloakUserID, nil
+}
+
+func (kc *KeycloakClient) ValidateAccessToken(ctx context.Context, accessToken string) (bool, error) {
+	result, err := kc.client.RetrospectToken(ctx, accessToken, kc.cfg.ClientID, kc.cfg.ClientSecret, kc.cfg.Realm)
+	if err != nil {
+		return false, fmt.Errorf("unable to retrospect token: %w", err)
+	}
+	if result == nil {
+		return false, errors.New("retrospect result is nil")
+	}
+
+	b, _ := json.Marshal(result)
+	fmt.Println("ValidateAccessToken result: %s\n", string(b))
+
+	if !*result.Active {
+		return false, nil
+	}
+	return true, nil
+}
+
+func (kc *KeycloakClient) GetUserIDAndRoles(ctx context.Context, accessToken string) (uuid.UUID, model.Roles, error) {
+	userInfo, err := kc.client.GetUserInfo(ctx, accessToken, kc.cfg.Realm)
+	if err != nil {
+		return uuid.UUID{}, nil, fmt.Errorf("unable to get user info: %w", err)
+	}
+	if userInfo == nil {
+		return uuid.UUID{}, nil, errors.New("no userInfo is returned")
+	}
+	userId, err := uuid.Parse(*userInfo.Sub)
+	if err != nil {
+		return uuid.UUID{}, nil, fmt.Errorf("unable to parse user ID from *userInfo.Sub: %w", err)
+	}
+
+	roles, err := kc.client.GetRealmRolesByUserID(ctx, accessToken, kc.cfg.Realm, userId.String())
+	if err != nil {
+		return userId, nil, fmt.Errorf("unable to get user realm roles: %w", err)
+	}
+	var outRoles model.Roles
+	for _, modelRole := range model.AllRoles {
+		for _, realmRole := range roles {
+			if realmRole.Name != nil && *realmRole.Name == string(modelRole) {
+				outRoles = append(outRoles, modelRole)
+			}
+		}
+	}
+
+	return userId, outRoles, nil
 }
 
 func (kc *KeycloakClient) removeAllRealmRoles(ctx context.Context, userID string) error {
