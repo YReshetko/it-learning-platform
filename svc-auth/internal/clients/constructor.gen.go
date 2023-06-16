@@ -7,7 +7,7 @@
 package clients
 
 import (
-	config "github.com/YReshetko/it-academy-cources/svc-auth/internal/config"
+	config "github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
 )
 
 func NewKeycloakClient(cfg config.KeycloakClient) KeycloakClient {

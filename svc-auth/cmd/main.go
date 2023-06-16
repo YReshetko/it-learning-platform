@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/YReshetko/it-academy-cources/svc-auth/internal/clients"
-	"github.com/YReshetko/it-academy-cources/svc-auth/internal/config"
-	"github.com/YReshetko/it-academy-cources/svc-auth/internal/grpc"
+	"github.com/YReshetko/it-learning-platform/svc-auth/internal/clients"
+	"github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
+	"github.com/YReshetko/it-learning-platform/svc-auth/internal/grpc"
 	"log"
 )
 

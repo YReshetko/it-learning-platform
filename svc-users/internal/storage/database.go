@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/YReshetko/it-academy-cources/svc-users/internal/config"
+	"github.com/YReshetko/it-learning-platform/svc-users/internal/config"
 )
 
 func DatabaseConnection(cfg config.Database) (*gorm.DB, error) {

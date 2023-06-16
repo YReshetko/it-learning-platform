@@ -1,6 +1,6 @@
 package models
 
-import "github.com/YReshetko/it-academy-cources/svc-auth/pb/auth"
+import "github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
 
 type Roles []string
 

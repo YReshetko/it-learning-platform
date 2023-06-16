@@ -3,10 +3,10 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"github.com/YReshetko/it-academy-cources/svc-auth/internal/clients"
-	"github.com/YReshetko/it-academy-cources/svc-auth/internal/model"
-	"github.com/YReshetko/it-academy-cources/svc-auth/pb/auth"
-	"github.com/YReshetko/it-academy-cources/svc-users/pb/users"
+	"github.com/YReshetko/it-learning-platform/svc-auth/internal/clients"
+	"github.com/YReshetko/it-learning-platform/svc-auth/internal/model"
+	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
+	"github.com/YReshetko/it-learning-platform/svc-users/pb/users"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

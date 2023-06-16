@@ -2,8 +2,8 @@ package grpc
 
 import (
 	"fmt"
-	"github.com/YReshetko/it-academy-cources/svc-auth/internal/config"
-	"github.com/YReshetko/it-academy-cources/svc-auth/pb/auth"
+	"github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
+	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
 	"google.golang.org/grpc"
 	"log"
 	"net"

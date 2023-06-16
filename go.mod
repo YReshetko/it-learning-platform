@@ -1,4 +1,4 @@
-module github.com/YReshetko/it-academy-cources
+module github.com/YReshetko/it-learning-platform
 
 go 1.20
 

@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http"
-	auth "github.com/YReshetko/it-academy-cources/api-app/internal/http/middlewares/authorization"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http"
+	auth "github.com/YReshetko/it-learning-platform/api-app/internal/http/middlewares/authorization"
 
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http/handlers"
-	mgin "github.com/YReshetko/it-academy-cources/api-app/internal/http/middlewares/gin"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http/handlers"
+	mgin "github.com/YReshetko/it-learning-platform/api-app/internal/http/middlewares/gin"
 	"github.com/gin-gonic/gin"
 )
 

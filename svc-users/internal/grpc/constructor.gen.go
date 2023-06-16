@@ -7,8 +7,8 @@
 package grpc
 
 import (
-	config "github.com/YReshetko/it-academy-cources/svc-users/internal/config"
-	storage "github.com/YReshetko/it-academy-cources/svc-users/internal/storage"
+	config "github.com/YReshetko/it-learning-platform/svc-users/internal/config"
+	storage "github.com/YReshetko/it-learning-platform/svc-users/internal/storage"
 )
 
 func NewHandler(storage storage.UserStorage) Handler {

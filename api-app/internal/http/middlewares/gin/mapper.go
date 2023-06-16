@@ -2,7 +2,7 @@ package gin
 
 import (
 	"fmt"
-	rest "github.com/YReshetko/it-academy-cources/api-app/internal/http"
+	rest "github.com/YReshetko/it-learning-platform/api-app/internal/http"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

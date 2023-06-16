@@ -2,8 +2,8 @@ package clients
 
 import (
 	"fmt"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/config"
-	"github.com/YReshetko/it-academy-cources/svc-auth/pb/auth"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/config"
+	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"

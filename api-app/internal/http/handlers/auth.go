@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/clients"
-	"github.com/YReshetko/it-academy-cources/svc-auth/pb/auth"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/clients"
+	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
 	rest "net/http"
 
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http/models"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http/models"
 )
 
 /*

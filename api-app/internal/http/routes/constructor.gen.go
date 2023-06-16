@@ -7,8 +7,8 @@
 package routes
 
 import (
-	handlers "github.com/YReshetko/it-academy-cources/api-app/internal/http/handlers"
-	auth "github.com/YReshetko/it-academy-cources/api-app/internal/http/middlewares/authorization"
+	handlers "github.com/YReshetko/it-learning-platform/api-app/internal/http/handlers"
+	auth "github.com/YReshetko/it-learning-platform/api-app/internal/http/middlewares/authorization"
 )
 
 type RouterOption func(*Router)

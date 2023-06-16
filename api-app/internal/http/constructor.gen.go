@@ -7,7 +7,7 @@
 package http
 
 import (
-	config "github.com/YReshetko/it-academy-cources/api-app/internal/config"
+	config "github.com/YReshetko/it-learning-platform/api-app/internal/config"
 )
 
 func NewServer(cfg config.HTTP) Server {

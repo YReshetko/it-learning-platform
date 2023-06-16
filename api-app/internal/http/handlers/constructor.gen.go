@@ -7,7 +7,7 @@
 package handlers
 
 import (
-	clients "github.com/YReshetko/it-academy-cources/api-app/internal/clients"
+	clients "github.com/YReshetko/it-learning-platform/api-app/internal/clients"
 )
 
 func NewAuth(client clients.AuthClient) Auth {

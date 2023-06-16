@@ -2,8 +2,8 @@ package mapper
 
 import (
 	"fmt"
-	"github.com/YReshetko/it-academy-cources/svc-users/internal/storage"
-	"github.com/YReshetko/it-academy-cources/svc-users/pb/users"
+	"github.com/YReshetko/it-learning-platform/svc-users/internal/storage"
+	"github.com/YReshetko/it-learning-platform/svc-users/pb/users"
 	"github.com/google/uuid"
 )
 

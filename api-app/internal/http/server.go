@@ -3,7 +3,7 @@ package http
 import (
 	"context"
 	"fmt"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/config"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/config"
 	"github.com/gin-gonic/gin"
 	_ "github.com/gin-gonic/gin"
 	"log"

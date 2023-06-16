@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/YReshetko/it-academy-cources/svc-users/internal/config"
-	"github.com/YReshetko/it-academy-cources/svc-users/internal/grpc"
-	"github.com/YReshetko/it-academy-cources/svc-users/internal/storage"
+	"github.com/YReshetko/it-learning-platform/svc-users/internal/config"
+	"github.com/YReshetko/it-learning-platform/svc-users/internal/grpc"
+	"github.com/YReshetko/it-learning-platform/svc-users/internal/storage"
 	"log"
 )
 

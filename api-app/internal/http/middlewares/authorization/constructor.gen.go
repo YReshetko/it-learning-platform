@@ -7,7 +7,7 @@
 package authorization
 
 import (
-	clients "github.com/YReshetko/it-academy-cources/api-app/internal/clients"
+	clients "github.com/YReshetko/it-learning-platform/api-app/internal/clients"
 )
 
 func NewService(client clients.AuthClient) Service {

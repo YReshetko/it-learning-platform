@@ -1,6 +1,6 @@
 package main
 
-import "github.com/YReshetko/it-academy-cources/api-management/internal/http"
+import "github.com/YReshetko/it-learning-platform/api-management/internal/http"
 
 func main() {
 	server := http.NewServer()

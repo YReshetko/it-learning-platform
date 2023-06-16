@@ -7,8 +7,8 @@
 package grpc
 
 import (
-	clients "github.com/YReshetko/it-academy-cources/svc-auth/internal/clients"
-	config "github.com/YReshetko/it-academy-cources/svc-auth/internal/config"
+	clients "github.com/YReshetko/it-learning-platform/svc-auth/internal/clients"
+	config "github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
 )
 
 func NewHandler(keycloakClient *clients.KeycloakClient, userClient *clients.UsersClient) Handler {

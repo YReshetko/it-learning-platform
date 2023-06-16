@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/YReshetko/it-academy-cources/api-app/internal/clients"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/config"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http/handlers"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http/middlewares/authorization"
-	"github.com/YReshetko/it-academy-cources/api-app/internal/http/routes"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/clients"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/config"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http/handlers"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http/middlewares/authorization"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http/routes"
 	"log"
 )
 
