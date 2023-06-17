@@ -642,48 +642,7 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:academy:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "_id": "901ffee9-5795-49c3-88e0-13c19aacaaa3",
-            "uris": [
-              "/*"
-            ]
-          }
-        ],
-        "policies": [
-          {
-            "id": "54ffe8d8-cee0-4c55-b085-64ff70205059",
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {}
-          },
-          {
-            "id": "2255a8b9-6c9d-4f86-b0af-34bd59774100",
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:academy:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
+      ]
     },
     {
       "id": "59f2980d-bad2-4cb4-a0cb-3245d3f91c67",
