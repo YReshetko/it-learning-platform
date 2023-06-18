@@ -2,6 +2,7 @@ package gin
 
 import (
 	rest "github.com/YReshetko/it-learning-platform/api-app/internal/http"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http/models"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -10,10 +11,14 @@ import (
 func Wrap[Request any, Response any](fn rest.HandlerFunc[Request, Response], redirect string, logger *logrus.Entry) func(*gin.Context) {
 	return func(ginCtx *gin.Context) {
 		var rq Request
-		if err := ginCtx.ShouldBindJSON(&rq); err != nil {
-			logger.WithError(err).Error("parse body error")
-			ginCtx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
+		_, ok := any(rq).(models.Empty)
+
+		if !ok {
+			if err := ginCtx.ShouldBindJSON(&rq); err != nil {
+				logger.WithError(err).Error("parse body error")
+				ginCtx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
 		}
 		ctx := rest.Context{
 			GinCtx: ginCtx,

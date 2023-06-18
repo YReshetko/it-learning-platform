@@ -16,6 +16,7 @@ Router REST API router
 */
 type Router struct {
 	registration handlers.Registration
+	self         handlers.Self
 
 	services *RouterServices
 }
@@ -33,6 +34,7 @@ type RouterServices struct {
 func (r Router) Init(engine *gin.Engine) {
 	engine.POST("/api/v1/registration/user", protected(r.registration.CreateUser, r.services, []auth.Role{auth.ADMIN}))
 	engine.POST("/api/v1/registration/users", protected(r.registration.CreateUsers, r.services, []auth.Role{auth.ADMIN}))
+	engine.GET("/api/v1/self", protected(r.self.GetUserInfo, r.services, []auth.Role{auth.ADMIN, auth.STUDENT, auth.MANAGER, auth.TEACHER}))
 
 }
 

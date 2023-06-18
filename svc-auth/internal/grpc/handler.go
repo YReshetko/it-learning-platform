@@ -6,6 +6,7 @@ import (
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/model"
 	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
 	"github.com/YReshetko/it-learning-platform/svc-users/pb/users"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -86,6 +87,43 @@ func (h *Handler) AccessTokenExchange(ctx context.Context, rq *auth.AccessTokenE
 		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Internal, "unable to authorize user")
 	}
 
+	return &auth.AccessTokenExchangeResponse{
+		UserInfo: &auth.UserInfo{
+			Id:    user.User.Id,
+			Roles: mapModelToProtoRoles(roles, logger),
+		},
+	}, nil
+}
+
+func (h *Handler) GetUserInfo(ctx context.Context, rq *auth.GetUserInfoRequest) (*auth.GetUserInfoResponse, error) {
+	logger := h.logger.WithField("method", "GetUserInfo").WithField("request", rq)
+
+	rs, err := h.userClient.UserInfo(ctx, &users.UserInfoRequest{Id: rq.GetId()})
+	if err != nil {
+		logger.WithError(err).Error("Unable to get user by ID")
+		return &auth.GetUserInfoResponse{}, status.Error(codes.Internal, "unable to get user by ID")
+	}
+
+	keycloakUserID, err := uuid.Parse(rs.GetUser().GetExternalId())
+	if err != nil {
+		logger.WithError(err).Error("Unable to parse ExternalUserID")
+		return &auth.GetUserInfoResponse{}, status.Error(codes.Internal, "unable to parse ExternalUserID")
+	}
+	roles, err := h.keycloakClient.GetUserRoles(ctx, keycloakUserID)
+	if err != nil {
+		logger.WithError(err).Error("Unable to get user roles")
+		return &auth.GetUserInfoResponse{}, status.Error(codes.Internal, "Unable to get user roles")
+	}
+	return &auth.GetUserInfoResponse{UserInfo: &auth.UserInfo{
+		Id:        rq.GetId(),
+		FirstName: rs.GetUser().FirstName,
+		LastName:  rs.GetUser().GetLastName(),
+		Roles:     mapModelToProtoRoles(roles, logger),
+	}}, nil
+
+}
+
+func mapModelToProtoRoles(roles model.Roles, logger *logrus.Entry) []auth.UserRole {
 	var userRoles []auth.UserRole
 	for _, role := range roles {
 		r, ok := auth.UserRole_value[string(role)]
@@ -97,11 +135,5 @@ func (h *Handler) AccessTokenExchange(ctx context.Context, rq *auth.AccessTokenE
 		}
 		userRoles = append(userRoles, auth.UserRole(r))
 	}
-
-	return &auth.AccessTokenExchangeResponse{
-		UserInfo: &auth.UserInfo{
-			Id:    user.User.Id,
-			Roles: userRoles,
-		},
-	}, nil
+	return userRoles
 }

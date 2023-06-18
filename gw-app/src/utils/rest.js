@@ -43,9 +43,11 @@ function prepareRequest(method, body = null) {
 
 function doRequest(url, request) {
     return fetch(url, request).then(res => {
-        //res.json();
         if (res.redirected) {
             window.location.replace(res.url);
         }
+        // TODO Verify response statuses
+
+        return res.json();
     })
 }

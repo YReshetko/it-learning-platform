@@ -19,8 +19,12 @@ func main() {
 	server := http.NewServer(cfg.HTTP, logger.WithField("server", "http"))
 
 	authClient := clients.NewAuthClient(cfg.AuthClient, logger.WithField("client", "AuthClient"))
+
 	registration := handlers.NewRegistration(authClient, logger.WithField("handler", "Registration"))
+	self := handlers.NewSelf(authClient, logger.WithField("handler", "Self"))
+
 	authorizationService := authorization.NewService(authClient)
+
 	routeServices := routes.NewRouterServices(
 		routes.WithLogger(logger.WithField("sub_system", "RouterServices")),
 		routes.WithAuthService(&authorizationService),
@@ -28,6 +32,7 @@ func main() {
 	)
 	r := routes.NewRouter(
 		routes.WithRegistration(registration),
+		routes.WithSelf(self),
 		routes.WithServices(&routeServices),
 	)
 	r.Init(server.Engine)

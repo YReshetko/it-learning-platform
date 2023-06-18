@@ -28,6 +28,8 @@ message CreateAuthUserResponse {
 
 message UserInfo {
   string id = 1;
+  string first_name = 4;
+  string last_name = 5;
   repeated UserRole roles = 7;
 }
 
@@ -43,7 +45,16 @@ message AccessTokenExchangeResponse {
   UserInfo user_info = 1;
 }
 
+message GetUserInfoRequest {
+  string id = 1;
+}
+
+message GetUserInfoResponse {
+  UserInfo user_info = 1;
+}
+
 service AuthService {
   rpc CreateUser(CreateAuthUserRequest) returns (CreateAuthUserResponse){}
   rpc AccessTokenExchange(AccessTokenExchangeRequest) returns (AccessTokenExchangeResponse){}
+  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse){}
 }

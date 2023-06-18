@@ -2,6 +2,7 @@ import React, {useRef} from 'react';
 import CreateUserTable from "./CreateUserTable";
 import Button from "../../ui/button/Button";
 import * as rest from '../../utils/rest';
+import Label from "../../ui/label/Label";
 
 const UserForm = () => {
     const tableCallback = useRef(null);
@@ -39,7 +40,7 @@ const UserForm = () => {
     }
     return (
         <div>
-            <h2>Создать пользователей</h2>
+            <Label>Создать пользователей</Label>
             {table}
             <Button onClick={send}>Отправить</Button>
             <Button onClick={add}>Добавить</Button>

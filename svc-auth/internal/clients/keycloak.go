@@ -119,6 +119,22 @@ func (kc *KeycloakClient) GetUserIDAndRoles(ctx context.Context, accessToken str
 	if err != nil {
 		return userId, nil, fmt.Errorf("unable to get user realm roles: %w", err)
 	}
+	return userId, extractAppRoles(roles), nil
+}
+
+func (kc *KeycloakClient) GetUserRoles(ctx context.Context, userID uuid.UUID) (model.Roles, error) {
+	clientToken, err := kc.getClientToken(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get client token: %w", err)
+	}
+	roles, err := kc.client.GetRealmRolesByUserID(ctx, clientToken.AccessToken, kc.cfg.Realm, userID.String())
+	if err != nil {
+		return nil, fmt.Errorf("unable to get user realm roles: %w", err)
+	}
+	return extractAppRoles(roles), nil
+}
+
+func extractAppRoles(roles []*gocloak.Role) model.Roles {
 	var outRoles model.Roles
 	for _, modelRole := range model.AllRoles {
 		for _, realmRole := range roles {
@@ -127,8 +143,7 @@ func (kc *KeycloakClient) GetUserIDAndRoles(ctx context.Context, accessToken str
 			}
 		}
 	}
-
-	return userId, outRoles, nil
+	return outRoles
 }
 
 func (kc *KeycloakClient) removeAllRealmRoles(ctx context.Context, userID string) error {

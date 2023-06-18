@@ -29,6 +29,12 @@ func WithRegistration(v handlers.Registration) RouterOption {
 	}
 }
 
+func WithSelf(v handlers.Self) RouterOption {
+	return func(rt *Router) {
+		rt.self = v
+	}
+}
+
 func WithServices(v *RouterServices) RouterOption {
 	return func(rt *Router) {
 		rt.services = v

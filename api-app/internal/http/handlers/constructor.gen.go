@@ -19,3 +19,12 @@ func NewRegistration(client clients.AuthClient, logger *logrus.Entry) Registrati
 
 	return returnValue
 }
+
+func NewSelf(client clients.AuthClient, logger *logrus.Entry) Self {
+	returnValue := Self{
+		client: client,
+		logger: logger,
+	}
+
+	return returnValue
+}
