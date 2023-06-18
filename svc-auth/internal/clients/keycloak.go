@@ -2,7 +2,6 @@ package clients
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/Nerzal/gocloak/v13"
@@ -96,10 +95,6 @@ func (kc *KeycloakClient) ValidateAccessToken(ctx context.Context, accessToken s
 	if result == nil {
 		return false, errors.New("retrospect result is nil")
 	}
-
-	b, _ := json.Marshal(result)
-	fmt.Println("ValidateAccessToken result: %s\n", string(b))
-
 	if !*result.Active {
 		return false, nil
 	}
@@ -119,7 +114,12 @@ func (kc *KeycloakClient) GetUserIDAndRoles(ctx context.Context, accessToken str
 		return uuid.UUID{}, nil, fmt.Errorf("unable to parse user ID from *userInfo.Sub: %w", err)
 	}
 
-	roles, err := kc.client.GetRealmRolesByUserID(ctx, accessToken, kc.cfg.Realm, userId.String())
+	clientToken, err := kc.getClientToken(ctx)
+	if err != nil {
+		return uuid.UUID{}, nil, fmt.Errorf("unable to get client token: %w", err)
+	}
+
+	roles, err := kc.client.GetRealmRolesByUserID(ctx, clientToken.AccessToken, kc.cfg.Realm, userId.String())
 	if err != nil {
 		return userId, nil, fmt.Errorf("unable to get user realm roles: %w", err)
 	}

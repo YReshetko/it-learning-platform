@@ -67,7 +67,7 @@ func (h *Handler) AccessTokenExchange(ctx context.Context, rq *auth.AccessTokenE
 		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Internal, "unable to validate access token")
 	}
 	if !ok {
-		fmt.Println("invalid token: ", rq.AccessToken)
+		fmt.Println("invalid token: ", rq.AccessToken.GetToken())
 		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Unauthenticated, "invalid access token")
 	}
 

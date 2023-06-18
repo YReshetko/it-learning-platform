@@ -44,7 +44,7 @@ func (s Handler) CreateUser(_ context.Context, request *users.CreateUserRequest)
 func (s Handler) FindUsers(ctx context.Context, request *users.FindUsersRequest) (*users.FindUsersResponse, error) {
 	var IDs []uuid.UUID
 	for _, ID := range request.Ids {
-		u, _ := uuid.FromBytes([]byte(ID))
+		u, _ := uuid.Parse(ID)
 		IDs = append(IDs, u)
 	}
 	usrs, err := s.storage.FindByIDs(IDs)
@@ -61,7 +61,7 @@ func (s Handler) FindUsers(ctx context.Context, request *users.FindUsersRequest)
 }
 
 func (s Handler) UserInfo(ctx context.Context, request *users.UserInfoRequest) (*users.UserInfoResponse, error) {
-	UUID, err := uuid.FromBytes([]byte(request.Id))
+	UUID, err := uuid.Parse(request.Id)
 	if err != nil {
 		fmt.Println("unable to find user by ID:", err)
 		return &users.UserInfoResponse{}, status.Error(codes.InvalidArgument, "invalid user ID")
@@ -76,7 +76,7 @@ func (s Handler) UserInfo(ctx context.Context, request *users.UserInfoRequest) (
 }
 
 func (s Handler) FindUserByExternalID(ctx context.Context, request *users.FindUserByExternalIDRequest) (*users.FindUserByExternalIDResponse, error) {
-	UUID, err := uuid.FromBytes([]byte(request.ExternalId))
+	UUID, err := uuid.Parse(request.ExternalId)
 	if err != nil {
 		fmt.Println("unable to find user by ID:", err)
 		return &users.FindUserByExternalIDResponse{}, status.Error(codes.InvalidArgument, "invalid user ExternalId")
@@ -91,7 +91,7 @@ func (s Handler) FindUserByExternalID(ctx context.Context, request *users.FindUs
 }
 
 func (s Handler) UpdateUser(ctx context.Context, request *users.UpdateUserRequest) (*users.UpdateUserResponse, error) {
-	UUID, err := uuid.FromBytes([]byte(request.GetUser().GetId()))
+	UUID, err := uuid.Parse(request.GetUser().GetId())
 	if err != nil {
 		fmt.Println("unable to find user by ID:", err)
 		return &users.UpdateUserResponse{}, status.Error(codes.InvalidArgument, "invalid user ID")
@@ -106,7 +106,7 @@ func (s Handler) UpdateUser(ctx context.Context, request *users.UpdateUserReques
 	user.LastName = request.GetUser().GetLastName()
 	user.FirstName = request.GetUser().GetFirstName()
 
-	externalId, err := uuid.FromBytes([]byte(request.GetUser().GetExternalId()))
+	externalId, err := uuid.Parse(request.GetUser().GetExternalId())
 	if err != nil {
 		fmt.Println("unable to update user with invalid external ID:", err)
 		return &users.UpdateUserResponse{}, status.Error(codes.InvalidArgument, "unable to update user with invalid external ID")

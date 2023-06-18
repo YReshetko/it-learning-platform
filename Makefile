@@ -19,3 +19,10 @@ d-go-clean:
 
 .PHONY: d-go-restart
 d-go-restart: d-stop d-go-clean d-up
+
+.PHONY: rebuild-%
+rebuild-%:
+	docker stop $* || true
+	docker rm $* || true
+	docker rmi $*:latest || true
+	docker compose up -d

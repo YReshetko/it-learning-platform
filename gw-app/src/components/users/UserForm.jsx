@@ -31,7 +31,8 @@ const UserForm = () => {
                 'Content-Type': 'application/json'
             }
         }
-        let accessToken = cookies.getCookie('access_token')
+        // let accessToken = cookies.getCookie('access_token')
+        let accessToken = window.localStorage.getItem("access_token")
         if (accessToken) {
             request.headers['Authorization'] = 'Bearer '+ accessToken;
         }
@@ -40,7 +41,8 @@ const UserForm = () => {
             .then(res => {
                 res.json();
                 if (res.redirected) {
-                    window.location.href = res.url;
+                    window.location.replace(res.url);
+                    //window.location.href = res.url;
                 }
             }) // if response is json, for text use res.text()
             .then(response => console.log('Response:', JSON.stringify(response))) // if text, no need for JSON.stringify

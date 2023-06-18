@@ -75,8 +75,8 @@ services:
     environment:
       USERS_HOST: users
       USERS_PORT: 3000
-      KEYCLOAK_HOST: keycloak
-      KEYCLOAK_PORT: 8080
+      KEYCLOAK_HOST: ui
+      KEYCLOAK_PORT: 8081
       KEYCLOAK_REALM: it-academy
       KEYCLOAK_CLIENT_ID: academy
       KEYCLOAK_CLIENT_SECRET: Ch9EWb4fMp3ksYqAVLRTf39vsFuI6s8K

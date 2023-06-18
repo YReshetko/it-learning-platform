@@ -33,8 +33,8 @@ func (us UserStorage) FindByID(ID uuid.UUID) (User, error) {
 }
 
 func (us UserStorage) FindByExternalID(ID uuid.UUID) (User, error) {
-	user := User{ID: &ID}
-	rs := us.db.First(&user, "external_id = ?", ID.String())
+	user := User{ExternalID: ID}
+	rs := us.db.First(&user)
 	if rs.Error != nil {
 		return User{}, fmt.Errorf("unable to find user by external ID %s: %w", ID.String(), rs.Error)
 	}
