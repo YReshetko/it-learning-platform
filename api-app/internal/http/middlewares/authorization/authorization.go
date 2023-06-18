@@ -1,6 +1,7 @@
 package authorization
 
 import (
+	"fmt"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/clients"
 	rest "github.com/YReshetko/it-learning-platform/api-app/internal/http"
 	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
@@ -18,10 +19,12 @@ type Service struct {
 }
 
 func (s *Service) getUserRoles(ctx context.Context, token string) (uuid.UUID, []Role, error) {
+	fmt.Printf("USER INFO TOKEN: %+v\n", token)
 	userInfo, err := s.client.AccessTokenExchange(ctx, &auth.AccessTokenExchangeRequest{AccessToken: &auth.AccessToken{Token: token}})
 	if err != nil {
 		return uuid.UUID{}, nil, err
 	}
+	fmt.Printf("USER INFO FROM TOKEN: %+v\n", userInfo)
 	userId, err := uuid.Parse(userInfo.GetUserInfo().GetId())
 	if err != nil {
 		return uuid.UUID{}, nil, err

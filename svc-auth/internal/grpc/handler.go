@@ -80,6 +80,8 @@ func (h *Handler) AccessTokenExchange(ctx context.Context, rq *auth.AccessTokenE
 		logger.WithError(err).Error("unable to get user ID and role from keycloak")
 		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Internal, "unable to authorize user")
 	}
+	logger = logger.WithField("keycloak_id", keycloakUserId)
+	logger.Info("Retrieved keycloak ID")
 
 	user, err := h.userClient.FindUserByExternalID(ctx, &users.FindUserByExternalIDRequest{ExternalId: keycloakUserId.String()})
 	if err != nil {
