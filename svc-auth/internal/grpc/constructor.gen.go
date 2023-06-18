@@ -8,11 +8,13 @@ package grpc
 
 import (
 	clients "github.com/YReshetko/it-learning-platform/svc-auth/internal/clients"
+	logrus "github.com/sirupsen/logrus"
 )
 
-func NewHandler(keycloakClient *clients.KeycloakClient, userClient *clients.UsersClient) Handler {
+func NewHandler(keycloakClient *clients.KeycloakClient, logger *logrus.Entry, userClient *clients.UsersClient) Handler {
 	returnValue := Handler{
 		keycloakClient: keycloakClient,
+		logger:         logger,
 		userClient:     userClient,
 	}
 

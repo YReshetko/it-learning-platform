@@ -16,7 +16,7 @@ func main() {
 	cfg := errors.MustExitAppErrorHandler[config.Config](logger.WithField("sub_system", "config"))(config.LoadConfig())
 	uc := clients.NewUsersClient(cfg.UsersClient, logger.WithField("client", "UsersClient"))
 	kc := clients.NewKeycloakClient(cfg.KeycloakClient)
-	h := grpc.NewHandler(&kc, &uc)
+	h := grpc.NewHandler(&kc, logger.WithField("handler", "grpc"), &uc)
 	server := commonGrpc.NewServer[auth.AuthServiceServer](
 		commonGrpc.WithCfg[auth.AuthServiceServer](cfg.GRPCServer),
 		commonGrpc.WithHandler[auth.AuthServiceServer](&h),
