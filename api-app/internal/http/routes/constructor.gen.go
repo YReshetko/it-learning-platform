@@ -9,6 +9,7 @@ package routes
 import (
 	handlers "github.com/YReshetko/it-learning-platform/api-app/internal/http/handlers"
 	auth "github.com/YReshetko/it-learning-platform/api-app/internal/http/middlewares/authorization"
+	logrus "github.com/sirupsen/logrus"
 )
 
 type RouterOption func(*Router)
@@ -22,14 +23,43 @@ func NewRouter(opts ...RouterOption) Router {
 	return *rt
 }
 
-func WithAuthHandler(v handlers.Auth) RouterOption {
+func WithRegistration(v handlers.Registration) RouterOption {
 	return func(rt *Router) {
-		rt.authHandler = v
+		rt.registration = v
 	}
 }
 
-func WithAuthService(v auth.Service) RouterOption {
+func WithServices(v *RouterServices) RouterOption {
 	return func(rt *Router) {
+		rt.services = v
+	}
+}
+
+type RouterServicesOption func(*RouterServices)
+
+func NewRouterServices(opts ...RouterServicesOption) RouterServices {
+	rt := &RouterServices{}
+	for _, o := range opts {
+		o(rt)
+	}
+
+	return *rt
+}
+
+func WithAuthService(v *auth.Service) RouterServicesOption {
+	return func(rt *RouterServices) {
 		rt.authService = v
+	}
+}
+
+func WithLogger(v *logrus.Entry) RouterServicesOption {
+	return func(rt *RouterServices) {
+		rt.logger = v
+	}
+}
+
+func WithRedirectURL(v string) RouterServicesOption {
+	return func(rt *RouterServices) {
+		rt.redirectURL = v
 	}
 }

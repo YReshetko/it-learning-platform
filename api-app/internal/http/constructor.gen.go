@@ -8,11 +8,13 @@ package http
 
 import (
 	config "github.com/YReshetko/it-learning-platform/api-app/internal/config"
+	logrus "github.com/sirupsen/logrus"
 )
 
-func NewServer(cfg config.HTTP) Server {
+func NewServer(cfg config.HTTP, logger *logrus.Entry) Server {
 	returnValue := Server{
-		cfg: cfg,
+		cfg:    cfg,
+		logger: logger,
 	}
 	returnValue.postConstruct()
 

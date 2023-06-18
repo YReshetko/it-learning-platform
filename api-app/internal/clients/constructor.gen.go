@@ -8,11 +8,13 @@ package clients
 
 import (
 	config "github.com/YReshetko/it-learning-platform/api-app/internal/config"
+	logrus "github.com/sirupsen/logrus"
 )
 
-func NewAuthClient(cfg config.AuthClient) AuthClient {
+func NewAuthClient(cfg config.AuthClient, logger *logrus.Entry) AuthClient {
 	returnValue := AuthClient{
-		cfg: cfg,
+		cfg:    cfg,
+		logger: logger,
 	}
 	returnValue.postConstruct()
 

@@ -8,11 +8,13 @@ package handlers
 
 import (
 	clients "github.com/YReshetko/it-learning-platform/api-app/internal/clients"
+	logrus "github.com/sirupsen/logrus"
 )
 
-func NewAuth(client clients.AuthClient) Auth {
-	returnValue := Auth{
+func NewRegistration(client clients.AuthClient, logger *logrus.Entry) Registration {
+	returnValue := Registration{
 		client: client,
+		logger: logger,
 	}
 
 	return returnValue

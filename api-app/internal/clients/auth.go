@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/config"
 	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
 )
 
 /*
@@ -15,6 +15,7 @@ AuthClient the client to RGPC svc-users API
 */
 type AuthClient struct {
 	cfg                    config.AuthClient
+	logger                 *logrus.Entry
 	auth.AuthServiceClient // @Exclude
 }
 
@@ -23,9 +24,11 @@ func (uc *AuthClient) postConstruct() {
 	opt := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
-	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", uc.cfg.Host, uc.cfg.Port), opt...)
+	host := fmt.Sprintf("%s:%d", uc.cfg.Host, uc.cfg.Port)
+	conn, err := grpc.Dial(host, opt...)
 	if err != nil {
-		log.Fatalln(err)
+		uc.logger.WithField("host", host).WithError(err).Error("Unable to establish deal connection")
+		return
 	}
 	uc.AuthServiceClient = auth.NewAuthServiceClient(conn)
 }

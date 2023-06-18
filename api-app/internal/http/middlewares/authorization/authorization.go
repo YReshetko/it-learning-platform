@@ -17,7 +17,7 @@ type Service struct {
 	client clients.AuthClient
 }
 
-func (s Service) getUserRoles(ctx context.Context, token string) (uuid.UUID, []Role, error) {
+func (s *Service) getUserRoles(ctx context.Context, token string) (uuid.UUID, []Role, error) {
 	userInfo, err := s.client.AccessTokenExchange(ctx, &auth.AccessTokenExchangeRequest{AccessToken: &auth.AccessToken{Token: token}})
 	if err != nil {
 		return uuid.UUID{}, nil, err
@@ -53,7 +53,7 @@ func Authenticate[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs]) rest.HandlerFunc[
 	}
 }
 
-func Authorize[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs], service Service, roles []Role) rest.HandlerFunc[Rq, Rs] {
+func Authorize[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs], service *Service, roles []Role) rest.HandlerFunc[Rq, Rs] {
 	return func(context rest.Context, request Rq) (Rs, rest.Status) {
 		var rs Rs
 		userId, userRoles, err := service.getUserRoles(context.Context(), context.AccessToken)

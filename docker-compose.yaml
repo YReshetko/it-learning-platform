@@ -94,6 +94,11 @@ services:
       HTTP_PORT: 9000
       AUTH_HOST: auth
       AUTH_PORT: 3000
+      AUTH_REDIRECT_SCHEMA: http
+      AUTH_REDIRECT_HOST: localhost
+      AUTH_REDIRECT_PORT: 8081
+      AUTH_REDIRECT_REALM: it-academy
+      AUTH_REDIRECT_URI: http://localhost:8080
     ports:
       - 9000:9000
   ui:

@@ -1,41 +1,28 @@
 package gin
 
 import (
-	"fmt"
 	rest "github.com/YReshetko/it-learning-platform/api-app/internal/http"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
-func Wrap[Request any, Response any](fn rest.HandlerFunc[Request, Response]) func(*gin.Context) {
+func Wrap[Request any, Response any](fn rest.HandlerFunc[Request, Response], redirect string, logger *logrus.Entry) func(*gin.Context) {
 	return func(ginCtx *gin.Context) {
 		var rq Request
 		if err := ginCtx.ShouldBindJSON(&rq); err != nil {
-			fmt.Println("parse body error: ", err)
+			logger.WithError(err).Error("parse body error")
 			ginCtx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		fmt.Printf("body: %+v\n", rq)
 		ctx := rest.Context{
 			GinCtx: ginCtx,
 		}
 
 		rs, status := fn(ctx, rq)
 		if status.StatusCode == http.StatusUnauthorized {
-			url := "http://localhost:8081/realms/it-academy/protocol/openid-connect/auth?response_type=token&scope=openid&client_id=academy&redirect_uri=http://localhost:8080"
-			//url := "http://localhost:8080/auth?response_type=token&scope=openid&client_id=academy&redirect_uri=http://localhost:8080"
-			fmt.Println("REDIRECT TO: ", url)
-			/*redirectRequest, err := http.NewRequest(http.MethodGet, url, nil)
-			if err != nil {
-				fmt.Println("unable to create redirect request", err)
-			}
-			redirectRequest.Header.Add("Access-Control-Allow-Origin", "*")
-			ginCtx.Render(http.StatusUnauthorized, render.Redirect{
-				Code:     http.StatusFound,
-				Location: url,
-				Request:  redirectRequest,
-			})*/
-			ginCtx.Redirect(http.StatusFound, url)
+			logger.WithField("redirect_to", redirect).Info("redirecting as unauthorized")
+			ginCtx.Redirect(http.StatusFound, redirect)
 			return
 		}
 
@@ -43,7 +30,7 @@ func Wrap[Request any, Response any](fn rest.HandlerFunc[Request, Response]) fun
 			ginCtx.JSON(status.StatusCode, rs)
 			return
 		}
-		fmt.Println(status.Error)
+		logger.WithField("error_status", status.StatusCode).WithError(status.Error).Error(status.Message)
 		ginCtx.JSON(status.StatusCode, gin.H{"error": status.Message})
 	}
 }

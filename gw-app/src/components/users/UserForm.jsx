@@ -19,7 +19,7 @@ const UserForm = () => {
             }
         })
 
-        rest.post("/api/auth/users", {users: newUsers})
+        rest.post("/api/registration/users", {users: newUsers})
             .then(response => {
                 console.log('Response:', JSON.stringify(response));
                 tableCallback.current.clean();

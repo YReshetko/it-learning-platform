@@ -7,27 +7,29 @@ import (
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http/handlers"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http/middlewares/authorization"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http/routes"
-	"log"
+	"github.com/YReshetko/it-learning-platform/lib-app/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	cfg := handleError(config.LoadConfig())
-	server := http.NewServer(cfg.HTTP)
+	logger := logrus.New().WithField("application", "api-app")
 
-	authClient := clients.NewAuthClient(cfg.AuthClient)
-	auth := handlers.NewAuth(authClient)
+	cfg := errors.MustExitAppErrorHandler[config.Config](logger.WithField("sub_system", "config"))(config.LoadConfig())
+	server := http.NewServer(cfg.HTTP, logger.WithField("server", "http"))
+
+	authClient := clients.NewAuthClient(cfg.AuthClient, logger.WithField("client", "AuthClient"))
+	registration := handlers.NewRegistration(authClient, logger.WithField("handler", "Registration"))
+	authorizationService := authorization.NewService(authClient)
+	routeServices := routes.NewRouterServices(
+		routes.WithLogger(logger.WithField("sub_system", "RouterServices")),
+		routes.WithAuthService(&authorizationService),
+		routes.WithRedirectURL(cfg.AuthRedirect.URL()),
+	)
 	r := routes.NewRouter(
-		routes.WithAuthHandler(auth),
-		routes.WithAuthService(authorization.NewService(authClient)),
+		routes.WithRegistration(registration),
+		routes.WithServices(&routeServices),
 	)
 	r.Init(server.Engine)
-
 	server.Start()
 
-}
-func handleError[T any](val T, err error) T {
-	if err != nil {
-		log.Fatalf("crashing app due to: %s", err)
-	}
-	return val
 }
