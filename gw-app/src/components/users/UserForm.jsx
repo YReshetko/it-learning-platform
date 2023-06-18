@@ -1,18 +1,14 @@
 import React, {useRef} from 'react';
 import CreateUserTable from "./CreateUserTable";
 import Button from "../../ui/button/Button";
-import '../../utils/cookies'
-import * as cookies from '../../utils/cookies';
+import * as rest from '../../utils/rest';
 
 const UserForm = () => {
     const tableCallback = useRef(null);
     const table = <CreateUserTable ref={tableCallback}/>
 
     const send = (value) => {
-        console.log("send")
         let users = tableCallback.current.getData()
-        console.log({users: users});
-
         let newUsers = users.map((user) => {
             return {
                 login: user.login,
@@ -23,30 +19,14 @@ const UserForm = () => {
             }
         })
 
-        let request = {
-            method: 'POST', // or GET
-            redirect: 'follow', // React to redirect if 3xx status is returned
-            body: JSON.stringify({users: newUsers}), // data can be string or object
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-        // let accessToken = cookies.getCookie('access_token')
-        let accessToken = window.localStorage.getItem("access_token")
-        if (accessToken) {
-            request.headers['Authorization'] = 'Bearer '+ accessToken;
-        }
-
-        fetch("/api/auth/users", request)
-            .then(res => {
-                res.json();
-                if (res.redirected) {
-                    window.location.replace(res.url);
-                    //window.location.href = res.url;
-                }
-            }) // if response is json, for text use res.text()
-            .then(response => console.log('Response:', JSON.stringify(response))) // if text, no need for JSON.stringify
-            .catch(error => console.error('Error:', error));
+        rest.post("/api/auth/users", {users: newUsers})
+            .then(response => {
+                console.log('Response:', JSON.stringify(response));
+                tableCallback.current.clean();
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            });
     }
 
     const add = (value) => {

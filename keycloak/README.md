@@ -1,6 +1,7 @@
 - При поднятии keycloak впервый раз необходиом зайти в консоль localhost:8081
 - Перейти в реалм it-academy
 - Создать нового пользователя\лей для тестирования
+- Добавить пользователя в БД вручную и указать external_id из keycloak
 - Сгенерировать academy client secret
 - Скопировать секрет в docker-compose\auth\KEYCLOAK_CLIENT_SECRET
 - Перезапустить auth для того чтобы секрет подтянулся docker compose restart auth

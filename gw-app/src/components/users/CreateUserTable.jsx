@@ -4,9 +4,6 @@ import CreateUserTableRow from "./CreateUserTableRow";
 const CreateUserTable = forwardRef((props, ref) => {
     const [users, setUsers] = useState([{id: 1, login: '', firstName: '', lastName: '', email: '', roles: []}]);
     const updateUser = (id, field, value) => {
-        console.log(id)
-        console.log(field)
-        console.log(value)
         users[id - 1][field] = value
         setUsers(users);
     }
@@ -24,9 +21,10 @@ const CreateUserTable = forwardRef((props, ref) => {
         },
         getData() {
             return users;
+        },
+        clean(){
+            setUsers([{id: 1, login: '', firstName: '', lastName: '', email: '', roles: []}])
         }
-
-
     }));
 
     return (
