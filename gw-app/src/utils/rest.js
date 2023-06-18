@@ -43,7 +43,7 @@ function prepareRequest(method, body = null) {
 
 function doRequest(url, request) {
     return fetch(url, request).then(res => {
-        res.json();
+        //res.json();
         if (res.redirected) {
             window.location.replace(res.url);
         }

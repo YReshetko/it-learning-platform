@@ -22,7 +22,7 @@ type AuthClient struct {
 }
 
 // "http://localhost:8081/realms/it-academy/protocol/openid-connect/auth?response_type=token&scope=openid&client_id=academy&redirect_uri=http://localhost:8080"
-const redirectTemplate = "%s://%s:%d/realms/%sprotocol/openid-connect/auth?response_type=token&scope=openid&client_id=academy&redirect_uri=%s"
+const redirectTemplate = "%s://%s:%d/realms/%s/protocol/openid-connect/auth?response_type=token&scope=openid&client_id=academy&redirect_uri=%s"
 
 type AuthRedirect struct {
 	Schema      string `env:"AUTH_REDIRECT_SCHEMA"`

@@ -11,7 +11,8 @@ import (
 )
 
 func main() {
-	logger := logrus.New().WithField("application", "svc-auth")
+	logrus.SetFormatter(new(logrus.JSONFormatter))
+	logger := logrus.StandardLogger().WithField("application", "svc-auth")
 
 	cfg := errors.MustExitAppErrorHandler[config.Config](logger.WithField("sub_system", "config"))(config.LoadConfig())
 	uc := clients.NewUsersClient(cfg.UsersClient, logger.WithField("client", "UsersClient"))

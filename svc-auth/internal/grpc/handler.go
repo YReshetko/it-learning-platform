@@ -67,7 +67,7 @@ func (h *Handler) AccessTokenExchange(ctx context.Context, rq *auth.AccessTokenE
 	ok, err := h.keycloakClient.ValidateAccessToken(ctx, rq.AccessToken.GetToken())
 	if err != nil {
 		logger.WithError(err).Error("unable to validate access token")
-		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Internal, "unable to validate access token")
+		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Unauthenticated, "unable to validate access token")
 	}
 	if !ok {
 		logger.Error("invalid token")
@@ -77,13 +77,13 @@ func (h *Handler) AccessTokenExchange(ctx context.Context, rq *auth.AccessTokenE
 	keycloakUserId, roles, err := h.keycloakClient.GetUserIDAndRoles(ctx, rq.AccessToken.GetToken())
 	if err != nil {
 		logger.WithError(err).Error("unable to get user ID and role from keycloak")
-		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Unauthenticated, "unable to authorize user")
+		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Internal, "unable to authorize user")
 	}
 
 	user, err := h.userClient.FindUserByExternalID(ctx, &users.FindUserByExternalIDRequest{ExternalId: keycloakUserId.String()})
 	if err != nil {
 		logger.WithError(err).Error("unable to get user ID by external user ID")
-		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Unauthenticated, "unable to authorize user")
+		return &auth.AccessTokenExchangeResponse{}, status.Error(codes.Internal, "unable to authorize user")
 	}
 
 	var userRoles []auth.UserRole

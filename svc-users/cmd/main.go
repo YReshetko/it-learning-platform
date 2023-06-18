@@ -12,7 +12,8 @@ import (
 )
 
 func main() {
-	logger := logrus.New().WithField("application", "svc-users")
+	logrus.SetFormatter(new(logrus.JSONFormatter))
+	logger := logrus.StandardLogger().WithField("application", "svc-users")
 
 	cfg := errors.MustExitAppErrorHandler[config.Config](logger.WithField("sub_system", "config"))(config.LoadConfig())
 	db := errors.MustExitAppErrorHandler[*gorm.DB](logger.WithField("sub_system", "database"))(storage.DatabaseConnection(cfg.DB))

@@ -12,7 +12,8 @@ import (
 )
 
 func main() {
-	logger := logrus.New().WithField("application", "api-app")
+	logrus.SetFormatter(new(logrus.JSONFormatter))
+	logger := logrus.StandardLogger().WithField("application", "api-app")
 
 	cfg := errors.MustExitAppErrorHandler[config.Config](logger.WithField("sub_system", "config"))(config.LoadConfig())
 	server := http.NewServer(cfg.HTTP, logger.WithField("server", "http"))
