@@ -37,10 +37,7 @@ func (kc *KeycloakClient) CreateUser(ctx context.Context, user model.User) (stri
 	if err != nil {
 		return "", fmt.Errorf("unable create user: %w", err)
 	}
-
-	fmt.Println("CLIENT TOKEN:", clientToken.AccessToken)
 	roles := user.Roles.ToStringPtr()
-	fmt.Println("Creating user with roles:", roles)
 
 	keycloakUserID, err := kc.client.CreateUser(ctx, clientToken.AccessToken, kc.cfg.Realm, gocloak.User{
 		Username:               toPtr(user.Login),
@@ -75,7 +72,6 @@ func (kc *KeycloakClient) CreateUser(ctx context.Context, user model.User) (stri
 	}
 
 	if len(userRoles) == 0 {
-		fmt.Println("Skip roles updating as no one was found")
 		return keycloakUserID, nil
 	}
 

@@ -3,13 +3,14 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/YReshetko/it-learning-platform/lib-app/pkg/config"
 
 	"github.com/caarlos0/env/v8"
 )
 
 type Config struct {
-	DB   Database
-	GRPC GRPC
+	DB         Database
+	GRPCServer config.GRPCServer
 }
 
 type Database struct {

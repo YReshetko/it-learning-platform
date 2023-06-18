@@ -8,6 +8,7 @@ package clients
 
 import (
 	config "github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
+	logrus "github.com/sirupsen/logrus"
 )
 
 func NewKeycloakClient(cfg config.KeycloakClient) KeycloakClient {
@@ -19,9 +20,10 @@ func NewKeycloakClient(cfg config.KeycloakClient) KeycloakClient {
 	return returnValue
 }
 
-func NewUsersClient(cfg config.UsersClient) UsersClient {
+func NewUsersClient(cfg config.UsersClient, logger *logrus.Entry) UsersClient {
 	returnValue := UsersClient{
-		cfg: cfg,
+		cfg:    cfg,
+		logger: logger,
 	}
 	returnValue.postConstruct()
 

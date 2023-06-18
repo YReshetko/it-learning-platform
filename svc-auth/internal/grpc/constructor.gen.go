@@ -8,22 +8,12 @@ package grpc
 
 import (
 	clients "github.com/YReshetko/it-learning-platform/svc-auth/internal/clients"
-	config "github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
 )
 
 func NewHandler(keycloakClient *clients.KeycloakClient, userClient *clients.UsersClient) Handler {
 	returnValue := Handler{
 		keycloakClient: keycloakClient,
 		userClient:     userClient,
-	}
-
-	return returnValue
-}
-
-func NewServer(cfg config.GRPC, handler *Handler) Server {
-	returnValue := Server{
-		cfg:     cfg,
-		handler: handler,
 	}
 
 	return returnValue

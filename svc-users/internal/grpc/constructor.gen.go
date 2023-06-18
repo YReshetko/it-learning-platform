@@ -7,7 +7,6 @@
 package grpc
 
 import (
-	config "github.com/YReshetko/it-learning-platform/svc-users/internal/config"
 	storage "github.com/YReshetko/it-learning-platform/svc-users/internal/storage"
 	logrus "github.com/sirupsen/logrus"
 )
@@ -16,16 +15,6 @@ func NewHandler(logger *logrus.Entry, storage storage.UserStorage) Handler {
 	returnValue := Handler{
 		logger:  logger,
 		storage: storage,
-	}
-
-	return returnValue
-}
-
-func NewServer(cfg config.GRPC, handler *Handler, logger *logrus.Entry) Server {
-	returnValue := Server{
-		cfg:     cfg,
-		handler: handler,
-		logger:  logger,
 	}
 
 	return returnValue

@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/YReshetko/it-learning-platform/lib-app/pkg/config"
 	"github.com/caarlos0/env/v8"
 	_ "github.com/caarlos0/env/v8"
 )
@@ -9,7 +10,7 @@ import (
 type Config struct {
 	UsersClient    UsersClient
 	KeycloakClient KeycloakClient
-	GRPC           GRPC
+	GRPCServer     config.GRPCServer
 }
 
 type UsersClient struct {
