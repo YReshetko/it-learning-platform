@@ -1,24 +1,22 @@
 package main
 
 import (
+	"github.com/YReshetko/it-learning-platform/lib-app/pkg/errors"
 	"github.com/YReshetko/it-learning-platform/svc-users/internal/config"
 	"github.com/YReshetko/it-learning-platform/svc-users/internal/grpc"
 	"github.com/YReshetko/it-learning-platform/svc-users/internal/storage"
-	"log"
+	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 func main() {
-	cfg := handleError(config.LoadConfig())
-	db := handleError(storage.DatabaseConnection(cfg.DB))
+	logger := logrus.New().WithField("application", "svc-users")
+
+	cfg := errors.MustExitAppErrorHandler[config.Config](logger.WithField("sub_system", "config"))(config.LoadConfig())
+	db := errors.MustExitAppErrorHandler[*gorm.DB](logger.WithField("sub_system", "database"))(storage.DatabaseConnection(cfg.DB))
 	s := storage.NewUserStorage(db)
 
-	server := grpc.NewServer(cfg.GRPC, grpc.NewHandler(s))
+	handler := grpc.NewHandler(logger.WithField("handler", "grpc"), s)
+	server := grpc.NewServer(cfg.GRPC, &handler, logger.WithField("server", "grpc"))
 	server.Start()
-}
-
-func handleError[T any](val T, err error) T {
-	if err != nil {
-		log.Fatalf("crashing app due to: %s", err)
-	}
-	return val
 }

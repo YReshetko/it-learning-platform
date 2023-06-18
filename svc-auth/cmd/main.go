@@ -4,10 +4,13 @@ import (
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/clients"
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/grpc"
+	"github.com/sirupsen/logrus"
 	"log"
 )
 
 func main() {
+	logger := logrus.New().WithField("application", "svc-users")
+
 	cfg := handleError(config.LoadConfig())
 	uc := clients.NewUsersClient(cfg.UsersClient)
 	kc := clients.NewKeycloakClient(cfg.KeycloakClient)
