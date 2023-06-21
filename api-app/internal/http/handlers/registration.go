@@ -20,28 +20,28 @@ type Registration struct {
 	logger *logrus.Entry
 }
 
-func (r *Registration) CreateUser(context http.Context, user models.AuthUser) (models.AuthResponse, http.Status) {
+func (r *Registration) CreateUser(context http.Context, user models.AuthUser) (models.Empty, http.Status) {
 	logger := r.logger.WithField("method", "CreateUser").WithField("user", user)
 	err := r.createUser(context, user)
 	if err != nil {
 		logger.WithError(err).Error("unable to create user")
-		return models.AuthResponse{}, http.Status{
+		return models.Empty{}, http.Status{
 			Error:      err,
 			StatusCode: rest.StatusInternalServerError,
 			Message:    "unable to create user",
 		}
 	}
 
-	return models.AuthResponse{}, http.Status{StatusCode: rest.StatusOK}
+	return models.Empty{}, http.Status{StatusCode: rest.StatusCreated}
 }
 
-func (r *Registration) CreateUsers(context http.Context, users models.AuthUsers) (models.AuthResponse, http.Status) {
+func (r *Registration) CreateUsers(context http.Context, users models.AuthUsers) (models.Empty, http.Status) {
 	logger := r.logger.WithField("method", "CreateUsers").WithField("user", users)
 	for i, user := range users.Users {
 		err := r.createUser(context, user)
 		if err != nil {
 			logger.WithField("user", user).WithError(err).Error("unable to create user")
-			return models.AuthResponse{}, http.Status{
+			return models.Empty{}, http.Status{
 				Error:      err,
 				StatusCode: rest.StatusInternalServerError,
 				Message:    fmt.Sprintf("unable to create %d user", i+1),
@@ -49,11 +49,11 @@ func (r *Registration) CreateUsers(context http.Context, users models.AuthUsers)
 		}
 	}
 
-	return models.AuthResponse{}, http.Status{StatusCode: rest.StatusOK}
+	return models.Empty{}, http.Status{StatusCode: rest.StatusCreated}
 }
 
 func (r *Registration) createUser(context http.Context, user models.AuthUser) error {
-	_, err := r.client.CreateUser(context.GinCtx.Request.Context(), &auth.CreateAuthUserRequest{
+	_, err := r.client.CreateUser(context.Context(), &auth.CreateAuthUserRequest{
 		User: &auth.AuthUser{
 			Login:     user.Login,
 			FirstName: user.FirstName,

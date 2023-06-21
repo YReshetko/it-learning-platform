@@ -32,7 +32,10 @@ func Wrap[Request any, Response any](fn rest.HandlerFunc[Request, Response], red
 		}
 
 		if status.Error == nil {
-			ginCtx.JSON(status.StatusCode, rs)
+			_, ok = any(rs).(models.Empty)
+			if !ok {
+				ginCtx.JSON(status.StatusCode, rs)
+			}
 			return
 		}
 		logger.WithField("error_status", status.StatusCode).WithError(status.Error).Error(status.Message)

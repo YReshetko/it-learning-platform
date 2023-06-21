@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Nerzal/gocloak/v13"
+	commonModel "github.com/YReshetko/it-learning-platform/lib-app/pkg/model"
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/config"
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/model"
 	"github.com/google/uuid"
@@ -37,7 +38,7 @@ func (kc *KeycloakClient) CreateUser(ctx context.Context, user model.User) (stri
 	if err != nil {
 		return "", fmt.Errorf("unable create user: %w", err)
 	}
-	roles := user.Roles.ToStringPtr()
+	roles := commonModel.RolesToStrings(user.Roles)
 
 	keycloakUserID, err := kc.client.CreateUser(ctx, clientToken.AccessToken, kc.cfg.Realm, gocloak.User{
 		Username:               toPtr(user.Login),
@@ -97,7 +98,7 @@ func (kc *KeycloakClient) ValidateAccessToken(ctx context.Context, accessToken s
 	return true, nil
 }
 
-func (kc *KeycloakClient) GetUserIDAndRoles(ctx context.Context, accessToken string) (uuid.UUID, model.Roles, error) {
+func (kc *KeycloakClient) GetUserIDAndRoles(ctx context.Context, accessToken string) (uuid.UUID, []commonModel.Role, error) {
 	userInfo, err := kc.client.GetUserInfo(ctx, accessToken, kc.cfg.Realm)
 	if err != nil {
 		return uuid.UUID{}, nil, fmt.Errorf("unable to get user info: %w", err)
@@ -122,7 +123,7 @@ func (kc *KeycloakClient) GetUserIDAndRoles(ctx context.Context, accessToken str
 	return userId, extractAppRoles(roles), nil
 }
 
-func (kc *KeycloakClient) GetUserRoles(ctx context.Context, userID uuid.UUID) (model.Roles, error) {
+func (kc *KeycloakClient) GetUserRoles(ctx context.Context, userID uuid.UUID) ([]commonModel.Role, error) {
 	clientToken, err := kc.getClientToken(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get client token: %w", err)
@@ -134,12 +135,35 @@ func (kc *KeycloakClient) GetUserRoles(ctx context.Context, userID uuid.UUID) (m
 	return extractAppRoles(roles), nil
 }
 
-func extractAppRoles(roles []*gocloak.Role) model.Roles {
-	var outRoles model.Roles
-	for _, modelRole := range model.AllRoles {
-		for _, realmRole := range roles {
-			if realmRole.Name != nil && *realmRole.Name == string(modelRole) {
-				outRoles = append(outRoles, modelRole)
+func (kc *KeycloakClient) Logout(ctx context.Context, userID uuid.UUID) error {
+	accessToken, err := kc.getClientToken(ctx)
+	if err != nil {
+		return fmt.Errorf("unable to get client access token: %w", err)
+	}
+	sessions, err := kc.client.GetUserSessions(ctx, accessToken.AccessToken, kc.cfg.Realm, userID.String())
+	if err != nil {
+		return fmt.Errorf("unable to get user sessions: %w", err)
+	}
+
+	for _, session := range sessions {
+		if session == nil || session.ID == nil {
+			continue
+		}
+		err = kc.client.LogoutUserSession(ctx, accessToken.AccessToken, kc.cfg.Realm, *session.ID)
+		if err != nil {
+			return fmt.Errorf("unable to logout user session: %w", err)
+		}
+	}
+	return nil
+}
+
+func extractAppRoles(realmRoles []*gocloak.Role) []commonModel.Role {
+	var outRoles []commonModel.Role
+	for _, realmRole := range realmRoles {
+		if realmRole != nil {
+			r, ok := commonModel.RoleFromString(*realmRole.Name)
+			if ok {
+				outRoles = append(outRoles, r)
 			}
 		}
 	}

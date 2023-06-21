@@ -2,6 +2,8 @@ package grpc
 
 import (
 	"context"
+	"github.com/YReshetko/it-learning-platform/lib-app/pkg/grpc"
+	commonModel "github.com/YReshetko/it-learning-platform/lib-app/pkg/model"
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/clients"
 	"github.com/YReshetko/it-learning-platform/svc-auth/internal/model"
 	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
@@ -10,6 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 /*
@@ -55,10 +58,14 @@ func (h *Handler) CreateUser(ctx context.Context, rq *auth.CreateAuthUserRequest
 	return &auth.CreateAuthUserResponse{}, nil
 }
 
-func mapRoles(roles []auth.UserRole) model.Roles {
-	out := make(model.Roles, len(roles))
-	for i, role := range roles {
-		out[i] = model.Role(auth.UserRole_name[int32(role)])
+func mapRoles(roles []auth.UserRole) []commonModel.Role {
+	var out []commonModel.Role
+	for _, role := range roles {
+		pbRoleName := auth.UserRole_name[int32(role)]
+		r, ok := commonModel.RoleFromString(pbRoleName)
+		if ok {
+			out = append(out, r)
+		}
 	}
 	return out
 }
@@ -125,7 +132,34 @@ func (h *Handler) GetUserInfo(ctx context.Context, rq *auth.GetUserInfoRequest) 
 
 }
 
-func mapModelToProtoRoles(roles model.Roles, logger *logrus.Entry) []auth.UserRole {
+func (h *Handler) Logout(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {
+	logger := h.logger.WithField("method", "Logout")
+	userID, err := grpc.GetUserIDFromContext(ctx)
+	if err != nil {
+		logger.WithError(err).Error("Unable to get user from context")
+		return &emptypb.Empty{}, status.Error(codes.Unauthenticated, "unable to get user from context")
+	}
+	userInfo, err := h.userClient.UserInfo(ctx, &users.UserInfoRequest{Id: userID.String()})
+	if err != nil {
+		logger.WithError(err).Error("Unable to get user info")
+		return &emptypb.Empty{}, status.Error(codes.Internal, "unable to get user info")
+	}
+
+	externalId, err := uuid.Parse(userInfo.GetUser().GetExternalId())
+	if err != nil {
+		logger.WithError(err).Error("Unable to parse user external ID")
+		return &emptypb.Empty{}, status.Error(codes.Internal, "unable to parse user external ID")
+	}
+
+	err = h.keycloakClient.Logout(ctx, externalId)
+	if err != nil {
+		logger.WithError(err).Error("Unable to logout from keycloak")
+		return &emptypb.Empty{}, status.Error(codes.Internal, "unable to logout from keycloak")
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func mapModelToProtoRoles(roles []commonModel.Role, logger *logrus.Entry) []auth.UserRole {
 	var userRoles []auth.UserRole
 	for _, role := range roles {
 		r, ok := auth.UserRole_value[string(role)]

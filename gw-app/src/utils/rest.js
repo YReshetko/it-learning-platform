@@ -6,7 +6,7 @@ export function get(url, query) {
     return doRequest(url, request)
 }
 
-export function post(url, body) {
+export function post(url, body = null) {
     let request = prepareRequest("POST", body);
     return doRequest(url, request)
 }
@@ -46,8 +46,12 @@ function doRequest(url, request) {
         if (res.redirected) {
             window.location.replace(res.url);
         }
+        const isJson = res.headers.get('content-type')?.includes('application/json');
         // TODO Verify response statuses
 
-        return res.json();
+        if (isJson) {
+            return res.json();
+        }
+        return Promise.resolve();
     })
 }

@@ -1,10 +1,12 @@
 package grpc
 
 import (
+	"context"
 	"fmt"
 	"github.com/YReshetko/it-learning-platform/lib-app/pkg/config"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"net"
 )
 
@@ -24,7 +26,11 @@ type Server[T any] struct {
 }
 
 func (s *Server[T]) Start() {
-	server := grpc.NewServer()
+	opts := []grpc.ServerOption{
+		grpc.UnaryInterceptor(contextPropagationUnaryServerInterceptor()),
+	}
+
+	server := grpc.NewServer(opts...)
 	s.registrarFn(server, s.handler)
 
 	addr := fmt.Sprintf(":%d", s.cfg.Port)
@@ -50,4 +56,18 @@ func (s *Server[T]) Start() {
 func (s *Server[T]) Stop() {
 	s.server.GracefulStop()
 	s.logger.Info("Server stopped")
+}
+
+func contextPropagationUnaryServerInterceptor() grpc.UnaryServerInterceptor {
+	return func(
+		ctx context.Context,
+		req interface{},
+		info *grpc.UnaryServerInfo,
+		handler grpc.UnaryHandler,
+	) (interface{}, error) {
+		if md, ok := metadata.FromIncomingContext(ctx); ok {
+			ctx = metadata.NewOutgoingContext(ctx, md)
+		}
+		return handler(ctx, req)
+	}
 }

@@ -11,6 +11,9 @@ import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import Drawer from "@mui/material/Drawer";
 import Layout from "./Layout";
+import {Button} from "@mui/material";
+import * as rest from "../../utils/rest";
+import * as auth from "../../utils/auth";
 
 const menuItems = {
     "ADMIN": {
@@ -63,21 +66,33 @@ const Workspace = ({user}) => {
         console.log("Opening layout", layout)
     }
 
+    const logout = () => {
+        rest.post("/api/logout")
+            .then(response => {
+                auth.clean();
+                window.location.replace("/");
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            });
+    }
+
     return (
         <div>
             <Box sx={{display: 'flex'}}>
                 {/*<AppBar position="fixed" sx={{ width: { sm: `calc(100% - ${drawerWidth}px)` }, ml: { sm: `${drawerWidth}px` }}}>*/}
                 <AppBar position="fixed" sx={{width: {sm: `calc(100% - ${appBarWidth}px)`} , ml: { sm: `${appBarWidth}px` }}}>
                     <Toolbar>
-                        <IconButton color="inherit" aria-label="open drawer" onClick={handleMenuOpen}>
+                        <IconButton color="inherit" onClick={handleMenuOpen}>
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h6" noWrap component="div">
+                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                             {user.firstName} {user.lastName}
                         </Typography>
+                        <Button onClick={logout} color="inherit">Выход</Button>
                     </Toolbar>
                 </AppBar>
-                <Box component="nav" sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}} aria-label="mailbox folders">
+                <Box component="nav" sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}>
                     {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                     <Drawer
                         variant="persistent"
@@ -115,6 +130,7 @@ function createMenuItems(userRoles, callback) {
                     Меню
                 </Typography>
             </Toolbar>
+
             {userMenuItems.map((item) => createMenuBlock(item, callback))}
         </div>
     )

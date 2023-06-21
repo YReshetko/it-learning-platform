@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/clients"
 	rest "github.com/YReshetko/it-learning-platform/api-app/internal/http"
+	"github.com/YReshetko/it-learning-platform/lib-app/pkg/model"
 	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
@@ -18,7 +19,7 @@ type Service struct {
 	client clients.AuthClient
 }
 
-func (s *Service) getUserRoles(ctx context.Context, token string) (uuid.UUID, []Role, error) {
+func (s *Service) getUserRoles(ctx context.Context, token string) (uuid.UUID, []model.Role, error) {
 	fmt.Printf("USER INFO TOKEN: %+v\n", token)
 	userInfo, err := s.client.AccessTokenExchange(ctx, &auth.AccessTokenExchangeRequest{AccessToken: &auth.AccessToken{Token: token}})
 	if err != nil {
@@ -31,9 +32,14 @@ func (s *Service) getUserRoles(ctx context.Context, token string) (uuid.UUID, []
 	}
 
 	userRoles := userInfo.GetUserInfo().GetRoles()
-	roles := make([]Role, len(userRoles))
-	for i, role := range userRoles {
-		roles[i] = Role(auth.UserRole_name[int32(role)])
+
+	var roles []model.Role
+	for _, role := range userRoles {
+		pbRoleName := auth.UserRole_name[int32(role)]
+		r, ok := model.RoleFromString(pbRoleName)
+		if ok {
+			roles = append(roles, r)
+		}
 	}
 
 	return userId, roles, nil
@@ -56,7 +62,7 @@ func Authenticate[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs]) rest.HandlerFunc[
 	}
 }
 
-func Authorize[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs], service *Service, roles []Role) rest.HandlerFunc[Rq, Rs] {
+func Authorize[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs], service *Service, roles []model.Role) rest.HandlerFunc[Rq, Rs] {
 	return func(context rest.Context, request Rq) (Rs, rest.Status) {
 		var rs Rs
 		userId, userRoles, err := service.getUserRoles(context.Context(), context.AccessToken)
@@ -100,11 +106,13 @@ func Authorize[Rq any, Rs any](fn rest.HandlerFunc[Rq, Rs], service *Service, ro
 		}
 
 		context.UserID = userId
+
+		context.UserRoles = userRoles
 		return fn(context, request)
 	}
 }
 
-func matchRoles(r1, r2 []Role) bool {
+func matchRoles(r1, r2 []model.Role) bool {
 	for _, role1 := range r1 {
 		for _, role2 := range r2 {
 			if role1 == role2 {

@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 enum UserRole {
   ADMIN = 0;
   MANAGER = 1;
@@ -57,4 +59,5 @@ service AuthService {
   rpc CreateUser(CreateAuthUserRequest) returns (CreateAuthUserResponse){}
   rpc AccessTokenExchange(AccessTokenExchangeRequest) returns (AccessTokenExchangeResponse){}
   rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse){}
+  rpc Logout(google.protobuf.Empty) returns (google.protobuf.Empty){}
 }

@@ -6,6 +6,9 @@ import (
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http/models"
 	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 	rest "net/http"
 )
 
@@ -43,4 +46,27 @@ func (s *Self) GetUserInfo(context http.Context, _ models.Empty) (models.SelfRes
 		Roles:     roles,
 	}, http.Status{StatusCode: rest.StatusOK}
 
+}
+
+func (s *Self) Logout(context http.Context, _ models.Empty) (models.Empty, http.Status) {
+	logger := s.logger.WithField("method", "Logout")
+	_, err := s.client.Logout(context.Context(), &emptypb.Empty{})
+	if err != nil {
+		logger.WithError(err).Error("Unable to logout")
+		grpcErr, ok := status.FromError(err)
+		if ok && grpcErr.Code() == codes.Unauthenticated {
+			return models.Empty{}, http.Status{
+				Error:      err,
+				StatusCode: rest.StatusUnauthorized,
+				Message:    "unable to logout unauthorized user",
+			}
+		}
+		return models.Empty{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to logout",
+		}
+
+	}
+	return models.Empty{}, http.Status{StatusCode: rest.StatusNoContent}
 }

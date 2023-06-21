@@ -5,7 +5,7 @@ import UnsupportedLayout from "../unsupported/UnsupportedLayout";
 
 const layoutsMapping = {
     "admin-add-user": (<UserForm/>),
-    "admin-all-users": (<UserList/>)
+    /*"admin-all-users": (<UserList/>)*/
 }
 
 const getLayout = (layout) => {

@@ -9,12 +9,13 @@ import Workspace from "./components/workspace/Workspace";
 function App() {
     auth.verifyToken();
 
-    const [me, setMe] = useState({
+    const [me, setMe] = useState({id: '', firstName: '', lastName: '', roles: []})
+/*    const [me, setMe] = useState({
         id: '',
         firstName: 'John',
         lastName: 'Doe',
         roles: ["ADMIN", "STUDENT", "MANAGER", "TEACHER"]
-    })
+    })*/
     useEffect(() => {
             async function fetch() {
                 get("/api/self", null)
