@@ -36,8 +36,7 @@ services:
       - start-dev
       - '--import-realm'
   users-migration:
-    build: ./svc-users/db-migration
-    image: users-migration
+    image: migration-tool:latest
     container_name: users-migration
     environment:
       USER_NAME: users
@@ -45,6 +44,21 @@ services:
       DB_NAME: users
       DB_HOST: db
       DB_PORT: 5432
+    volumes:
+      - ./svc-users/db-migration/sql:/sql
+    depends_on:
+      - db
+  courses-migration:
+    image: migration-tool:latest
+    container_name: courses-migration
+    environment:
+      USER_NAME: courses
+      USER_PASSWORD: courses
+      DB_NAME: courses
+      DB_HOST: db
+      DB_PORT: 5432
+    volumes:
+      - ./svc-courses/db-migration/sql:/sql
     depends_on:
       - db
   users:

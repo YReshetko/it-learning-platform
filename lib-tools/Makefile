@@ -5,3 +5,7 @@ build:
 .PHONY: install
 install:
 	cp ./bin/annotations $(GOBIN)
+
+.PHONY: build-docker
+build-docker:
+	docker build -t migration-tool:latest -f docker/db/Dockerfile ./docker/db

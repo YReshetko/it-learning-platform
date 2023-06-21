@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS courses(
     id UUID                             DEFAULT uuid_generate_v4(),
     seq_no      INT                     NOT NULL,
     name        VARCHAR(1024)           NOT NULL,
-    description TEXT                    NOT NULL,
+    description TEXT,
     active      BOOLEAN                 NOT NULL,
     created_at  TIMESTAMP               NOT NULL,
     updated_at  TIMESTAMP               NOT NULL,
