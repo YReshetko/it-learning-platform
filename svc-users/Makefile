@@ -4,10 +4,6 @@ SVC_NAME=svc-users
 annotations:
 	annotations .
 
-.PHONY: build-migration
-build-migration:
-	echo $(SVC_NAME)
-
 .PHONY: new-sql
 new-sql:
 	goose -dir ./db-migration/sql/ create $(sql) sql

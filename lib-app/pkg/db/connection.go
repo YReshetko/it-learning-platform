@@ -1,11 +1,10 @@
-package storage
+package db
 
 import (
 	"fmt"
+	"github.com/YReshetko/it-learning-platform/lib-app/pkg/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-
-	"github.com/YReshetko/it-learning-platform/svc-users/internal/config"
 )
 
 func DatabaseConnection(cfg config.Database) (*gorm.DB, error) {

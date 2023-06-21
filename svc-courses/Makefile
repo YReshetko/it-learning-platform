@@ -1,12 +1,8 @@
-SVC_NAME=svc-migration
+SVC_NAME=svc-courses
 
 .PHONY: annotations
 annotations:
 	annotations .
-
-.PHONY: build-migration
-build-migration:
-	echo $(SVC_NAME)
 
 .PHONY: new-sql
 new-sql:
@@ -15,3 +11,12 @@ new-sql:
 .PHONY: new-test-sql
 new-test-sql:
 	goose -dir ./db-migration/sql/test/ create $(sql) sql
+
+.PHONY: gen-proto
+gen-proto:
+	protoc --go_out=. \
+	--go_opt=Mproto/courses.proto=./pb/courses \
+	--go-grpc_out=. \
+	--go-grpc_opt=Mproto/courses.proto=./pb/courses \
+	proto/courses.proto
+
