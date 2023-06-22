@@ -10,15 +10,16 @@ type ProtoTechnologies struct {
 	Values []*courses.Technology
 }
 
+// TechnologyMapper mapper from proto to API models and vise versa
 // @Mapper
 type TechnologyMapper interface {
-	// @SliceMapping(target="Values", source="in.Technologies", this="ToProto")
+	// ToProtos @SliceMapping(target="Values", source="in.Technologies", this="ToProto")
 	ToProtos(in models.Technologies) ProtoTechnologies
-	// @Mapping(target="Id", func="uuidPtrToString(in.ID)")
+	// ToProto @Mapping(target="Id", func="uuidPtrToString(in.ID)")
 	ToProto(in models.Technology) *courses.Technology
-	// @SliceMapping(target="Technologies", source="in.Technology", this="ToModel")
+	// ToModels @SliceMapping(target="Technologies", source="in.Technology", this="ToModel")
 	ToModels(in *courses.GetTechnologiesResponse) models.Technologies
-	// @Mapping(target="ID", func="stringToUUIDPtr(in.Id)")
+	// ToModel @Mapping(target="ID", func="stringToUUIDPtr(in.Id)")
 	ToModel(in *courses.Technology) models.Technology
 }
 
