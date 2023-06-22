@@ -20,3 +20,13 @@ func NewAuthClient(cfg config.AuthClient, logger *logrus.Entry) AuthClient {
 
 	return returnValue
 }
+
+func NewCoursesClient(cfg config.CoursesClient, logger *logrus.Entry) CoursesClient {
+	returnValue := CoursesClient{
+		cfg:    cfg,
+		logger: logger,
+	}
+	returnValue.postConstruct()
+
+	return returnValue
+}

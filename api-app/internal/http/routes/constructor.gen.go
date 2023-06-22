@@ -23,6 +23,12 @@ func NewRouter(opts ...RouterOption) Router {
 	return *rt
 }
 
+func WithCourses(v handlers.Courses) RouterOption {
+	return func(rt *Router) {
+		rt.courses = v
+	}
+}
+
 func WithRegistration(v handlers.Registration) RouterOption {
 	return func(rt *Router) {
 		rt.registration = v

@@ -123,6 +123,8 @@ services:
       HTTP_PORT: 8080
       AUTH_HOST: auth
       AUTH_PORT: 3000
+      COURSES_HOST: courses
+      COURSES_PORT: 3000
       AUTH_REDIRECT_SCHEMA: http
       AUTH_REDIRECT_HOST: localhost
       AUTH_REDIRECT_PORT: 8081

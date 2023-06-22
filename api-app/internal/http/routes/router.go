@@ -18,6 +18,7 @@ Router REST API router
 type Router struct {
 	registration handlers.Registration
 	self         handlers.Self
+	courses      handlers.Courses
 
 	services *RouterServices
 }
@@ -37,6 +38,9 @@ func (r Router) Init(engine *gin.Engine) {
 	engine.POST("/api/v1/registration/users", protected(r.registration.CreateUsers, r.services, []model.Role{model.ADMIN}))
 	engine.GET("/api/v1/self", protected(r.self.GetUserInfo, r.services, model.AllRoles()))
 	engine.POST("/api/v1/logout", protected(r.self.Logout, r.services, model.AllRoles()))
+
+	engine.POST("/api/v1/admin/technology", protected(r.courses.CreateTechnology, r.services, []model.Role{model.ADMIN}))
+	engine.GET("/api/v1/admin/technologies", protected(r.courses.GetTechnologies, r.services, []model.Role{model.ADMIN}))
 }
 
 func protected[Rq any, Rs any](fn http.HandlerFunc[Rq, Rs], service *RouterServices, roles []model.Role) func(*gin.Context) {

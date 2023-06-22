@@ -8,8 +8,19 @@ package handlers
 
 import (
 	clients "github.com/YReshetko/it-learning-platform/api-app/internal/clients"
+	mappers "github.com/YReshetko/it-learning-platform/api-app/internal/http/mappers"
 	logrus "github.com/sirupsen/logrus"
 )
+
+func NewCourses(client clients.CoursesClient, logger *logrus.Entry, technologyMapper mappers.TechnologyMapper) Courses {
+	returnValue := Courses{
+		client:           client,
+		logger:           logger,
+		technologyMapper: technologyMapper,
+	}
+
+	return returnValue
+}
 
 func NewRegistration(client clients.AuthClient, logger *logrus.Entry) Registration {
 	returnValue := Registration{

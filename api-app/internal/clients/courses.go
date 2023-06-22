@@ -3,24 +3,24 @@ package clients
 import (
 	"fmt"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/config"
-	"github.com/YReshetko/it-learning-platform/svc-auth/pb/auth"
+	"github.com/YReshetko/it-learning-platform/svc-courses/pb/courses"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 /*
-AuthClient the client to RGPC svc-auth API
+CoursesClient the client to RGPC svc-courses API
 @Constructor
 */
-type AuthClient struct {
-	cfg                    config.AuthClient
-	logger                 *logrus.Entry
-	auth.AuthServiceClient // @Exclude
+type CoursesClient struct {
+	cfg                          config.CoursesClient
+	logger                       *logrus.Entry
+	courses.CoursesServiceClient // @Exclude
 }
 
 // @PostConstruct
-func (uc *AuthClient) postConstruct() {
+func (uc *CoursesClient) postConstruct() {
 	opt := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
@@ -30,5 +30,5 @@ func (uc *AuthClient) postConstruct() {
 		uc.logger.WithField("host", host).WithError(err).Error("Unable to establish deal connection")
 		return
 	}
-	uc.AuthServiceClient = auth.NewAuthServiceClient(conn)
+	uc.CoursesServiceClient = courses.NewCoursesServiceClient(conn)
 }

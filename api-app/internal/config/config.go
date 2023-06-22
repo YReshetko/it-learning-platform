@@ -6,9 +6,10 @@ import (
 )
 
 type Config struct {
-	HTTP         HTTP
-	AuthClient   AuthClient
-	AuthRedirect AuthRedirect
+	HTTP          HTTP
+	AuthClient    AuthClient
+	AuthRedirect  AuthRedirect
+	CoursesClient CoursesClient
 }
 
 type HTTP struct {
@@ -19,6 +20,11 @@ type HTTP struct {
 type AuthClient struct {
 	Host string `env:"AUTH_HOST"`
 	Port int    `env:"AUTH_PORT"`
+}
+
+type CoursesClient struct {
+	Host string `env:"COURSES_HOST"`
+	Port int    `env:"COURSES_PORT"`
 }
 
 // "http://localhost:8081/realms/it-academy/protocol/openid-connect/auth?response_type=token&scope=openid&client_id=academy&redirect_uri=http://localhost:8080"

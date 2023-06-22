@@ -19,9 +19,11 @@ func main() {
 	server := http.NewServer(cfg.HTTP, logger.WithField("server", "http"))
 
 	authClient := clients.NewAuthClient(cfg.AuthClient, logger.WithField("client", "AuthClient"))
+	coursesClient := clients.NewCoursesClient(cfg.CoursesClient, logger.WithField("client", "CoursesClient"))
 
 	registration := handlers.NewRegistration(authClient, logger.WithField("handler", "Registration"))
 	self := handlers.NewSelf(authClient, logger.WithField("handler", "Self"))
+	courses := handlers.NewCourses(coursesClient, logger.WithField("handler", "Courses"))
 
 	authorizationService := authorization.NewService(authClient)
 
@@ -31,9 +33,10 @@ func main() {
 		routes.WithRedirectURL(cfg.AuthRedirect.URL()),
 	)
 	r := routes.NewRouter(
+		routes.WithServices(&routeServices),
 		routes.WithRegistration(registration),
 		routes.WithSelf(self),
-		routes.WithServices(&routeServices),
+		routes.WithCourses(courses),
 	)
 	r.Init(server.Engine)
 	server.Start()
