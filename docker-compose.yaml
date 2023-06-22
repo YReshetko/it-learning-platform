@@ -78,6 +78,23 @@ services:
       GRPC_NETWORK: tcp4
     depends_on:
       - users-migration
+  courses:
+    image: svc-courses
+    container_name: svc-courses
+    build:
+      context: .
+      dockerfile: ./svc-courses/Dockerfile
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER_NAME: courses
+      DB_USER_PASSWORD: courses
+      DB_NAME: courses
+      GRPC_HOST: localhost
+      GRPC_PORT: 3000
+      GRPC_NETWORK: tcp4
+    depends_on:
+      - courses-migration
   auth:
     image: svc-auth
     container_name: svc-auth

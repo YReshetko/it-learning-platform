@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+message Technology {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message CreateTechnologyRequest {
+  Technology technology = 1;
+}
+
+message CreateTechnologyResponse {
+  Technology technology = 1;
+}
+
+message GetTechnologiesResponse {
+  repeated Technology technology = 1;
+}
+
+service CoursesService{
+  rpc CreateTechnology(CreateTechnologyRequest) returns (CreateTechnologyResponse){}
+  rpc GetTechnologies(google.protobuf.Empty) returns (GetTechnologiesResponse){}
+}

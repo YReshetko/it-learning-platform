@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.7.0
-	github.com/YReshetko/go-annotation v0.1.3
+	github.com/YReshetko/go-annotation v0.1.4
 	github.com/caarlos0/env/v8 v8.0.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.3.0

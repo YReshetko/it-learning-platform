@@ -1,5 +1,9 @@
 GO_BUILD_SERVICES = svc-users svc-auth api-app ui-app
 
+.PHONY: annotations
+annotations:
+	annotations .
+
 .PHONY: go-build
 go-build:
 	$(foreach service,$(GO_BUILD_SERVICES),go build -o bin/$(service) -v ./$(service)/cmd/main.go &) echo Completed

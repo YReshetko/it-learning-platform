@@ -22,8 +22,8 @@ type Handler struct {
 	logger                               *logrus.Entry
 }
 
-func (s *Handler) CreateUser(_ context.Context, request *users.CreateUserRequest) (*users.CreateUserResponse, error) {
-	logger := s.logger.WithField("method", "CreateUser").WithField("request", request)
+func (h *Handler) CreateUser(_ context.Context, request *users.CreateUserRequest) (*users.CreateUserResponse, error) {
+	logger := h.logger.WithField("method", "CreateUser").WithField("request", request)
 	user := request.GetUser()
 	if user == nil {
 		logger.Error("no user is sent")
@@ -37,7 +37,7 @@ func (s *Handler) CreateUser(_ context.Context, request *users.CreateUserRequest
 	dbUser.CreatedAt = time.Now()
 	dbUser.UpdatedAt = time.Now()
 
-	dbUser, err = s.storage.Create(dbUser)
+	dbUser, err = h.storage.Create(dbUser)
 	if err != nil {
 		logger.WithError(err).Error("unable to save user")
 		return &users.CreateUserResponse{}, status.Error(codes.Internal, "unable to save user")
@@ -48,14 +48,14 @@ func (s *Handler) CreateUser(_ context.Context, request *users.CreateUserRequest
 	}, nil
 }
 
-func (s *Handler) FindUsers(ctx context.Context, request *users.FindUsersRequest) (*users.FindUsersResponse, error) {
-	logger := s.logger.WithField("method", "FindUsers").WithField("request", request)
+func (h *Handler) FindUsers(ctx context.Context, request *users.FindUsersRequest) (*users.FindUsersResponse, error) {
+	logger := h.logger.WithField("method", "FindUsers").WithField("request", request)
 	var IDs []uuid.UUID
 	for _, ID := range request.Ids {
 		u, _ := uuid.Parse(ID)
 		IDs = append(IDs, u)
 	}
-	usrs, err := s.storage.FindByIDs(IDs)
+	usrs, err := h.storage.FindByIDs(IDs)
 	if err != nil {
 		logger.WithError(err).Error("unable to find users by IDs")
 		return &users.FindUsersResponse{}, status.Error(codes.Internal, "unable to find users by IDs")
@@ -68,14 +68,14 @@ func (s *Handler) FindUsers(ctx context.Context, request *users.FindUsersRequest
 	return &users.FindUsersResponse{User: pbUsers}, nil
 }
 
-func (s *Handler) UserInfo(ctx context.Context, request *users.UserInfoRequest) (*users.UserInfoResponse, error) {
-	logger := s.logger.WithField("method", "UserInfo").WithField("request", request)
+func (h *Handler) UserInfo(ctx context.Context, request *users.UserInfoRequest) (*users.UserInfoResponse, error) {
+	logger := h.logger.WithField("method", "UserInfo").WithField("request", request)
 	UUID, err := uuid.Parse(request.Id)
 	if err != nil {
 		logger.WithError(err).Error("unable to find user by ID")
 		return &users.UserInfoResponse{}, status.Error(codes.InvalidArgument, "invalid user ID")
 	}
-	user, err := s.storage.FindByID(UUID)
+	user, err := h.storage.FindByID(UUID)
 	if err != nil {
 		logger.WithError(err).Error("unable to retrieve user by ID")
 		return &users.UserInfoResponse{}, status.Error(codes.NotFound, "unable to retrieve user by ID")
@@ -84,14 +84,14 @@ func (s *Handler) UserInfo(ctx context.Context, request *users.UserInfoRequest) 
 	return &users.UserInfoResponse{User: &pbUser}, nil
 }
 
-func (s *Handler) FindUserByExternalID(ctx context.Context, request *users.FindUserByExternalIDRequest) (*users.FindUserByExternalIDResponse, error) {
-	logger := s.logger.WithField("method", "FindUserByExternalID").WithField("request", request)
+func (h *Handler) FindUserByExternalID(ctx context.Context, request *users.FindUserByExternalIDRequest) (*users.FindUserByExternalIDResponse, error) {
+	logger := h.logger.WithField("method", "FindUserByExternalID").WithField("request", request)
 	UUID, err := uuid.Parse(request.ExternalId)
 	if err != nil {
 		logger.WithError(err).Error("unable to find user by ID")
 		return &users.FindUserByExternalIDResponse{}, status.Error(codes.InvalidArgument, "invalid user ExternalId")
 	}
-	user, err := s.storage.FindByExternalID(UUID)
+	user, err := h.storage.FindByExternalID(UUID)
 	if err != nil {
 		logger.WithError(err).Error("unable to retrieve user by ExternalId")
 		return &users.FindUserByExternalIDResponse{}, status.Error(codes.NotFound, "unable to retrieve user by ExternalId")
@@ -100,14 +100,14 @@ func (s *Handler) FindUserByExternalID(ctx context.Context, request *users.FindU
 	return &users.FindUserByExternalIDResponse{User: &pbUser}, nil
 }
 
-func (s *Handler) UpdateUser(ctx context.Context, request *users.UpdateUserRequest) (*users.UpdateUserResponse, error) {
-	logger := s.logger.WithField("method", "UpdateUser").WithField("request", request)
+func (h *Handler) UpdateUser(ctx context.Context, request *users.UpdateUserRequest) (*users.UpdateUserResponse, error) {
+	logger := h.logger.WithField("method", "UpdateUser").WithField("request", request)
 	UUID, err := uuid.Parse(request.GetUser().GetId())
 	if err != nil {
 		logger.WithError(err).Error("unable to find user by ID")
 		return &users.UpdateUserResponse{}, status.Error(codes.InvalidArgument, "invalid user ID")
 	}
-	user, err := s.storage.FindByID(UUID)
+	user, err := h.storage.FindByID(UUID)
 	if err != nil {
 		logger.WithError(err).Error("unable to retrieve user by ID")
 		return &users.UpdateUserResponse{}, status.Error(codes.NotFound, "unable to retrieve user by ID")
@@ -124,7 +124,7 @@ func (s *Handler) UpdateUser(ctx context.Context, request *users.UpdateUserReque
 	}
 	user.ExternalID = externalId
 
-	err = s.storage.Update(user)
+	err = h.storage.Update(user)
 	if err != nil {
 		logger.WithError(err).Error("unable to update user")
 		return &users.UpdateUserResponse{}, status.Error(codes.Internal, "unable to update user")
