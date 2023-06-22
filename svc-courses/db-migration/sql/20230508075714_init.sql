@@ -59,24 +59,22 @@ CREATE TABLE IF NOT EXISTS tags
 
 CREATE TABLE IF NOT EXISTS topics_tags
 (
-    id         UUID DEFAULT uuid_generate_v4(),
     topic_id   UUID         NOT NULL,
     tag_name   VARCHAR(128) NOT NULL,
     created_at TIMESTAMP    NOT NULL,
     updated_at TIMESTAMP    NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (topic_id, tag_name),
     CONSTRAINT fk_topics_tags_topics_id FOREIGN KEY (topic_id) REFERENCES topics (id),
     CONSTRAINT fk_topics_tags_tags_name FOREIGN KEY (tag_name) REFERENCES tags (name)
 );
 
 CREATE TABLE IF NOT EXISTS tasks_tags
 (
-    id         UUID DEFAULT uuid_generate_v4(),
     task_id    UUID         NOT NULL,
     tag_name   VARCHAR(128) NOT NULL,
     created_at TIMESTAMP    NOT NULL,
     updated_at TIMESTAMP    NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (task_id, tag_name),
     CONSTRAINT fk_tasks_tags_topics_id FOREIGN KEY (task_id) REFERENCES tasks (id),
     CONSTRAINT fk_tasks_tags_tags_name FOREIGN KEY (tag_name) REFERENCES tags (name)
 );
@@ -94,6 +92,9 @@ CREATE TABLE IF NOT EXISTS courses
     PRIMARY KEY (id)
 );
 
+CREATE INDEX idx_courses_ownwr_id
+    ON courses (owner_id);
+
 CREATE TABLE IF NOT EXISTS courses_topics
 (
     id         UUID DEFAULT uuid_generate_v4(),
@@ -107,6 +108,8 @@ CREATE TABLE IF NOT EXISTS courses_topics
     CONSTRAINT fk_courses_topics_courses_id FOREIGN KEY (course_id) REFERENCES courses (id),
     CONSTRAINT fk_courses_topics_topics_id FOREIGN KEY (topic_id) REFERENCES topics (id)
 );
+CREATE UNIQUE INDEX idx_courses_topics_course_id_topic_id
+    ON courses_topics (course_id, topic_id);
 
 CREATE TABLE IF NOT EXISTS tasks_courses_topics
 (
@@ -121,6 +124,9 @@ CREATE TABLE IF NOT EXISTS tasks_courses_topics
     CONSTRAINT fk_tasks_courses_topics_courses_topics_id FOREIGN KEY (course_topic_id) REFERENCES courses_topics (id),
     CONSTRAINT fk_tasks_courses_topics_tasks_id FOREIGN KEY (task_id) REFERENCES tasks (id)
 );
+
+CREATE UNIQUE INDEX idx_tasks_courses_topics_course_topic_id_task_id
+    ON tasks_courses_topics (course_topic_id, task_id);
 
 -- +goose Down
 DROP TABLE IF EXISTS tasks_courses_topics;
