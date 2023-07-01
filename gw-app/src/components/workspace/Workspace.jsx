@@ -22,6 +22,8 @@ const menuItems = {
             {name: "Добавить пользователей", label: "admin-add-user"},
             {name: "Все пользователи", label: "admin-all-users"},
             {name: "Технологии", label: "admin-technologies"},
+            {name: "Задачи", label: "admin-tasks"},
+            {name: "Тэги", label: "admin-tags"},
         ]
     },
     "TEACHER": {
