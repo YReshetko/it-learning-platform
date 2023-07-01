@@ -10,6 +10,8 @@ type ProtoTechnologies struct {
 	Values []*courses.Technology
 }
 
+var emptyUUID uuid.UUID
+
 // TechnologyMapper mapper from proto to API models and vise versa
 // @Mapper
 type TechnologyMapper interface {
@@ -24,6 +26,9 @@ type TechnologyMapper interface {
 }
 
 func uuidPtrToString(id uuid.UUID) string {
+	if id == emptyUUID {
+		return ""
+	}
 	return id.String()
 }
 

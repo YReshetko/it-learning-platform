@@ -5,6 +5,7 @@ import (
 	"github.com/YReshetko/it-learning-platform/api-app/internal/config"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http/handlers"
+	"github.com/YReshetko/it-learning-platform/api-app/internal/http/mappers"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http/middlewares/authorization"
 	"github.com/YReshetko/it-learning-platform/api-app/internal/http/routes"
 	"github.com/YReshetko/it-learning-platform/lib-app/pkg/errors"
@@ -23,7 +24,7 @@ func main() {
 
 	registration := handlers.NewRegistration(authClient, logger.WithField("handler", "Registration"))
 	self := handlers.NewSelf(authClient, logger.WithField("handler", "Self"))
-	courses := handlers.NewCourses(coursesClient, logger.WithField("handler", "Courses"))
+	courses := handlers.NewCourses(coursesClient, logger.WithField("handler", "Courses"), mappers.TechnologyMapperImpl{})
 
 	authorizationService := authorization.NewService(authClient)
 

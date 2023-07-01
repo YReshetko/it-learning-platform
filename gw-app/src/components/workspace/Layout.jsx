@@ -2,9 +2,11 @@ import React from 'react';
 import UserForm from "../users/UserForm";
 import UserList from "../users/UserList";
 import UnsupportedLayout from "../unsupported/UnsupportedLayout";
+import Technologies from "../technologies/Technologies";
 
 const layoutsMapping = {
     "admin-add-user": (<UserForm/>),
+    "admin-technologies": (<Technologies/>),
     /*"admin-all-users": (<UserList/>)*/
 }
 

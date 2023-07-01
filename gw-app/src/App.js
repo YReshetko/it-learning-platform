@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
 import './styles/post.css'
-import UserForm from "./components/users/UserForm";
 import * as auth from './utils/auth.js';
-/*import Header from "./components/header/Header";*/
 import {get} from "./utils/rest";
 import Workspace from "./components/workspace/Workspace";
 
@@ -10,7 +8,7 @@ function App() {
     auth.verifyToken();
 
     const [me, setMe] = useState({id: '', firstName: '', lastName: '', roles: []})
-/*    const [me, setMe] = useState({
+    /*const [me, setMe] = useState({
         id: '',
         firstName: 'John',
         lastName: 'Doe',
@@ -34,11 +32,8 @@ function App() {
             fetch();
         },
         []);
-
     return (
         <div className="App">
-            {/*<Header lastName={me.lastName} firstName={me.firstName}></Header>*/}
-            {/*<UserForm/>*/}
             <Workspace user={me}/>
         </div>
     );
