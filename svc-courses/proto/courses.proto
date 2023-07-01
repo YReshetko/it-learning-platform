@@ -8,6 +8,27 @@ message Technology {
   string description = 3;
 }
 
+message Category {
+  string  id = 1;
+  string technology_id = 2;
+  string name = 3;
+  string description = 4;
+}
+
+message Topic {
+  string  id = 1;
+  string category_id = 2;
+  int32 seq_no = 3;
+  string name = 4;
+  string description = 5;
+  bool active = 6;
+  repeated Tag tags = 7;
+}
+
+message Tag {
+  string name = 1;
+}
+
 message CreateTechnologyRequest {
   Technology technology = 1;
 }
@@ -17,10 +38,46 @@ message CreateTechnologyResponse {
 }
 
 message GetTechnologiesResponse {
-  repeated Technology technology = 1;
+  repeated Technology technologies = 1;
+}
+
+message CreateCategoryRequest {
+  Category category = 1;
+}
+
+message CreateCategoryResponse {
+  Category category = 1;
+}
+
+message GetCategoriesRequest {
+  string technology_id = 1;
+}
+
+message GetCategoriesResponse {
+  repeated Category categories = 1;
+}
+
+message CreateTopicRequest {
+  Topic topic = 1;
+}
+
+message CreateTopicResponse {
+  Topic topic = 1;
+}
+
+message GetTopicsRequest {
+  string category_id = 1;
+}
+
+message GetTopicsResponse {
+  repeated Topic topics = 1;
 }
 
 service CoursesService{
   rpc CreateTechnology(CreateTechnologyRequest) returns (CreateTechnologyResponse){}
   rpc GetTechnologies(google.protobuf.Empty) returns (GetTechnologiesResponse){}
+  rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse){}
+  rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse){}
+  rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse){}
+  rpc GetTopics(GetTopicsRequest) returns (GetTopicsResponse){}
 }

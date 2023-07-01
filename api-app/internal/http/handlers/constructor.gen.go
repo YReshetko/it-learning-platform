@@ -12,14 +12,45 @@ import (
 	logrus "github.com/sirupsen/logrus"
 )
 
-func NewCourses(client clients.CoursesClient, logger *logrus.Entry, technologyMapper mappers.TechnologyMapper) Courses {
-	returnValue := Courses{
-		client:           client,
-		logger:           logger,
-		technologyMapper: technologyMapper,
+type CoursesOption func(*Courses)
+
+func NewCourses(opts ...CoursesOption) Courses {
+	rt := &Courses{}
+	for _, o := range opts {
+		o(rt)
 	}
 
-	return returnValue
+	return *rt
+}
+
+func WithCategoryMapper(v mappers.CategoryMapper) CoursesOption {
+	return func(rt *Courses) {
+		rt.categoryMapper = v
+	}
+}
+
+func WithClient(v clients.CoursesClient) CoursesOption {
+	return func(rt *Courses) {
+		rt.client = v
+	}
+}
+
+func WithLogger(v *logrus.Entry) CoursesOption {
+	return func(rt *Courses) {
+		rt.logger = v
+	}
+}
+
+func WithTechnologyMapper(v mappers.TechnologyMapper) CoursesOption {
+	return func(rt *Courses) {
+		rt.technologyMapper = v
+	}
+}
+
+func WithTopicMapper(v mappers.TopicMapper) CoursesOption {
+	return func(rt *Courses) {
+		rt.topicMapper = v
+	}
 }
 
 func NewRegistration(client clients.AuthClient, logger *logrus.Entry) Registration {

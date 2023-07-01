@@ -3,6 +3,8 @@ import {Breadcrumbs, Button} from "@mui/material";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import TechnologiesList from "./TechnologiesList";
 import CategoriesList from "./CategoriesList";
+import TopicsList from "./TopicsList";
+import Topic from "./Topic";
 
 const TECHNOLOGIES_PAGE = 'technologies';
 const CATEGORIES_PAGE = 'categories';
@@ -12,16 +14,19 @@ const TOPIC_PAGE = 'topic';
 const Technologies = () => {
     const [page, setPage] = useState({
         technology: {
+            id: '',
             name: '',
-            id: ''
+            description: ''
         },
         category: {
+            id: '',
             name: '',
-            id: ''
+            description: ''
         },
         topic: {
+            id: '',
             name: '',
-            id: ''
+            description: ''
         },
         page: TECHNOLOGIES_PAGE
     });
@@ -30,16 +35,19 @@ const Technologies = () => {
         setPage(
             {
                 technology: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 category: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 topic: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 page: TECHNOLOGIES_PAGE
             }
@@ -51,12 +59,14 @@ const Technologies = () => {
             {
                 ...page,
                 category: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 topic: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 page: CATEGORIES_PAGE
             }
@@ -68,8 +78,9 @@ const Technologies = () => {
             {
                 ...page,
                 topic: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 page: TOPICS_PAGE
             }
@@ -85,14 +96,61 @@ const Technologies = () => {
                     description: item.description
                 },
                 category: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 topic: {
+                    id: '',
                     name: '',
-                    id: ''
+                    description: ''
                 },
                 page: CATEGORIES_PAGE
+            }
+        );
+    }
+
+    const toCategory = (item) => {
+        setPage(
+            {
+                technology: {
+                    id: page.technology.id,
+                    name: page.technology.name,
+                    description: page.technology.description
+                },
+                category: {
+                    id: item.id,
+                    name: item.name,
+                    description: item.description
+                },
+                topic: {
+                    id: '',
+                    name: '',
+                    description: ''
+                },
+                page: TOPICS_PAGE
+            }
+        );
+    }
+    const toTopic = (item) => {
+        setPage(
+            {
+                technology: {
+                    id: page.technology.id,
+                    name: page.technology.name,
+                    description: page.technology.description
+                },
+                category: {
+                    id: page.category.id,
+                    name: page.category.name,
+                    description: page.category.description
+                },
+                topic: {
+                    id: item.id,
+                    name: item.name,
+                    description: item.description
+                },
+                page: TOPIC_PAGE
             }
         );
     }
@@ -136,11 +194,11 @@ const Technologies = () => {
 
     const getPageList = () => {
         if (page.page === TOPIC_PAGE) {
-            return (<TechnologiesList/>);
+            return (<Topic topic={page.topic}/>);
         } else if (page.page === TOPICS_PAGE) {
-            return (<CategoriesList/>);
+            return (<TopicsList category={page.category} callback={toTopic}/>);
         } else if (page.page === CATEGORIES_PAGE) {
-            return (<CategoriesList/>);
+            return (<CategoriesList technology={page.technology} callback={toCategory}/>);
         } else {
             return (<TechnologiesList callback={toTechnology}/>);
         }

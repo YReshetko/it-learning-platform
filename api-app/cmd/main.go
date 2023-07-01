@@ -24,7 +24,13 @@ func main() {
 
 	registration := handlers.NewRegistration(authClient, logger.WithField("handler", "Registration"))
 	self := handlers.NewSelf(authClient, logger.WithField("handler", "Self"))
-	courses := handlers.NewCourses(coursesClient, logger.WithField("handler", "Courses"), mappers.TechnologyMapperImpl{})
+	courses := handlers.NewCourses(
+		handlers.WithClient(coursesClient),
+		handlers.WithLogger(logger.WithField("handler", "Courses")),
+		handlers.WithTechnologyMapper(mappers.TechnologyMapperImpl{}),
+		handlers.WithCategoryMapper(mappers.CategoryMapperImpl{}),
+		handlers.WithTopicMapper(mappers.TopicMapperImpl{}),
+	)
 
 	authorizationService := authorization.NewService(authClient)
 

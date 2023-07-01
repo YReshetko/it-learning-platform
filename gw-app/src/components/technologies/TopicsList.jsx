@@ -1,23 +1,23 @@
 import React, {useEffect, useState} from 'react';
+import {get, post} from "../../utils/rest";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import {Backdrop, Button, TextField} from "@mui/material";
+import Box from "@mui/material/Box";
+import CloseIcon from "@mui/icons-material/Close";
+import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import List from "@mui/material/List";
-import {get, post} from "../../utils/rest";
-import CloseIcon from '@mui/icons-material/Close';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import IconButton from "@mui/material/IconButton";
-import Toolbar from "@mui/material/Toolbar";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-const TechnologiesList = ({callback}) => {
-    const [technologiesList, setTechnologiesList] = useState([]);
+const TopicsList = ({category, callback}) => {
+    const [topicsList, setTopicsList] = useState([]);
     const [openForm, setOpenForm] = React.useState(false);
-    const [newTechnologyName, setNewTechnologyName] = useState('');
-    const [newTechnologyDescription, setNewTechnologyDescription] = useState('');
+    const [newTopicName, setNewTopicName] = useState('');
+    const [newTopicDescription, setNewTopicDescription] = useState('');
 
     const handleClose = () => {
         setOpenForm(false);
@@ -25,11 +25,12 @@ const TechnologiesList = ({callback}) => {
     const handleOpen = () => {
         setOpenForm(true);
     };
+
     useEffect(() => {
         async function fetch() {
-            get("/api/admin/technologies", null)
+            get("/api/admin/categories/" + category.id + "/topics", null)
                 .then(response => {
-                    setTechnologiesList(response.technologies)
+                    setTopicsList(response.topics)
                 })
                 .catch(error => {
                     console.error('Error:', error)
@@ -39,32 +40,42 @@ const TechnologiesList = ({callback}) => {
         fetch();
     }, []);
 
-    const saveTechnology = () => {
-        if (newTechnologyName.trim() === '' || newTechnologyDescription.trim() === '') {
+
+    const saveTopic = () => {
+        if (newTopicName.trim() === '' || newTopicDescription.trim() === '') {
             console.log("Empty, skip")
             return;
         }
 
-        post("/api/admin/technology", {
-            name: newTechnologyName,
-            description: newTechnologyDescription
+        post("/api/admin/categories/" + category.id + "/topic", {
+            name: newTopicName,
+            description: newTopicDescription,
+            active: true,
+            seq_no: topicsList.length + 1
+
         }).then(response => {
-            console.log("Technology creation status:", response)
-            setNewTechnologyName('');
-            setNewTechnologyDescription('');
-            setTechnologiesList([...technologiesList, response])
+            setNewTopicName('');
+            setNewTopicDescription('');
+            setTopicsList([...topicsList, response])
         }).catch(error => {
             console.error('Error:', error)
         })
     }
-
     return (
         <div>
+            <div>
+                <Typography variant="h3" noWrap component="div" sx={{color: '#000'}}>{category.name}</Typography>
+                <Typography variant="body1" noWrap component="div" sx={{color: '#000'}}>
+                    <pre style={{fontFamily: 'inherit'}}>
+                        {category.description}
+                    </pre>
+                </Typography>
+            </div>
             <div>
                 <Toolbar>
                     <Typography variant="h4" noWrap component="div"
                                 sx={{color: '#000', mx: 1, my: 1, flexGrow: 1}}
-                                color="text.primary">Технологии</Typography>
+                                color="text.primary">Тема</Typography>
                     <IconButton aria-label="close" onClick={handleOpen} sx={{my: 1, mx: 1}}>
                         <AddCircleOutlineOutlinedIcon/>
                     </IconButton>
@@ -79,7 +90,7 @@ const TechnologiesList = ({callback}) => {
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div"
                                             sx={{color: '#000', mx: 1, my: 1, flexGrow: 1}}>
-                                    Добавить технологию
+                                    Добавить тему
                                 </Typography>
                                 <IconButton aria-label="close" onClick={handleClose} sx={{my: 1, mx: 1}}>
                                     <CloseIcon/>
@@ -87,24 +98,24 @@ const TechnologiesList = ({callback}) => {
                             </Toolbar>
                         </div>
                         <div>
-                            <TextField fullWidth id="standard-basic" label="Название технологии"
-                                       onChange={(event) => setNewTechnologyName(event.currentTarget.value)}
-                                       variant="filled">{newTechnologyName}</TextField>
+                            <TextField fullWidth id="standard-basic" label="Название темы"
+                                       onChange={(event) => setNewTopicName(event.currentTarget.value)}
+                                       variant="filled">{newTopicName}</TextField>
                         </div>
                         <div>
                             <TextField fullWidth id="outlined-textarea" label="Описание"
-                                       onChange={(event) => setNewTechnologyDescription(event.currentTarget.value)}
-                                       variant="filled" multiline rows={10}>{newTechnologyDescription}</TextField>
+                                       onChange={(event) => setNewTopicDescription(event.currentTarget.value)}
+                                       variant="filled" multiline rows={10}>{newTopicDescription}</TextField>
                         </div>
                         <div>
-                            <Button variant="contained" onClick={saveTechnology} sx={{mx: 1, my: 1}}>Сохранить</Button>
+                            <Button variant="contained" onClick={saveTopic} sx={{mx: 1, my: 1}}>Сохранить</Button>
                         </div>
                     </Box>
                 </Backdrop>
             </div>
             <div>
                 <List>
-                    {technologiesList.map((item) =>
+                    {topicsList.map((item) =>
                         <ListItemButton onClick={(e) => callback(item)} key={item.id}>
                             <ListItemText primary={item.name} sx={{flexGrow: 1}}/>
                             <IconButton disabled aria-label="edit">
@@ -120,4 +131,4 @@ const TechnologiesList = ({callback}) => {
     );
 };
 
-export default TechnologiesList;
+export default TopicsList;

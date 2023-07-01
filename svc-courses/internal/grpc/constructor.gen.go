@@ -11,12 +11,43 @@ import (
 	logrus "github.com/sirupsen/logrus"
 )
 
-func NewHandler(logger *logrus.Entry, storage storage.CourseStorage, technologyMapper TechnologyMapper) Handler {
-	returnValue := Handler{
-		logger:           logger,
-		storage:          storage,
-		technologyMapper: technologyMapper,
+type HandlerOption func(*Handler)
+
+func NewHandler(opts ...HandlerOption) Handler {
+	rt := &Handler{}
+	for _, o := range opts {
+		o(rt)
 	}
 
-	return returnValue
+	return *rt
+}
+
+func WithCategoryMapper(v CategoryMapper) HandlerOption {
+	return func(rt *Handler) {
+		rt.categoryMapper = v
+	}
+}
+
+func WithLogger(v *logrus.Entry) HandlerOption {
+	return func(rt *Handler) {
+		rt.logger = v
+	}
+}
+
+func WithStorage(v storage.CourseStorage) HandlerOption {
+	return func(rt *Handler) {
+		rt.storage = v
+	}
+}
+
+func WithTechnologyMapper(v TechnologyMapper) HandlerOption {
+	return func(rt *Handler) {
+		rt.technologyMapper = v
+	}
+}
+
+func WithTopicMapper(v TopicMapper) HandlerOption {
+	return func(rt *Handler) {
+		rt.topicMapper = v
+	}
 }

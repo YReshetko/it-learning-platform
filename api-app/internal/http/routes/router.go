@@ -41,6 +41,10 @@ func (r Router) Init(engine *gin.Engine) {
 
 	engine.POST("/api/v1/admin/technology", protected(r.courses.CreateTechnology, r.services, []model.Role{model.ADMIN}))
 	engine.GET("/api/v1/admin/technologies", protected(r.courses.GetTechnologies, r.services, []model.Role{model.ADMIN}))
+	engine.POST("/api/v1/admin/technologies/:technology_id/category", protected(r.courses.CreateCategory, r.services, []model.Role{model.ADMIN}))
+	engine.GET("/api/v1/admin/technologies/:technology_id/categories", protected(r.courses.GetCategories, r.services, []model.Role{model.ADMIN}))
+	engine.POST("/api/v1/admin/categories/:category_id/topic", protected(r.courses.CreateTopic, r.services, []model.Role{model.ADMIN}))
+	engine.GET("/api/v1/admin/categories/:category_id/topics", protected(r.courses.GetTopics, r.services, []model.Role{model.ADMIN}))
 }
 
 func protected[Rq any, Rs any](fn http.HandlerFunc[Rq, Rs], service *RouterServices, roles []model.Role) func(*gin.Context) {

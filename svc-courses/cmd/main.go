@@ -19,7 +19,13 @@ func main() {
 	dbConnection := errors.MustExitAppErrorHandler[*gorm.DB](logger.WithField("sub_system", "database"))(db.DatabaseConnection(cfg.DB))
 
 	s := storage.NewCourseStorage(dbConnection)
-	h := grpc.NewHandler(logger.WithField("handler", "grpc"), s, grpc.TechnologyMapperImpl{})
+	h := grpc.NewHandler(
+		grpc.WithLogger(logger.WithField("handler", "grpc")),
+		grpc.WithStorage(s),
+		grpc.WithTechnologyMapper(grpc.TechnologyMapperImpl{}),
+		grpc.WithCategoryMapper(grpc.CategoryMapperImpl{}),
+		grpc.WithTopicMapper(grpc.TopicMapperImpl{}),
+	)
 
 	server := libGrpc.NewServer[courses.CoursesServiceServer](
 		libGrpc.WithCfg[courses.CoursesServiceServer](cfg.GRPCServer),

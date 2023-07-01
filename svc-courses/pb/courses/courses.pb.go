@@ -84,6 +84,219 @@ func (x *Technology) GetDescription() string {
 	return ""
 }
 
+type Category struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id           string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	TechnologyId string `protobuf:"bytes,2,opt,name=technology_id,json=technologyId,proto3" json:"technology_id,omitempty"`
+	Name         string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Description  string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+}
+
+func (x *Category) Reset() {
+	*x = Category{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Category) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Category) ProtoMessage() {}
+
+func (x *Category) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Category.ProtoReflect.Descriptor instead.
+func (*Category) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Category) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Category) GetTechnologyId() string {
+	if x != nil {
+		return x.TechnologyId
+	}
+	return ""
+}
+
+func (x *Category) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Category) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type Topic struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CategoryId  string `protobuf:"bytes,2,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
+	SeqNo       int32  `protobuf:"varint,3,opt,name=seq_no,json=seqNo,proto3" json:"seq_no,omitempty"`
+	Name        string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Active      bool   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	Tags        []*Tag `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
+}
+
+func (x *Topic) Reset() {
+	*x = Topic{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Topic) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Topic) ProtoMessage() {}
+
+func (x *Topic) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Topic.ProtoReflect.Descriptor instead.
+func (*Topic) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Topic) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Topic) GetCategoryId() string {
+	if x != nil {
+		return x.CategoryId
+	}
+	return ""
+}
+
+func (x *Topic) GetSeqNo() int32 {
+	if x != nil {
+		return x.SeqNo
+	}
+	return 0
+}
+
+func (x *Topic) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Topic) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *Topic) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+func (x *Topic) GetTags() []*Tag {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
+type Tag struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *Tag) Reset() {
+	*x = Tag{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Tag) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Tag) ProtoMessage() {}
+
+func (x *Tag) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Tag.ProtoReflect.Descriptor instead.
+func (*Tag) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Tag) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type CreateTechnologyRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -95,7 +308,7 @@ type CreateTechnologyRequest struct {
 func (x *CreateTechnologyRequest) Reset() {
 	*x = CreateTechnologyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_courses_proto_msgTypes[1]
+		mi := &file_proto_courses_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -108,7 +321,7 @@ func (x *CreateTechnologyRequest) String() string {
 func (*CreateTechnologyRequest) ProtoMessage() {}
 
 func (x *CreateTechnologyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_courses_proto_msgTypes[1]
+	mi := &file_proto_courses_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -121,7 +334,7 @@ func (x *CreateTechnologyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTechnologyRequest.ProtoReflect.Descriptor instead.
 func (*CreateTechnologyRequest) Descriptor() ([]byte, []int) {
-	return file_proto_courses_proto_rawDescGZIP(), []int{1}
+	return file_proto_courses_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateTechnologyRequest) GetTechnology() *Technology {
@@ -142,7 +355,7 @@ type CreateTechnologyResponse struct {
 func (x *CreateTechnologyResponse) Reset() {
 	*x = CreateTechnologyResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_courses_proto_msgTypes[2]
+		mi := &file_proto_courses_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -155,7 +368,7 @@ func (x *CreateTechnologyResponse) String() string {
 func (*CreateTechnologyResponse) ProtoMessage() {}
 
 func (x *CreateTechnologyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_courses_proto_msgTypes[2]
+	mi := &file_proto_courses_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -168,7 +381,7 @@ func (x *CreateTechnologyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTechnologyResponse.ProtoReflect.Descriptor instead.
 func (*CreateTechnologyResponse) Descriptor() ([]byte, []int) {
-	return file_proto_courses_proto_rawDescGZIP(), []int{2}
+	return file_proto_courses_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateTechnologyResponse) GetTechnology() *Technology {
@@ -183,13 +396,13 @@ type GetTechnologiesResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Technology []*Technology `protobuf:"bytes,1,rep,name=technology,proto3" json:"technology,omitempty"`
+	Technologies []*Technology `protobuf:"bytes,1,rep,name=technologies,proto3" json:"technologies,omitempty"`
 }
 
 func (x *GetTechnologiesResponse) Reset() {
 	*x = GetTechnologiesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_courses_proto_msgTypes[3]
+		mi := &file_proto_courses_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -202,7 +415,7 @@ func (x *GetTechnologiesResponse) String() string {
 func (*GetTechnologiesResponse) ProtoMessage() {}
 
 func (x *GetTechnologiesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_courses_proto_msgTypes[3]
+	mi := &file_proto_courses_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -215,12 +428,388 @@ func (x *GetTechnologiesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTechnologiesResponse.ProtoReflect.Descriptor instead.
 func (*GetTechnologiesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_courses_proto_rawDescGZIP(), []int{3}
+	return file_proto_courses_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GetTechnologiesResponse) GetTechnology() []*Technology {
+func (x *GetTechnologiesResponse) GetTechnologies() []*Technology {
 	if x != nil {
-		return x.Technology
+		return x.Technologies
+	}
+	return nil
+}
+
+type CreateCategoryRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Category *Category `protobuf:"bytes,1,opt,name=category,proto3" json:"category,omitempty"`
+}
+
+func (x *CreateCategoryRequest) Reset() {
+	*x = CreateCategoryRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCategoryRequest) ProtoMessage() {}
+
+func (x *CreateCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCategoryRequest.ProtoReflect.Descriptor instead.
+func (*CreateCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CreateCategoryRequest) GetCategory() *Category {
+	if x != nil {
+		return x.Category
+	}
+	return nil
+}
+
+type CreateCategoryResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Category *Category `protobuf:"bytes,1,opt,name=category,proto3" json:"category,omitempty"`
+}
+
+func (x *CreateCategoryResponse) Reset() {
+	*x = CreateCategoryResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateCategoryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCategoryResponse) ProtoMessage() {}
+
+func (x *CreateCategoryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCategoryResponse.ProtoReflect.Descriptor instead.
+func (*CreateCategoryResponse) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CreateCategoryResponse) GetCategory() *Category {
+	if x != nil {
+		return x.Category
+	}
+	return nil
+}
+
+type GetCategoriesRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TechnologyId string `protobuf:"bytes,1,opt,name=technology_id,json=technologyId,proto3" json:"technology_id,omitempty"`
+}
+
+func (x *GetCategoriesRequest) Reset() {
+	*x = GetCategoriesRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetCategoriesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCategoriesRequest) ProtoMessage() {}
+
+func (x *GetCategoriesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCategoriesRequest.ProtoReflect.Descriptor instead.
+func (*GetCategoriesRequest) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *GetCategoriesRequest) GetTechnologyId() string {
+	if x != nil {
+		return x.TechnologyId
+	}
+	return ""
+}
+
+type GetCategoriesResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Categories []*Category `protobuf:"bytes,1,rep,name=categories,proto3" json:"categories,omitempty"`
+}
+
+func (x *GetCategoriesResponse) Reset() {
+	*x = GetCategoriesResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetCategoriesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCategoriesResponse) ProtoMessage() {}
+
+func (x *GetCategoriesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCategoriesResponse.ProtoReflect.Descriptor instead.
+func (*GetCategoriesResponse) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetCategoriesResponse) GetCategories() []*Category {
+	if x != nil {
+		return x.Categories
+	}
+	return nil
+}
+
+type CreateTopicRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Topic *Topic `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
+}
+
+func (x *CreateTopicRequest) Reset() {
+	*x = CreateTopicRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateTopicRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateTopicRequest) ProtoMessage() {}
+
+func (x *CreateTopicRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateTopicRequest.ProtoReflect.Descriptor instead.
+func (*CreateTopicRequest) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CreateTopicRequest) GetTopic() *Topic {
+	if x != nil {
+		return x.Topic
+	}
+	return nil
+}
+
+type CreateTopicResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Topic *Topic `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
+}
+
+func (x *CreateTopicResponse) Reset() {
+	*x = CreateTopicResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateTopicResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateTopicResponse) ProtoMessage() {}
+
+func (x *CreateTopicResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateTopicResponse.ProtoReflect.Descriptor instead.
+func (*CreateTopicResponse) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CreateTopicResponse) GetTopic() *Topic {
+	if x != nil {
+		return x.Topic
+	}
+	return nil
+}
+
+type GetTopicsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CategoryId string `protobuf:"bytes,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
+}
+
+func (x *GetTopicsRequest) Reset() {
+	*x = GetTopicsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetTopicsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTopicsRequest) ProtoMessage() {}
+
+func (x *GetTopicsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTopicsRequest.ProtoReflect.Descriptor instead.
+func (*GetTopicsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetTopicsRequest) GetCategoryId() string {
+	if x != nil {
+		return x.CategoryId
+	}
+	return ""
+}
+
+type GetTopicsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Topics []*Topic `protobuf:"bytes,1,rep,name=topics,proto3" json:"topics,omitempty"`
+}
+
+func (x *GetTopicsResponse) Reset() {
+	*x = GetTopicsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_courses_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetTopicsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTopicsResponse) ProtoMessage() {}
+
+func (x *GetTopicsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_courses_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTopicsResponse.ProtoReflect.Descriptor instead.
+func (*GetTopicsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_courses_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GetTopicsResponse) GetTopics() []*Topic {
+	if x != nil {
+		return x.Topics
 	}
 	return nil
 }
@@ -236,31 +825,97 @@ var file_proto_courses_proto_rawDesc = []byte{
 	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
 	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
 	0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72,
-	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x46, 0x0a, 0x17, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x12, 0x2b, 0x0a, 0x0a, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f,
-	0x67, 0x79, 0x52, 0x0a, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x22, 0x47,
-	0x0a, 0x18, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f,
-	0x67, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2b, 0x0a, 0x0a, 0x74, 0x65,
-	0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b,
-	0x2e, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x0a, 0x74, 0x65, 0x63,
-	0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x22, 0x46, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x54, 0x65,
-	0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x69, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x2b, 0x0a, 0x0a, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
-	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c,
-	0x6f, 0x67, 0x79, 0x52, 0x0a, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x32,
-	0xa2, 0x01, 0x0a, 0x0e, 0x43, 0x6f, 0x75, 0x72, 0x73, 0x65, 0x73, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x12, 0x49, 0x0a, 0x10, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x63, 0x68,
-	0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x12, 0x18, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54,
-	0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x19, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c,
-	0x6f, 0x67, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x45, 0x0a,
-	0x0f, 0x47, 0x65, 0x74, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x69, 0x65, 0x73,
-	0x12, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x18, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x65,
-	0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x69, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x75, 0x0a, 0x08, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f,
+	0x72, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x23, 0x0a, 0x0d, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x74, 0x65, 0x63, 0x68, 0x6e,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64,
+	0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xb7, 0x01,
+	0x0a, 0x05, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x61, 0x74, 0x65, 0x67,
+	0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x61,
+	0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x15, 0x0a, 0x06, 0x73, 0x65, 0x71, 0x5f,
+	0x6e, 0x6f, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x65, 0x71, 0x4e, 0x6f, 0x12,
+	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
+	0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x18,
+	0x06, 0x20, 0x01, 0x28, 0x08, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x12, 0x18, 0x0a,
+	0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x04, 0x2e, 0x54, 0x61,
+	0x67, 0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x22, 0x19, 0x0a, 0x03, 0x54, 0x61, 0x67, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x22, 0x46, 0x0a, 0x17, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x63, 0x68,
+	0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2b, 0x0a,
+	0x0a, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x0b, 0x2e, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x0a,
+	0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x22, 0x47, 0x0a, 0x18, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2b, 0x0a, 0x0a, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x54, 0x65, 0x63,
+	0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x0a, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c,
+	0x6f, 0x67, 0x79, 0x22, 0x4a, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f,
+	0x6c, 0x6f, 0x67, 0x69, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2f,
+	0x0a, 0x0c, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x69, 0x65, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x52, 0x0c, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x69, 0x65, 0x73, 0x22,
+	0x3e, 0x0a, 0x15, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72,
+	0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x08, 0x63, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x43, 0x61, 0x74,
+	0x65, 0x67, 0x6f, 0x72, 0x79, 0x52, 0x08, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x22,
+	0x3f, 0x0a, 0x16, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x25, 0x0a, 0x08, 0x63, 0x61, 0x74,
+	0x65, 0x67, 0x6f, 0x72, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x43, 0x61,
+	0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x52, 0x08, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79,
+	0x22, 0x3b, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x23, 0x0a, 0x0d, 0x74, 0x65, 0x63, 0x68,
+	0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0c, 0x74, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x49, 0x64, 0x22, 0x42, 0x0a,
+	0x15, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x0a, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f,
+	0x72, 0x69, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x43, 0x61, 0x74,
+	0x65, 0x67, 0x6f, 0x72, 0x79, 0x52, 0x0a, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65,
+	0x73, 0x22, 0x32, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x70, 0x69, 0x63,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1c, 0x0a, 0x05, 0x74, 0x6f, 0x70, 0x69, 0x63,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x06, 0x2e, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x52, 0x05,
+	0x74, 0x6f, 0x70, 0x69, 0x63, 0x22, 0x33, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54,
+	0x6f, 0x70, 0x69, 0x63, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1c, 0x0a, 0x05,
+	0x74, 0x6f, 0x70, 0x69, 0x63, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x06, 0x2e, 0x54, 0x6f,
+	0x70, 0x69, 0x63, 0x52, 0x05, 0x74, 0x6f, 0x70, 0x69, 0x63, 0x22, 0x33, 0x0a, 0x10, 0x47, 0x65,
+	0x74, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1f,
+	0x0a, 0x0b, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x22,
+	0x33, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1e, 0x0a, 0x06, 0x74, 0x6f, 0x70, 0x69, 0x63, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x06, 0x2e, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x52, 0x06, 0x74, 0x6f,
+	0x70, 0x69, 0x63, 0x73, 0x32, 0x9b, 0x03, 0x0a, 0x0e, 0x43, 0x6f, 0x75, 0x72, 0x73, 0x65, 0x73,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x49, 0x0a, 0x10, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x12, 0x18, 0x2e, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65,
+	0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x12, 0x45, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c,
+	0x6f, 0x67, 0x69, 0x65, 0x73, 0x12, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x18, 0x2e,
+	0x47, 0x65, 0x74, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x6f, 0x6c, 0x6f, 0x67, 0x69, 0x65, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x0e, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x12, 0x16, 0x2e, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x40,
+	0x0a, 0x0d, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x12,
+	0x15, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x65,
+	0x67, 0x6f, 0x72, 0x69, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x12, 0x3a, 0x0a, 0x0b, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x12,
+	0x13, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x70,
+	0x69, 0x63, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x34, 0x0a, 0x09,
+	0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x73, 0x12, 0x11, 0x2e, 0x47, 0x65, 0x74, 0x54,
+	0x6f, 0x70, 0x69, 0x63, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e, 0x47,
+	0x65, 0x74, 0x54, 0x6f, 0x70, 0x69, 0x63, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -275,27 +930,53 @@ func file_proto_courses_proto_rawDescGZIP() []byte {
 	return file_proto_courses_proto_rawDescData
 }
 
-var file_proto_courses_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_courses_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_proto_courses_proto_goTypes = []interface{}{
 	(*Technology)(nil),               // 0: Technology
-	(*CreateTechnologyRequest)(nil),  // 1: CreateTechnologyRequest
-	(*CreateTechnologyResponse)(nil), // 2: CreateTechnologyResponse
-	(*GetTechnologiesResponse)(nil),  // 3: GetTechnologiesResponse
-	(*emptypb.Empty)(nil),            // 4: google.protobuf.Empty
+	(*Category)(nil),                 // 1: Category
+	(*Topic)(nil),                    // 2: Topic
+	(*Tag)(nil),                      // 3: Tag
+	(*CreateTechnologyRequest)(nil),  // 4: CreateTechnologyRequest
+	(*CreateTechnologyResponse)(nil), // 5: CreateTechnologyResponse
+	(*GetTechnologiesResponse)(nil),  // 6: GetTechnologiesResponse
+	(*CreateCategoryRequest)(nil),    // 7: CreateCategoryRequest
+	(*CreateCategoryResponse)(nil),   // 8: CreateCategoryResponse
+	(*GetCategoriesRequest)(nil),     // 9: GetCategoriesRequest
+	(*GetCategoriesResponse)(nil),    // 10: GetCategoriesResponse
+	(*CreateTopicRequest)(nil),       // 11: CreateTopicRequest
+	(*CreateTopicResponse)(nil),      // 12: CreateTopicResponse
+	(*GetTopicsRequest)(nil),         // 13: GetTopicsRequest
+	(*GetTopicsResponse)(nil),        // 14: GetTopicsResponse
+	(*emptypb.Empty)(nil),            // 15: google.protobuf.Empty
 }
 var file_proto_courses_proto_depIdxs = []int32{
-	0, // 0: CreateTechnologyRequest.technology:type_name -> Technology
-	0, // 1: CreateTechnologyResponse.technology:type_name -> Technology
-	0, // 2: GetTechnologiesResponse.technology:type_name -> Technology
-	1, // 3: CoursesService.CreateTechnology:input_type -> CreateTechnologyRequest
-	4, // 4: CoursesService.GetTechnologies:input_type -> google.protobuf.Empty
-	2, // 5: CoursesService.CreateTechnology:output_type -> CreateTechnologyResponse
-	3, // 6: CoursesService.GetTechnologies:output_type -> GetTechnologiesResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	3,  // 0: Topic.tags:type_name -> Tag
+	0,  // 1: CreateTechnologyRequest.technology:type_name -> Technology
+	0,  // 2: CreateTechnologyResponse.technology:type_name -> Technology
+	0,  // 3: GetTechnologiesResponse.technologies:type_name -> Technology
+	1,  // 4: CreateCategoryRequest.category:type_name -> Category
+	1,  // 5: CreateCategoryResponse.category:type_name -> Category
+	1,  // 6: GetCategoriesResponse.categories:type_name -> Category
+	2,  // 7: CreateTopicRequest.topic:type_name -> Topic
+	2,  // 8: CreateTopicResponse.topic:type_name -> Topic
+	2,  // 9: GetTopicsResponse.topics:type_name -> Topic
+	4,  // 10: CoursesService.CreateTechnology:input_type -> CreateTechnologyRequest
+	15, // 11: CoursesService.GetTechnologies:input_type -> google.protobuf.Empty
+	7,  // 12: CoursesService.CreateCategory:input_type -> CreateCategoryRequest
+	9,  // 13: CoursesService.GetCategories:input_type -> GetCategoriesRequest
+	11, // 14: CoursesService.CreateTopic:input_type -> CreateTopicRequest
+	13, // 15: CoursesService.GetTopics:input_type -> GetTopicsRequest
+	5,  // 16: CoursesService.CreateTechnology:output_type -> CreateTechnologyResponse
+	6,  // 17: CoursesService.GetTechnologies:output_type -> GetTechnologiesResponse
+	8,  // 18: CoursesService.CreateCategory:output_type -> CreateCategoryResponse
+	10, // 19: CoursesService.GetCategories:output_type -> GetCategoriesResponse
+	12, // 20: CoursesService.CreateTopic:output_type -> CreateTopicResponse
+	14, // 21: CoursesService.GetTopics:output_type -> GetTopicsResponse
+	16, // [16:22] is the sub-list for method output_type
+	10, // [10:16] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_proto_courses_proto_init() }
@@ -317,7 +998,7 @@ func file_proto_courses_proto_init() {
 			}
 		}
 		file_proto_courses_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateTechnologyRequest); i {
+			switch v := v.(*Category); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -329,7 +1010,7 @@ func file_proto_courses_proto_init() {
 			}
 		}
 		file_proto_courses_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateTechnologyResponse); i {
+			switch v := v.(*Topic); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -341,7 +1022,139 @@ func file_proto_courses_proto_init() {
 			}
 		}
 		file_proto_courses_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Tag); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateTechnologyRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateTechnologyResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetTechnologiesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateCategoryRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateCategoryResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetCategoriesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetCategoriesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateTopicRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateTopicResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetTopicsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_courses_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetTopicsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -359,7 +1172,7 @@ func file_proto_courses_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_courses_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

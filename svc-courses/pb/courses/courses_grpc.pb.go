@@ -22,6 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	CoursesService_CreateTechnology_FullMethodName = "/CoursesService/CreateTechnology"
 	CoursesService_GetTechnologies_FullMethodName  = "/CoursesService/GetTechnologies"
+	CoursesService_CreateCategory_FullMethodName   = "/CoursesService/CreateCategory"
+	CoursesService_GetCategories_FullMethodName    = "/CoursesService/GetCategories"
+	CoursesService_CreateTopic_FullMethodName      = "/CoursesService/CreateTopic"
+	CoursesService_GetTopics_FullMethodName        = "/CoursesService/GetTopics"
 )
 
 // CoursesServiceClient is the client API for CoursesService service.
@@ -30,6 +34,10 @@ const (
 type CoursesServiceClient interface {
 	CreateTechnology(ctx context.Context, in *CreateTechnologyRequest, opts ...grpc.CallOption) (*CreateTechnologyResponse, error)
 	GetTechnologies(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetTechnologiesResponse, error)
+	CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error)
+	GetCategories(ctx context.Context, in *GetCategoriesRequest, opts ...grpc.CallOption) (*GetCategoriesResponse, error)
+	CreateTopic(ctx context.Context, in *CreateTopicRequest, opts ...grpc.CallOption) (*CreateTopicResponse, error)
+	GetTopics(ctx context.Context, in *GetTopicsRequest, opts ...grpc.CallOption) (*GetTopicsResponse, error)
 }
 
 type coursesServiceClient struct {
@@ -58,12 +66,52 @@ func (c *coursesServiceClient) GetTechnologies(ctx context.Context, in *emptypb.
 	return out, nil
 }
 
+func (c *coursesServiceClient) CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error) {
+	out := new(CreateCategoryResponse)
+	err := c.cc.Invoke(ctx, CoursesService_CreateCategory_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) GetCategories(ctx context.Context, in *GetCategoriesRequest, opts ...grpc.CallOption) (*GetCategoriesResponse, error) {
+	out := new(GetCategoriesResponse)
+	err := c.cc.Invoke(ctx, CoursesService_GetCategories_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) CreateTopic(ctx context.Context, in *CreateTopicRequest, opts ...grpc.CallOption) (*CreateTopicResponse, error) {
+	out := new(CreateTopicResponse)
+	err := c.cc.Invoke(ctx, CoursesService_CreateTopic_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) GetTopics(ctx context.Context, in *GetTopicsRequest, opts ...grpc.CallOption) (*GetTopicsResponse, error) {
+	out := new(GetTopicsResponse)
+	err := c.cc.Invoke(ctx, CoursesService_GetTopics_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CoursesServiceServer is the server API for CoursesService service.
 // All implementations must embed UnimplementedCoursesServiceServer
 // for forward compatibility
 type CoursesServiceServer interface {
 	CreateTechnology(context.Context, *CreateTechnologyRequest) (*CreateTechnologyResponse, error)
 	GetTechnologies(context.Context, *emptypb.Empty) (*GetTechnologiesResponse, error)
+	CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error)
+	GetCategories(context.Context, *GetCategoriesRequest) (*GetCategoriesResponse, error)
+	CreateTopic(context.Context, *CreateTopicRequest) (*CreateTopicResponse, error)
+	GetTopics(context.Context, *GetTopicsRequest) (*GetTopicsResponse, error)
 	mustEmbedUnimplementedCoursesServiceServer()
 }
 
@@ -76,6 +124,18 @@ func (UnimplementedCoursesServiceServer) CreateTechnology(context.Context, *Crea
 }
 func (UnimplementedCoursesServiceServer) GetTechnologies(context.Context, *emptypb.Empty) (*GetTechnologiesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTechnologies not implemented")
+}
+func (UnimplementedCoursesServiceServer) CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCategory not implemented")
+}
+func (UnimplementedCoursesServiceServer) GetCategories(context.Context, *GetCategoriesRequest) (*GetCategoriesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCategories not implemented")
+}
+func (UnimplementedCoursesServiceServer) CreateTopic(context.Context, *CreateTopicRequest) (*CreateTopicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTopic not implemented")
+}
+func (UnimplementedCoursesServiceServer) GetTopics(context.Context, *GetTopicsRequest) (*GetTopicsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTopics not implemented")
 }
 func (UnimplementedCoursesServiceServer) mustEmbedUnimplementedCoursesServiceServer() {}
 
@@ -126,6 +186,78 @@ func _CoursesService_GetTechnologies_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CoursesService_CreateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).CreateCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_CreateCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).CreateCategory(ctx, req.(*CreateCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_GetCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCategoriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).GetCategories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_GetCategories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).GetCategories(ctx, req.(*GetCategoriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_CreateTopic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTopicRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).CreateTopic(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_CreateTopic_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).CreateTopic(ctx, req.(*CreateTopicRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_GetTopics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTopicsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).GetTopics(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_GetTopics_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).GetTopics(ctx, req.(*GetTopicsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CoursesService_ServiceDesc is the grpc.ServiceDesc for CoursesService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -140,6 +272,22 @@ var CoursesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTechnologies",
 			Handler:    _CoursesService_GetTechnologies_Handler,
+		},
+		{
+			MethodName: "CreateCategory",
+			Handler:    _CoursesService_CreateCategory_Handler,
+		},
+		{
+			MethodName: "GetCategories",
+			Handler:    _CoursesService_GetCategories_Handler,
+		},
+		{
+			MethodName: "CreateTopic",
+			Handler:    _CoursesService_CreateTopic_Handler,
+		},
+		{
+			MethodName: "GetTopics",
+			Handler:    _CoursesService_GetTopics_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
