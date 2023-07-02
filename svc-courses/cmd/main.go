@@ -25,6 +25,7 @@ func main() {
 		grpc.WithTechnologyMapper(grpc.TechnologyMapperImpl{}),
 		grpc.WithCategoryMapper(grpc.CategoryMapperImpl{}),
 		grpc.WithTopicMapper(grpc.TopicMapperImpl{}),
+		grpc.WithTaskMapper(grpc.TaskMapperImpl{}),
 	)
 
 	server := libGrpc.NewServer[courses.CoursesServiceServer](

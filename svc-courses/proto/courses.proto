@@ -9,24 +9,33 @@ message Technology {
 }
 
 message Category {
-  string  id = 1;
+  string id = 1;
   string technology_id = 2;
   string name = 3;
   string description = 4;
 }
 
 message Topic {
-  string  id = 1;
+  string id = 1;
   string category_id = 2;
-  int32 seq_no = 3;
+  int32  seq_no = 3;
   string name = 4;
   string description = 5;
-  bool active = 6;
+  bool   active = 6;
   repeated Tag tags = 7;
 }
 
 message Tag {
   string name = 1;
+}
+
+message Task {
+  string id = 1;
+  int32  seq_no = 3;
+  string name = 4;
+  string description = 5;
+  bool   active = 6;
+  repeated Tag tags = 7;
 }
 
 message CreateTechnologyRequest {
@@ -109,17 +118,57 @@ message RemoveTopicTagRequest {
   string topic_id = 1;
   Tag tag = 2;
 }
+
+message CreateTaskRequest {
+  Task task = 1;
+}
+
+message GetTaskRequest {
+  string task_id = 1;
+}
+
+message TaskResponse {
+  Task task = 1;
+}
+
+message AddTaskTagRequest {
+  string task_id = 1;
+  Tag tag = 2;
+}
+
+message RemoveTaskTagRequest {
+  string task_id = 1;
+  Tag tag = 2;
+}
+
+message FindTasksRequest {
+  repeated Tag tags = 1;
+}
+
+message TasksResponse {
+  repeated Task tasks = 1;
+}
+
 service CoursesService{
   rpc CreateTechnology(CreateTechnologyRequest) returns (CreateTechnologyResponse){}
   rpc GetTechnologies(google.protobuf.Empty) returns (GetTechnologiesResponse){}
+
   rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse){}
   rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse){}
+
   rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse){}
   rpc GetTopics(GetTopicsRequest) returns (GetTopicsResponse){}
   rpc GetTopic(GetTopicRequest) returns (TopicResponse){}
+
+  rpc CreateTask(CreateTaskRequest) returns (TaskResponse){}
+  rpc FindTasks(FindTasksRequest) returns (TasksResponse){}
+  rpc GetTask(GetTaskRequest) returns (TaskResponse){}
+
   rpc CreateTag(CreateTagRequest) returns (CreateTagResponse){}
   rpc SearchTag(SearchTagsRequest) returns (SearchTagsResponse){}
   rpc RemoveTag(RemoveTagRequest) returns (google.protobuf.Empty){}
   rpc AddTopicTag(AddTopicTagRequest) returns (TopicResponse){}
   rpc RemoveTopicTag(RemoveTopicTagRequest) returns (TopicResponse){}
+  rpc AddTaskTag(AddTaskTagRequest) returns (TaskResponse){}
+  rpc RemoveTaskTag(RemoveTaskTagRequest) returns (TaskResponse){}
 }

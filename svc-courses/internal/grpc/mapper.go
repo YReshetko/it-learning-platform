@@ -76,6 +76,30 @@ type TopicMapper interface {
 	toTagModel(in *courses.Tag) storage.Tag
 }
 
+type modelTasks struct {
+	Values []storage.Task
+}
+type protoTasks struct {
+	Values []*courses.Task
+}
+
+// TaskMapper the mapper model storage.Task from\to proto courses.Task
+// @Mapper
+type TaskMapper interface {
+	// @SliceMapping(target="Values", source="in.Values", this="toProto")
+	toProtos(in modelTasks) protoTasks
+	// @Mapping(target="Id", func="uuidPtrToString(in.ID)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagProto")
+	toProto(in storage.Task) *courses.Task
+	// @SliceMapping(target="Values", source="in.Values", this="toModel")
+	toModels(in protoTasks) modelTasks
+	// @Mapping(target="ID", func="stringToUUIDPtr(in.Id)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagModel")
+	toModel(in *courses.Task) storage.Task
+	toTagProto(in storage.Tag) *courses.Tag
+	toTagModel(in *courses.Tag) storage.Tag
+}
+
 func uuidPtrToString(id *uuid.UUID) string {
 	if id == nil {
 		return ""

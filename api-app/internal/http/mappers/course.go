@@ -67,6 +67,27 @@ type TopicMapper interface {
 	toTagModel(in *courses.Tag) models.Tag
 }
 
+type ProtoTasks struct {
+	Values []*courses.Task
+}
+
+// TaskMapper mapper from proto to API models and vise versa
+// @Mapper
+type TaskMapper interface {
+	// ToProtos @SliceMapping(target="Values", source="in.Tasks", this="ToProto")
+	ToProtos(in models.Tasks) ProtoTasks
+	// ToProto @Mapping(target="Id", func="uuidToString(in.ID)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagProto")
+	ToProto(in models.Task) *courses.Task
+	// ToModels @SliceMapping(target="Tasks", source="in.Tasks", this="ToModel")
+	ToModels(in *courses.TasksResponse) models.Tasks
+	// ToModel @Mapping(target="ID", func="stringToUUID(in.Id)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagModel")
+	ToModel(in *courses.Task) models.Task
+	toTagProto(in models.Tag) *courses.Tag
+	toTagModel(in *courses.Tag) models.Tag
+}
+
 func uuidToString(id uuid.UUID) string {
 	if id == emptyUUID {
 		return ""

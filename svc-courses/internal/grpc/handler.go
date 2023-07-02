@@ -24,6 +24,7 @@ type Handler struct {
 	technologyMapper                          TechnologyMapper
 	categoryMapper                            CategoryMapper
 	topicMapper                               TopicMapper
+	taskMapper                                TaskMapper
 	logger                                    *logrus.Entry
 }
 
@@ -226,4 +227,100 @@ func (h *Handler) RemoveTopicTag(_ context.Context, rq *courses.RemoveTopicTagRe
 		return &courses.TopicResponse{}, status.Error(codes.Internal, "unable to remove tag from topic")
 	}
 	return &courses.TopicResponse{Topic: h.topicMapper.toProto(topic)}, nil
+}
+
+func (h *Handler) CreateTask(_ context.Context, request *courses.CreateTaskRequest) (*courses.TaskResponse, error) {
+	logger := h.logger.WithField("method", "CreateTask").WithField("request", request)
+	var err error
+	t := h.taskMapper.toModel(request.GetTask())
+	now := time.Now()
+	t.CreatedAt = now
+	t.UpdatedAt = now
+
+	t, err = h.storage.CreateTask(t)
+	if err != nil {
+		logger.WithError(err).Error("unable to save task")
+		return &courses.TaskResponse{}, status.Error(codes.Internal, "unable to save task")
+	}
+
+	return &courses.TaskResponse{Task: h.taskMapper.toProto(t)}, nil
+}
+
+func (h *Handler) GetTask(_ context.Context, rq *courses.GetTaskRequest) (*courses.TaskResponse, error) {
+	logger := h.logger.WithField("method", "GetTask").WithField("request", rq)
+	taskID, err := uuid.Parse(rq.GetTaskId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse task ID")
+		return &courses.TaskResponse{}, status.Error(codes.InvalidArgument, "unable to parse task ID")
+	}
+	task, err := h.storage.GetTask(taskID)
+	if err != nil {
+		logger.WithError(err).Error("unable to get task")
+		return &courses.TaskResponse{}, status.Error(codes.Internal, "unable to get task")
+	}
+	return &courses.TaskResponse{Task: h.taskMapper.toProto(task)}, nil
+}
+
+func (h *Handler) FindTasks(_ context.Context, rq *courses.FindTasksRequest) (*courses.TasksResponse, error) {
+	logger := h.logger.WithField("method", "FindTasks").WithField("request", rq)
+
+	var tasks []storage.Task
+	var err error
+	if len(rq.GetTags()) == 0 {
+		tasks, err = h.storage.GetTasks()
+	} else {
+		tags := make([]storage.Tag, len(rq.GetTags()))
+		for i, tag := range rq.GetTags() {
+			tags[i] = storage.Tag{
+				Name: tag.GetName(),
+			}
+		}
+		tasks, err = h.storage.FindTasks(tags)
+	}
+
+	if err != nil {
+		logger.WithError(err).Error("unable to find tasks")
+		return &courses.TasksResponse{}, status.Error(codes.Internal, "unable to find tasks")
+	}
+
+	protoTasksValues := h.taskMapper.toProtos(modelTasks{tasks}).Values
+	sort.SliceIsSorted(protoTasksValues, func(i, j int) bool {
+		return protoTasksValues[i].SeqNo < protoTasksValues[j].SeqNo
+	})
+
+	return &courses.TasksResponse{
+		Tasks: protoTasksValues,
+	}, nil
+}
+
+func (h *Handler) AddTaskTag(_ context.Context, rq *courses.AddTaskTagRequest) (*courses.TaskResponse, error) {
+	logger := h.logger.WithField("method", "AddTaskTag").WithField("request", rq)
+	taskID, err := uuid.Parse(rq.GetTaskId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse task ID")
+		return &courses.TaskResponse{}, status.Error(codes.Internal, "unable to parse taskID")
+	}
+	task, err := h.storage.CreateTaskTag(taskID, rq.GetTag().GetName())
+	if err != nil {
+		logger.WithError(err).Error("unable to add tag to task")
+		return &courses.TaskResponse{}, status.Error(codes.Internal, "unable to add tag to task")
+	}
+
+	return &courses.TaskResponse{Task: h.taskMapper.toProto(task)}, nil
+}
+
+func (h *Handler) RemoveTaskTag(_ context.Context, rq *courses.RemoveTaskTagRequest) (*courses.TaskResponse, error) {
+	logger := h.logger.WithField("method", "RemoveTaskTag").WithField("request", rq)
+	taskID, err := uuid.Parse(rq.GetTaskId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse task ID")
+		return &courses.TaskResponse{}, status.Error(codes.Internal, "unable to parse taskID")
+	}
+
+	task, err := h.storage.RemoveTaskTag(taskID, rq.GetTag().GetName())
+	if err != nil {
+		logger.WithError(err).Error("unable to remove tag from task")
+		return &courses.TaskResponse{}, status.Error(codes.Internal, "unable to remove tag from task")
+	}
+	return &courses.TaskResponse{Task: h.taskMapper.toProto(task)}, nil
 }

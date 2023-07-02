@@ -41,6 +41,12 @@ func WithLogger(v *logrus.Entry) CoursesOption {
 	}
 }
 
+func WithTaskMapper(v mappers.TaskMapper) CoursesOption {
+	return func(rt *Courses) {
+		rt.taskMapper = v
+	}
+}
+
 func WithTechnologyMapper(v mappers.TechnologyMapper) CoursesOption {
 	return func(rt *Courses) {
 		rt.technologyMapper = v

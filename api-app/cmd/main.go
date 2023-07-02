@@ -30,6 +30,7 @@ func main() {
 		handlers.WithTechnologyMapper(mappers.TechnologyMapperImpl{}),
 		handlers.WithCategoryMapper(mappers.CategoryMapperImpl{}),
 		handlers.WithTopicMapper(mappers.TopicMapperImpl{}),
+		handlers.WithTaskMapper(mappers.TaskMapperImpl{}),
 	)
 
 	authorizationService := authorization.NewService(authClient)

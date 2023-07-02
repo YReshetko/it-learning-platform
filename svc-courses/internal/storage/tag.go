@@ -68,3 +68,32 @@ func (cs *CourseStorage) RemoveTopicTag(topicID uuid.UUID, tagName string) (Topi
 	}
 	return cs.GetTopic(topicID)
 }
+
+func (cs *CourseStorage) CreateTaskTag(taskID uuid.UUID, tagName string) (Task, error) {
+	now := time.Now()
+	taskTag := TaskTag{
+		TaskID:    taskID,
+		TagName:   tagName,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	rs := cs.db.Create(&taskTag)
+	if rs.Error != nil {
+		return Task{}, fmt.Errorf("unable to create task's tag record: %w", rs.Error)
+	}
+
+	return cs.GetTask(taskID)
+}
+
+func (cs *CourseStorage) RemoveTaskTag(taskID uuid.UUID, tagName string) (Task, error) {
+	taskTag := TaskTag{
+		TaskID:  taskID,
+		TagName: tagName,
+	}
+	rs := cs.db.Delete(&taskTag)
+	if rs.Error != nil {
+		return Task{}, fmt.Errorf("unable to delete task's tag record: %w", rs.Error)
+	}
+	return cs.GetTask(taskID)
+}

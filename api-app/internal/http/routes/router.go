@@ -47,11 +47,17 @@ func (r Router) Init(engine *gin.Engine) {
 	engine.GET("/api/v1/admin/categories/:category_id/topics", protected(r.courses.GetTopics, r.services, []model.Role{model.ADMIN}))
 	engine.GET("/api/v1/admin/topics/:topic_id", protected(r.courses.GetTopic, r.services, []model.Role{model.ADMIN}))
 
+	engine.POST("/api/v1/admin/tasks", protected(r.courses.CreateTask, r.services, []model.Role{model.ADMIN}))
+	engine.GET("/api/v1/admin/tasks/:task_id", protected(r.courses.GetTask, r.services, []model.Role{model.ADMIN}))
+	engine.GET("/api/v1/admin/tasks", protected(r.courses.GetTasks, r.services, []model.Role{model.ADMIN}))
+
 	engine.POST("/api/v1/admin/tags", protected(r.courses.CreateTag, r.services, []model.Role{model.ADMIN}))
 	engine.GET("/api/v1/admin/tags", protected(r.courses.SearchTags, r.services, []model.Role{model.ADMIN}))
 	engine.DELETE("/api/v1/admin/tags/:tag_name", protected(r.courses.RemoveTag, r.services, []model.Role{model.ADMIN}))
 	engine.POST("/api/v1/admin/topics/:topic_id/tags", protected(r.courses.AddTopicTag, r.services, []model.Role{model.ADMIN}))
 	engine.DELETE("/api/v1/admin/topics/:topic_id/tags/:tag_name", protected(r.courses.RemoveTopicTag, r.services, []model.Role{model.ADMIN}))
+	engine.POST("/api/v1/admin/tasks/:task_id/tags", protected(r.courses.AddTaskTag, r.services, []model.Role{model.ADMIN}))
+	engine.DELETE("/api/v1/admin/tasks/:task_id/tags/:tag_name", protected(r.courses.RemoveTaskTag, r.services, []model.Role{model.ADMIN}))
 }
 
 func protected[Rq any, Rs any](fn http.HandlerFunc[Rq, Rs], service *RouterServices, roles []model.Role) func(*gin.Context) {

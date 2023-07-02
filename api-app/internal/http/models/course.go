@@ -39,6 +39,19 @@ type Topics struct {
 	Topics []Topic `json:"topics"`
 }
 
+type Task struct {
+	ID          uuid.UUID `json:"id"`
+	SeqNo       int       `json:"seq_no"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Active      bool      `json:"active"`
+	Tags        []Tag     `json:"tags"`
+}
+
+type Tasks struct {
+	Tasks []Task `json:"tasks"`
+}
+
 type Tag struct {
 	Name string `json:"name"`
 }

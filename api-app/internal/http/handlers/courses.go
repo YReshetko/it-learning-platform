@@ -21,6 +21,7 @@ type Courses struct {
 	technologyMapper mappers.TechnologyMapper
 	categoryMapper   mappers.CategoryMapper
 	topicMapper      mappers.TopicMapper
+	taskMapper       mappers.TaskMapper
 	logger           *logrus.Entry
 }
 
@@ -275,4 +276,113 @@ func (c *Courses) RemoveTopicTag(ctx http.Context, _ models.Empty) (models.Topic
 	}
 
 	return c.topicMapper.ToModel(topic.GetTopic()), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) CreateTask(ctx http.Context, task models.Task) (models.Task, http.Status) {
+	logger := c.logger.WithField("method", "CreateTask").WithField("task", task.Name)
+
+	rq := &courses.CreateTaskRequest{
+		Task: c.taskMapper.ToProto(task),
+	}
+
+	rs, err := c.client.CreateTask(ctx.Context(), rq)
+	if err != nil {
+		logger.WithError(err).Error("unable to create task")
+		return models.Task{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to create task",
+		}
+	}
+
+	return c.taskMapper.ToModel(rs.Task), http.Status{StatusCode: rest.StatusCreated}
+}
+
+func (c *Courses) GetTask(ctx http.Context, _ models.Empty) (models.Task, http.Status) {
+	logger := c.logger.WithField("method", "GetTopic")
+	taskID := ctx.GinCtx.Param("task_id")
+	if taskID == "" {
+		logger.Error("no task id")
+		return models.Task{}, http.Status{
+			Error:      errors.New("empty task_id"),
+			StatusCode: rest.StatusBadRequest,
+			Message:    "unable to get task",
+		}
+	}
+	task, err := c.client.GetTask(ctx.Context(), &courses.GetTaskRequest{TaskId: taskID})
+	if err != nil {
+		logger.WithError(err).Error("unable to get task")
+		return models.Task{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to get task",
+		}
+	}
+	return c.taskMapper.ToModel(task.GetTask()), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) GetTasks(ctx http.Context, _ models.Empty) (models.Tasks, http.Status) {
+	logger := c.logger.WithField("method", "GetTasks")
+
+	tagNames, ok := ctx.GinCtx.GetQueryArray("tag")
+	var tags []*courses.Tag
+	if ok {
+		tags = make([]*courses.Tag, len(tagNames))
+		for i, name := range tagNames {
+			tags[i] = &courses.Tag{Name: name}
+		}
+	}
+
+	rs, err := c.client.FindTasks(ctx.Context(), &courses.FindTasksRequest{Tags: tags})
+	if err != nil {
+		logger.WithError(err).Error("unable to get tasks")
+		return models.Tasks{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to get tasks",
+		}
+	}
+
+	return c.taskMapper.ToModels(rs), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) AddTaskTag(ctx http.Context, tag models.Tag) (models.Task, http.Status) {
+	logger := c.logger.WithField("method", "AddTaskTag")
+	taskID := ctx.GinCtx.Param("task_id")
+
+	task, err := c.client.AddTaskTag(ctx.Context(), &courses.AddTaskTagRequest{
+		TaskId: taskID,
+		Tag:    &courses.Tag{Name: tag.Name},
+	})
+	if err != nil {
+		logger.WithError(err).Error("unable to add task tag")
+		return models.Task{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to add task tag",
+		}
+	}
+
+	return c.taskMapper.ToModel(task.GetTask()), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) RemoveTaskTag(ctx http.Context, _ models.Empty) (models.Task, http.Status) {
+	logger := c.logger.WithField("method", "RemoveTaskTag")
+	taskID := ctx.GinCtx.Param("task_id")
+	tagName := ctx.GinCtx.Param("tag_name")
+
+	task, err := c.client.RemoveTaskTag(ctx.Context(), &courses.RemoveTaskTagRequest{
+		TaskId: taskID,
+		Tag:    &courses.Tag{Name: tagName},
+	})
+	if err != nil {
+		logger.WithError(err).Error("unable to remove task tag")
+		return models.Task{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to remove task tag",
+		}
+	}
+
+	return c.taskMapper.ToModel(task.GetTask()), http.Status{StatusCode: rest.StatusOK}
 }

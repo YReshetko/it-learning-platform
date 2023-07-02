@@ -40,6 +40,12 @@ func WithStorage(v storage.CourseStorage) HandlerOption {
 	}
 }
 
+func WithTaskMapper(v TaskMapper) HandlerOption {
+	return func(rt *Handler) {
+		rt.taskMapper = v
+	}
+}
+
 func WithTechnologyMapper(v TechnologyMapper) HandlerOption {
 	return func(rt *Handler) {
 		rt.technologyMapper = v

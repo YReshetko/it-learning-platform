@@ -214,3 +214,97 @@ func (_this_ TopicMapperImpl) toTagModel(in *_imp_1.Tag) _imp_2.Tag {
 
 	return out0
 }
+
+var _ TaskMapper = (*TaskMapperImpl)(nil)
+
+type TaskMapperImpl struct{}
+
+func (_this_ TaskMapperImpl) ToProtos(in _imp_2.Tasks) ProtoTasks {
+	out0 := ProtoTasks{}
+
+	_var_0 := in.Tasks
+	_var_1 := make([]*_imp_1.Task, len(_var_0), len(_var_0))
+	for _var_2, _var_3 := range _var_0 {
+		_var_1[_var_2] = _this_.ToProto(_var_3)
+	}
+	out0.Values = _var_1
+
+	return out0
+}
+
+func (_this_ TaskMapperImpl) ToProto(in _imp_2.Task) *_imp_1.Task {
+	out0 := &_imp_1.Task{}
+	out0.Id = uuidToString(in.ID)
+	out0.SeqNo = func(v int) int32 {
+		res := int32(v)
+		return res
+	}(in.SeqNo)
+	out0.Name = in.Name
+	out0.Description = in.Description
+	out0.Active = in.Active
+
+	_var_0 := in.Tags
+	_var_1 := make([]*_imp_1.Tag, len(_var_0), len(_var_0))
+	for _var_2, _var_3 := range _var_0 {
+		_var_1[_var_2] = _this_.toTagProto(_var_3)
+	}
+	out0.Tags = _var_1
+
+	return out0
+}
+
+func (_this_ TaskMapperImpl) ToModels(in *_imp_1.TasksResponse) _imp_2.Tasks {
+	out0 := _imp_2.Tasks{}
+	if in != nil {
+
+		_var_0 := in.Tasks
+		_var_1 := make([]_imp_2.Task, len(_var_0), len(_var_0))
+		for _var_2, _var_3 := range _var_0 {
+			_var_1[_var_2] = _this_.ToModel(_var_3)
+		}
+		out0.Tasks = _var_1
+
+	}
+
+	return out0
+}
+
+func (_this_ TaskMapperImpl) ToModel(in *_imp_1.Task) _imp_2.Task {
+	out0 := _imp_2.Task{}
+	if in != nil {
+		out0.ID = stringToUUID(in.Id)
+		out0.SeqNo = func(v int32) int {
+			res := int(v)
+			return res
+		}(in.SeqNo)
+		out0.Name = in.Name
+		out0.Description = in.Description
+		out0.Active = in.Active
+
+		_var_0 := in.Tags
+		_var_1 := make([]_imp_2.Tag, len(_var_0), len(_var_0))
+		for _var_2, _var_3 := range _var_0 {
+			_var_1[_var_2] = _this_.toTagModel(_var_3)
+		}
+		out0.Tags = _var_1
+
+	}
+
+	return out0
+}
+
+func (_this_ TaskMapperImpl) toTagProto(in _imp_2.Tag) *_imp_1.Tag {
+	out0 := &_imp_1.Tag{}
+	out0.Name = in.Name
+
+	return out0
+}
+
+func (_this_ TaskMapperImpl) toTagModel(in *_imp_1.Tag) _imp_2.Tag {
+	out0 := _imp_2.Tag{}
+	if in != nil {
+		out0.Name = in.Name
+	}
+
+	return out0
+}
