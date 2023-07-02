@@ -11,6 +11,12 @@ export function post(url, body = null) {
     return doRequest(url, request)
 }
 
+export function remove(url, query = null) {
+    let request = prepareRequest("DELETE");
+    // build full url with query
+    return doRequest(url, request)
+}
+
 function prepareRequest(method, body = null) {
     let request = {
         method: method,

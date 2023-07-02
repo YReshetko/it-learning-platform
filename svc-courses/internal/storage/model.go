@@ -85,3 +85,14 @@ type Topic struct {
 func (u Topic) TableName() string {
 	return "topics"
 }
+
+type TopicTag struct {
+	TopicID   uuid.UUID `gorm:"primaryKey"`
+	TagName   string    `gorm:"primaryKey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+func (u TopicTag) TableName() string {
+	return "topics_tags"
+}

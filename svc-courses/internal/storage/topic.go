@@ -21,3 +21,14 @@ func (cs *CourseStorage) GetTopics(categoryID uuid.UUID) ([]Topic, error) {
 	}
 	return topics, nil
 }
+
+func (cs *CourseStorage) GetTopic(topicID uuid.UUID) (Topic, error) {
+	topic := Topic{
+		ID: &topicID,
+	}
+	rs := cs.db.Preload("Tags").First(&topic)
+	if rs.Error != nil {
+		return topic, fmt.Errorf("unable to get topic record")
+	}
+	return topic, nil
+}

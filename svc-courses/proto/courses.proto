@@ -69,10 +69,46 @@ message GetTopicsRequest {
   string category_id = 1;
 }
 
+message GetTopicRequest {
+  string topic_id = 1;
+}
+
 message GetTopicsResponse {
   repeated Topic topics = 1;
 }
 
+message CreateTagRequest {
+  Tag tag = 1;
+}
+message RemoveTagRequest {
+  Tag tag = 1;
+}
+
+message CreateTagResponse {
+  Tag tag = 1;
+}
+
+message SearchTagsRequest {
+  string search = 1;
+}
+
+message SearchTagsResponse {
+  repeated Tag tags = 1;
+}
+
+message AddTopicTagRequest {
+  string topic_id = 1;
+  Tag tag = 2;
+}
+
+message TopicResponse {
+  Topic topic = 1;
+}
+
+message RemoveTopicTagRequest {
+  string topic_id = 1;
+  Tag tag = 2;
+}
 service CoursesService{
   rpc CreateTechnology(CreateTechnologyRequest) returns (CreateTechnologyResponse){}
   rpc GetTechnologies(google.protobuf.Empty) returns (GetTechnologiesResponse){}
@@ -80,4 +116,10 @@ service CoursesService{
   rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse){}
   rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse){}
   rpc GetTopics(GetTopicsRequest) returns (GetTopicsResponse){}
+  rpc GetTopic(GetTopicRequest) returns (TopicResponse){}
+  rpc CreateTag(CreateTagRequest) returns (CreateTagResponse){}
+  rpc SearchTag(SearchTagsRequest) returns (SearchTagsResponse){}
+  rpc RemoveTag(RemoveTagRequest) returns (google.protobuf.Empty){}
+  rpc AddTopicTag(AddTopicTagRequest) returns (TopicResponse){}
+  rpc RemoveTopicTag(RemoveTopicTagRequest) returns (TopicResponse){}
 }

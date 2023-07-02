@@ -54,13 +54,17 @@ type TopicMapper interface {
 	// ToProtos @SliceMapping(target="Values", source="in.Topics", this="ToProto")
 	ToProtos(in models.Topics) ProtoTopics
 	// ToProto @Mapping(target="Id", func="uuidToString(in.ID)")
-	// ToProto @Mapping(target="CategoryId", func="uuidToString(in.CategoryID)")
+	// @Mapping(target="CategoryId", func="uuidToString(in.CategoryID)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagProto")
 	ToProto(in models.Topic) *courses.Topic
 	// ToModels @SliceMapping(target="Topics", source="in.Topics", this="ToModel")
 	ToModels(in *courses.GetTopicsResponse) models.Topics
 	// ToModel @Mapping(target="ID", func="stringToUUID(in.Id)")
-	// ToModel @Mapping(target="CategoryID", func="stringToUUID(in.CategoryId)")
+	// @Mapping(target="CategoryID", func="stringToUUID(in.CategoryId)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagModel")
 	ToModel(in *courses.Topic) models.Topic
+	toTagProto(in models.Tag) *courses.Tag
+	toTagModel(in *courses.Tag) models.Tag
 }
 
 func uuidToString(id uuid.UUID) string {

@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -73,7 +74,7 @@ func (h *Handler) CreateCategory(_ context.Context, request *courses.CreateCateg
 }
 
 func (h *Handler) GetCategories(_ context.Context, rq *courses.GetCategoriesRequest) (*courses.GetCategoriesResponse, error) {
-	logger := h.logger.WithField("method", "GetCategories")
+	logger := h.logger.WithField("method", "GetCategories").WithField("request", rq)
 
 	technologyID, err := uuid.Parse(rq.TechnologyId)
 	if err != nil {
@@ -110,7 +111,7 @@ func (h *Handler) CreateTopic(_ context.Context, request *courses.CreateTopicReq
 }
 
 func (h *Handler) GetTopics(_ context.Context, rq *courses.GetTopicsRequest) (*courses.GetTopicsResponse, error) {
-	logger := h.logger.WithField("method", "GetTopics")
+	logger := h.logger.WithField("method", "GetTopics").WithField("request", rq)
 
 	categoryID, err := uuid.Parse(rq.CategoryId)
 	if err != nil {
@@ -132,4 +133,97 @@ func (h *Handler) GetTopics(_ context.Context, rq *courses.GetTopicsRequest) (*c
 	return &courses.GetTopicsResponse{
 		Topics: protoTopicValues,
 	}, nil
+}
+
+func (h *Handler) GetTopic(_ context.Context, rq *courses.GetTopicRequest) (*courses.TopicResponse, error) {
+	logger := h.logger.WithField("method", "GetTopic").WithField("request", rq)
+	topicID, err := uuid.Parse(rq.GetTopicId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse topic ID")
+		return &courses.TopicResponse{}, status.Error(codes.InvalidArgument, "unable to parse topic ID")
+	}
+	topic, err := h.storage.GetTopic(topicID)
+	if err != nil {
+		logger.WithError(err).Error("unable to get topic")
+		return &courses.TopicResponse{}, status.Error(codes.Internal, "unable to get topic")
+	}
+	return &courses.TopicResponse{Topic: h.topicMapper.toProto(topic)}, nil
+}
+
+func (h *Handler) CreateTag(_ context.Context, rq *courses.CreateTagRequest) (*courses.CreateTagResponse, error) {
+	logger := h.logger.WithField("method", "CreateTag").WithField("request", rq)
+	now := time.Now()
+	tag, err := h.storage.CreateTag(storage.Tag{
+		Name:      rq.GetTag().GetName(),
+		CreatedAt: now,
+		UpdatedAt: now,
+	})
+	if err != nil {
+		logger.WithError(err).Error("unable to create tag")
+		return &courses.CreateTagResponse{}, status.Error(codes.Internal, "unable to create tag")
+	}
+	return &courses.CreateTagResponse{Tag: &courses.Tag{Name: tag.Name}}, nil
+}
+
+func (h *Handler) SearchTag(_ context.Context, rq *courses.SearchTagsRequest) (*courses.SearchTagsResponse, error) {
+	logger := h.logger.WithField("method", "SearchTag").WithField("request", rq)
+	var tags []storage.Tag
+	var err error
+	if strings.TrimSpace(rq.GetSearch()) == "" {
+		tags, err = h.storage.GetTags()
+	} else {
+		tags, err = h.storage.SearchTags(rq.GetSearch())
+	}
+	if err != nil {
+		logger.WithError(err).Error("unable to find tags")
+		return &courses.SearchTagsResponse{}, status.Error(codes.Internal, "unable to find tags")
+	}
+	protoTags := make([]*courses.Tag, len(tags))
+	for i, tag := range tags {
+		protoTags[i] = &courses.Tag{Name: tag.Name}
+	}
+
+	return &courses.SearchTagsResponse{Tags: protoTags}, nil
+}
+
+func (h *Handler) RemoveTag(_ context.Context, rq *courses.RemoveTagRequest) (*emptypb.Empty, error) {
+	logger := h.logger.WithField("method", "RemoveTag").WithField("request", rq)
+	_, err := h.storage.RemoveTag(storage.Tag{Name: rq.GetTag().GetName()})
+	if err != nil {
+		logger.WithError(err).Error("unable to remove tag")
+		return &emptypb.Empty{}, status.Error(codes.Internal, "unable to remove tag")
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (h *Handler) AddTopicTag(_ context.Context, rq *courses.AddTopicTagRequest) (*courses.TopicResponse, error) {
+	logger := h.logger.WithField("method", "AddTopicTag").WithField("request", rq)
+	topicID, err := uuid.Parse(rq.GetTopicId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse topic ID")
+		return &courses.TopicResponse{}, status.Error(codes.Internal, "unable to parse topic ID")
+	}
+	topic, err := h.storage.CreateTopicTag(topicID, rq.GetTag().GetName())
+	if err != nil {
+		logger.WithError(err).Error("unable to add tag to topic")
+		return &courses.TopicResponse{}, status.Error(codes.Internal, "unable to add tag to topic")
+	}
+
+	return &courses.TopicResponse{Topic: h.topicMapper.toProto(topic)}, nil
+}
+
+func (h *Handler) RemoveTopicTag(_ context.Context, rq *courses.RemoveTopicTagRequest) (*courses.TopicResponse, error) {
+	logger := h.logger.WithField("method", "RemoveTopicTag").WithField("request", rq)
+	topicID, err := uuid.Parse(rq.GetTopicId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse topic ID")
+		return &courses.TopicResponse{}, status.Error(codes.Internal, "unable to parse topic ID")
+	}
+
+	topic, err := h.storage.RemoveTopicTag(topicID, rq.GetTag().GetName())
+	if err != nil {
+		logger.WithError(err).Error("unable to remove tag from topic")
+		return &courses.TopicResponse{}, status.Error(codes.Internal, "unable to remove tag from topic")
+	}
+	return &courses.TopicResponse{Topic: h.topicMapper.toProto(topic)}, nil
 }

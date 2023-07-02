@@ -142,6 +142,13 @@ func (_this_ TopicMapperImpl) toProto(in _imp_3.Topic) *_imp_1.Topic {
 	out0.Description = in.Description
 	out0.Active = in.Active
 
+	_var_0 := in.Tags
+	_var_1 := make([]*_imp_1.Tag, len(_var_0), len(_var_0))
+	for _var_2, _var_3 := range _var_0 {
+		_var_1[_var_2] = _this_.toTagProto(_var_3)
+	}
+	out0.Tags = _var_1
+
 	return out0
 }
 
@@ -170,6 +177,30 @@ func (_this_ TopicMapperImpl) toModel(in *_imp_1.Topic) _imp_3.Topic {
 		out0.Name = in.Name
 		out0.Description = in.Description
 		out0.Active = in.Active
+
+		_var_0 := in.Tags
+		_var_1 := make([]_imp_3.Tag, len(_var_0), len(_var_0))
+		for _var_2, _var_3 := range _var_0 {
+			_var_1[_var_2] = _this_.toTagModel(_var_3)
+		}
+		out0.Tags = _var_1
+
+	}
+
+	return out0
+}
+
+func (_this_ TopicMapperImpl) toTagProto(in _imp_3.Tag) *_imp_1.Tag {
+	out0 := &_imp_1.Tag{}
+	out0.Name = in.Name
+
+	return out0
+}
+
+func (_this_ TopicMapperImpl) toTagModel(in *_imp_1.Tag) _imp_3.Tag {
+	out0 := _imp_3.Tag{}
+	if in != nil {
+		out0.Name = in.Name
 	}
 
 	return out0

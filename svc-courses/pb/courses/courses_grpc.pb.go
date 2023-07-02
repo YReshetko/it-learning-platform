@@ -26,6 +26,12 @@ const (
 	CoursesService_GetCategories_FullMethodName    = "/CoursesService/GetCategories"
 	CoursesService_CreateTopic_FullMethodName      = "/CoursesService/CreateTopic"
 	CoursesService_GetTopics_FullMethodName        = "/CoursesService/GetTopics"
+	CoursesService_GetTopic_FullMethodName         = "/CoursesService/GetTopic"
+	CoursesService_CreateTag_FullMethodName        = "/CoursesService/CreateTag"
+	CoursesService_SearchTag_FullMethodName        = "/CoursesService/SearchTag"
+	CoursesService_RemoveTag_FullMethodName        = "/CoursesService/RemoveTag"
+	CoursesService_AddTopicTag_FullMethodName      = "/CoursesService/AddTopicTag"
+	CoursesService_RemoveTopicTag_FullMethodName   = "/CoursesService/RemoveTopicTag"
 )
 
 // CoursesServiceClient is the client API for CoursesService service.
@@ -38,6 +44,12 @@ type CoursesServiceClient interface {
 	GetCategories(ctx context.Context, in *GetCategoriesRequest, opts ...grpc.CallOption) (*GetCategoriesResponse, error)
 	CreateTopic(ctx context.Context, in *CreateTopicRequest, opts ...grpc.CallOption) (*CreateTopicResponse, error)
 	GetTopics(ctx context.Context, in *GetTopicsRequest, opts ...grpc.CallOption) (*GetTopicsResponse, error)
+	GetTopic(ctx context.Context, in *GetTopicRequest, opts ...grpc.CallOption) (*TopicResponse, error)
+	CreateTag(ctx context.Context, in *CreateTagRequest, opts ...grpc.CallOption) (*CreateTagResponse, error)
+	SearchTag(ctx context.Context, in *SearchTagsRequest, opts ...grpc.CallOption) (*SearchTagsResponse, error)
+	RemoveTag(ctx context.Context, in *RemoveTagRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	AddTopicTag(ctx context.Context, in *AddTopicTagRequest, opts ...grpc.CallOption) (*TopicResponse, error)
+	RemoveTopicTag(ctx context.Context, in *RemoveTopicTagRequest, opts ...grpc.CallOption) (*TopicResponse, error)
 }
 
 type coursesServiceClient struct {
@@ -102,6 +114,60 @@ func (c *coursesServiceClient) GetTopics(ctx context.Context, in *GetTopicsReque
 	return out, nil
 }
 
+func (c *coursesServiceClient) GetTopic(ctx context.Context, in *GetTopicRequest, opts ...grpc.CallOption) (*TopicResponse, error) {
+	out := new(TopicResponse)
+	err := c.cc.Invoke(ctx, CoursesService_GetTopic_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) CreateTag(ctx context.Context, in *CreateTagRequest, opts ...grpc.CallOption) (*CreateTagResponse, error) {
+	out := new(CreateTagResponse)
+	err := c.cc.Invoke(ctx, CoursesService_CreateTag_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) SearchTag(ctx context.Context, in *SearchTagsRequest, opts ...grpc.CallOption) (*SearchTagsResponse, error) {
+	out := new(SearchTagsResponse)
+	err := c.cc.Invoke(ctx, CoursesService_SearchTag_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) RemoveTag(ctx context.Context, in *RemoveTagRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, CoursesService_RemoveTag_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) AddTopicTag(ctx context.Context, in *AddTopicTagRequest, opts ...grpc.CallOption) (*TopicResponse, error) {
+	out := new(TopicResponse)
+	err := c.cc.Invoke(ctx, CoursesService_AddTopicTag_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) RemoveTopicTag(ctx context.Context, in *RemoveTopicTagRequest, opts ...grpc.CallOption) (*TopicResponse, error) {
+	out := new(TopicResponse)
+	err := c.cc.Invoke(ctx, CoursesService_RemoveTopicTag_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CoursesServiceServer is the server API for CoursesService service.
 // All implementations must embed UnimplementedCoursesServiceServer
 // for forward compatibility
@@ -112,6 +178,12 @@ type CoursesServiceServer interface {
 	GetCategories(context.Context, *GetCategoriesRequest) (*GetCategoriesResponse, error)
 	CreateTopic(context.Context, *CreateTopicRequest) (*CreateTopicResponse, error)
 	GetTopics(context.Context, *GetTopicsRequest) (*GetTopicsResponse, error)
+	GetTopic(context.Context, *GetTopicRequest) (*TopicResponse, error)
+	CreateTag(context.Context, *CreateTagRequest) (*CreateTagResponse, error)
+	SearchTag(context.Context, *SearchTagsRequest) (*SearchTagsResponse, error)
+	RemoveTag(context.Context, *RemoveTagRequest) (*emptypb.Empty, error)
+	AddTopicTag(context.Context, *AddTopicTagRequest) (*TopicResponse, error)
+	RemoveTopicTag(context.Context, *RemoveTopicTagRequest) (*TopicResponse, error)
 	mustEmbedUnimplementedCoursesServiceServer()
 }
 
@@ -136,6 +208,24 @@ func (UnimplementedCoursesServiceServer) CreateTopic(context.Context, *CreateTop
 }
 func (UnimplementedCoursesServiceServer) GetTopics(context.Context, *GetTopicsRequest) (*GetTopicsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTopics not implemented")
+}
+func (UnimplementedCoursesServiceServer) GetTopic(context.Context, *GetTopicRequest) (*TopicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTopic not implemented")
+}
+func (UnimplementedCoursesServiceServer) CreateTag(context.Context, *CreateTagRequest) (*CreateTagResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTag not implemented")
+}
+func (UnimplementedCoursesServiceServer) SearchTag(context.Context, *SearchTagsRequest) (*SearchTagsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchTag not implemented")
+}
+func (UnimplementedCoursesServiceServer) RemoveTag(context.Context, *RemoveTagRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveTag not implemented")
+}
+func (UnimplementedCoursesServiceServer) AddTopicTag(context.Context, *AddTopicTagRequest) (*TopicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddTopicTag not implemented")
+}
+func (UnimplementedCoursesServiceServer) RemoveTopicTag(context.Context, *RemoveTopicTagRequest) (*TopicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveTopicTag not implemented")
 }
 func (UnimplementedCoursesServiceServer) mustEmbedUnimplementedCoursesServiceServer() {}
 
@@ -258,6 +348,114 @@ func _CoursesService_GetTopics_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CoursesService_GetTopic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTopicRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).GetTopic(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_GetTopic_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).GetTopic(ctx, req.(*GetTopicRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_CreateTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).CreateTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_CreateTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).CreateTag(ctx, req.(*CreateTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_SearchTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchTagsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).SearchTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_SearchTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).SearchTag(ctx, req.(*SearchTagsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_RemoveTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).RemoveTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_RemoveTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).RemoveTag(ctx, req.(*RemoveTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_AddTopicTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTopicTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).AddTopicTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_AddTopicTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).AddTopicTag(ctx, req.(*AddTopicTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_RemoveTopicTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveTopicTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).RemoveTopicTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_RemoveTopicTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).RemoveTopicTag(ctx, req.(*RemoveTopicTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CoursesService_ServiceDesc is the grpc.ServiceDesc for CoursesService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -288,6 +486,30 @@ var CoursesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTopics",
 			Handler:    _CoursesService_GetTopics_Handler,
+		},
+		{
+			MethodName: "GetTopic",
+			Handler:    _CoursesService_GetTopic_Handler,
+		},
+		{
+			MethodName: "CreateTag",
+			Handler:    _CoursesService_CreateTag_Handler,
+		},
+		{
+			MethodName: "SearchTag",
+			Handler:    _CoursesService_SearchTag_Handler,
+		},
+		{
+			MethodName: "RemoveTag",
+			Handler:    _CoursesService_RemoveTag_Handler,
+		},
+		{
+			MethodName: "AddTopicTag",
+			Handler:    _CoursesService_AddTopicTag_Handler,
+		},
+		{
+			MethodName: "RemoveTopicTag",
+			Handler:    _CoursesService_RemoveTopicTag_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

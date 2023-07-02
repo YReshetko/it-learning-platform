@@ -64,12 +64,16 @@ type TopicMapper interface {
 	toProtos(in modelTopics) protoTopics
 	// @Mapping(target="Id", func="uuidPtrToString(in.ID)")
 	// @Mapping(target="CategoryId", func="uuidToString(in.CategoryID)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagProto")
 	toProto(in storage.Topic) *courses.Topic
 	// @SliceMapping(target="Values", source="in.Values", this="toModel")
 	toModels(in protoTopics) modelTopics
 	// @Mapping(target="ID", func="stringToUUIDPtr(in.Id)")
 	// @Mapping(target="CategoryID", func="stringToUUID(in.CategoryId)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagModel")
 	toModel(in *courses.Topic) storage.Topic
+	toTagProto(in storage.Tag) *courses.Tag
+	toTagModel(in *courses.Tag) storage.Tag
 }
 
 func uuidPtrToString(id *uuid.UUID) string {

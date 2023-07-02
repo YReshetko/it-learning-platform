@@ -144,6 +144,7 @@ func (c *Courses) GetTopics(ctx http.Context, _ models.Empty) (models.Topics, ht
 
 	categoryID := ctx.GinCtx.Param("category_id")
 	if categoryID == "" {
+		logger.Error("no category id")
 		return models.Topics{}, http.Status{
 			Error:      errors.New("empty category_id"),
 			StatusCode: rest.StatusBadRequest,
@@ -162,4 +163,116 @@ func (c *Courses) GetTopics(ctx http.Context, _ models.Empty) (models.Topics, ht
 	}
 
 	return c.topicMapper.ToModels(rs), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) GetTopic(ctx http.Context, _ models.Empty) (models.Topic, http.Status) {
+	logger := c.logger.WithField("method", "GetTopic")
+	topicID := ctx.GinCtx.Param("topic_id")
+	if topicID == "" {
+		logger.Error("no topic id")
+		return models.Topic{}, http.Status{
+			Error:      errors.New("empty topic_id"),
+			StatusCode: rest.StatusBadRequest,
+			Message:    "unable to get topics",
+		}
+	}
+	topic, err := c.client.GetTopic(ctx.Context(), &courses.GetTopicRequest{TopicId: topicID})
+	if err != nil {
+		logger.WithError(err).Error("unable to get topic")
+		return models.Topic{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to get topic",
+		}
+	}
+	return c.topicMapper.ToModel(topic.GetTopic()), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) CreateTag(ctx http.Context, tag models.Tag) (models.Tag, http.Status) {
+	logger := c.logger.WithField("method", "CreateTag")
+	rs, err := c.client.CreateTag(ctx.Context(), &courses.CreateTagRequest{Tag: &courses.Tag{Name: tag.Name}})
+	if err != nil {
+		logger.WithError(err).Error("unable to create tag")
+		return models.Tag{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to create tag",
+		}
+	}
+	return models.Tag{Name: rs.GetTag().GetName()}, http.Status{StatusCode: rest.StatusCreated}
+}
+
+func (c *Courses) SearchTags(ctx http.Context, _ models.Empty) (models.Tags, http.Status) {
+	logger := c.logger.WithField("method", "SearchTags")
+	rs, err := c.client.SearchTag(ctx.Context(), &courses.SearchTagsRequest{Search: ctx.GinCtx.Query("search")})
+	if err != nil {
+		logger.WithError(err).Error("unable to find tags")
+		return models.Tags{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to find tags",
+		}
+	}
+
+	tags := make([]models.Tag, len(rs.GetTags()))
+	for i, tag := range rs.GetTags() {
+		tags[i] = models.Tag{Name: tag.GetName()}
+	}
+	return models.Tags{Tags: tags}, http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) RemoveTag(ctx http.Context, _ models.Empty) (models.Empty, http.Status) {
+	logger := c.logger.WithField("method", "RemoveTag")
+	tagName := ctx.GinCtx.Param("tag_name")
+	_, err := c.client.RemoveTag(ctx.Context(), &courses.RemoveTagRequest{Tag: &courses.Tag{Name: tagName}})
+	if err != nil {
+		logger.WithError(err).Error("unable to remove tag")
+		return models.Empty{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to remove tag",
+		}
+	}
+	return models.Empty{}, http.Status{StatusCode: rest.StatusNoContent}
+}
+
+func (c *Courses) AddTopicTag(ctx http.Context, tag models.Tag) (models.Topic, http.Status) {
+	logger := c.logger.WithField("method", "AddTopicTag")
+	topicID := ctx.GinCtx.Param("topic_id")
+
+	topic, err := c.client.AddTopicTag(ctx.Context(), &courses.AddTopicTagRequest{
+		TopicId: topicID,
+		Tag:     &courses.Tag{Name: tag.Name},
+	})
+	if err != nil {
+		logger.WithError(err).Error("unable to add topic tag")
+		return models.Topic{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to add topic tag",
+		}
+	}
+
+	return c.topicMapper.ToModel(topic.GetTopic()), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) RemoveTopicTag(ctx http.Context, _ models.Empty) (models.Topic, http.Status) {
+	logger := c.logger.WithField("method", "RemoveTopicTag")
+	topicID := ctx.GinCtx.Param("topic_id")
+	tagName := ctx.GinCtx.Param("tag_name")
+
+	topic, err := c.client.RemoveTopicTag(ctx.Context(), &courses.RemoveTopicTagRequest{
+		TopicId: topicID,
+		Tag:     &courses.Tag{Name: tagName},
+	})
+	if err != nil {
+		logger.WithError(err).Error("unable to remove topic tag")
+		return models.Topic{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to remove topic tag",
+		}
+	}
+
+	return c.topicMapper.ToModel(topic.GetTopic()), http.Status{StatusCode: rest.StatusOK}
 }

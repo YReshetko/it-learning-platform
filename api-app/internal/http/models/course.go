@@ -42,3 +42,7 @@ type Topics struct {
 type Tag struct {
 	Name string `json:"name"`
 }
+
+type Tags struct {
+	Tags []Tag `json:"tags"`
+}

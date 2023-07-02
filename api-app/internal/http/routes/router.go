@@ -45,6 +45,13 @@ func (r Router) Init(engine *gin.Engine) {
 	engine.GET("/api/v1/admin/technologies/:technology_id/categories", protected(r.courses.GetCategories, r.services, []model.Role{model.ADMIN}))
 	engine.POST("/api/v1/admin/categories/:category_id/topic", protected(r.courses.CreateTopic, r.services, []model.Role{model.ADMIN}))
 	engine.GET("/api/v1/admin/categories/:category_id/topics", protected(r.courses.GetTopics, r.services, []model.Role{model.ADMIN}))
+	engine.GET("/api/v1/admin/topics/:topic_id", protected(r.courses.GetTopic, r.services, []model.Role{model.ADMIN}))
+
+	engine.POST("/api/v1/admin/tags", protected(r.courses.CreateTag, r.services, []model.Role{model.ADMIN}))
+	engine.GET("/api/v1/admin/tags", protected(r.courses.SearchTags, r.services, []model.Role{model.ADMIN}))
+	engine.DELETE("/api/v1/admin/tags/:tag_name", protected(r.courses.RemoveTag, r.services, []model.Role{model.ADMIN}))
+	engine.POST("/api/v1/admin/topics/:topic_id/tags", protected(r.courses.AddTopicTag, r.services, []model.Role{model.ADMIN}))
+	engine.DELETE("/api/v1/admin/topics/:topic_id/tags/:tag_name", protected(r.courses.RemoveTopicTag, r.services, []model.Role{model.ADMIN}))
 }
 
 func protected[Rq any, Rs any](fn http.HandlerFunc[Rq, Rs], service *RouterServices, roles []model.Role) func(*gin.Context) {
