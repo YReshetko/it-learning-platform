@@ -4,11 +4,13 @@ import UserList from "../users/UserList";
 import UnsupportedLayout from "../unsupported/UnsupportedLayout";
 import Technologies from "../technologies/Technologies";
 import Tags from "../tags/Tags";
+import Tasks from "../tasks/Tasks";
 
 const layoutsMapping = {
     "admin-add-user": (<UserForm/>),
     "admin-technologies": (<Technologies/>),
     "admin-tags": (<Tags/>),
+    "admin-tasks": (<Tasks/>),
     /*"admin-all-users": (<UserList/>)*/
 }
 

@@ -125,7 +125,6 @@ const Workspace = ({user}) => {
 
 function createMenuItems(userRoles, callback) {
     let userMenuItems = userRoles.map(userRole => menuItems[userRole]);
-
     return (
         <div>
             <Toolbar sx={{backgroundColor: '#1976d2'}}>

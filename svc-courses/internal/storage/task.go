@@ -15,7 +15,7 @@ func (cs *CourseStorage) CreateTask(task Task) (Task, error) {
 
 func (cs *CourseStorage) GetTasks() ([]Task, error) {
 	var tasks []Task
-	rs := cs.db.Find(&tasks)
+	rs := cs.db.Preload("Tags").Find(&tasks)
 	if rs.Error != nil {
 		return nil, fmt.Errorf("unable to get tasks records: %w", rs.Error)
 	}
