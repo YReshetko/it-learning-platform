@@ -59,3 +59,25 @@ type Tag struct {
 type Tags struct {
 	Tags []Tag `json:"tags"`
 }
+
+type Course struct {
+	ID          uuid.UUID     `json:"id"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	SeqNo       int           `json:"seq_no"`
+	Active      bool          `json:"active"`
+	Topics      []CourseTopic `json:"topics"`
+}
+
+type Courses struct {
+	Courses []Course `json:"courses"`
+}
+
+type CourseTopic struct {
+	ID          uuid.UUID `json:"id"`
+	SeqNo       int       `json:"seq_no"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Active      bool      `json:"active"`
+	Tags        []Tag     `json:"tags"`
+}

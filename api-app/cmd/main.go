@@ -31,6 +31,7 @@ func main() {
 		handlers.WithCategoryMapper(mappers.CategoryMapperImpl{}),
 		handlers.WithTopicMapper(mappers.TopicMapperImpl{}),
 		handlers.WithTaskMapper(mappers.TaskMapperImpl{}),
+		handlers.WithCourseMapper(mappers.CourseMapperImpl{}),
 	)
 
 	authorizationService := authorization.NewService(authClient)

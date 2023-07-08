@@ -45,6 +45,34 @@ func (u Course) TableName() string {
 	return "courses"
 }
 
+type CourseTopic struct {
+	ID        *uuid.UUID `gorm:"primaryKey;default:uuid_generate_v4()"`
+	CourseID  uuid.UUID
+	Topic     Topic `gorm:"foreignKey:topic_id"`
+	SeqNo     int
+	Active    bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+func (u CourseTopic) TableName() string {
+	return "courses_topics"
+}
+
+type CourseTopicTask struct {
+	ID            *uuid.UUID `gorm:"primaryKey;default:uuid_generate_v4()"`
+	CourseTopicID uuid.UUID
+	Task          Task `gorm:"foreignKey:task_id"`
+	Weight        int
+	Active        bool
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+}
+
+func (u CourseTopicTask) TableName() string {
+	return "tasks_courses_topics"
+}
+
 type Tag struct {
 	Name      string `gorm:"primaryKey"`
 	CreatedAt time.Time

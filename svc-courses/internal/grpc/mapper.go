@@ -99,6 +99,20 @@ type TaskMapper interface {
 	toTagProto(in storage.Tag) *courses.Tag
 	toTagModel(in *courses.Tag) storage.Tag
 }
+type modelCourses struct {
+	Values []storage.Course
+}
+
+// CourseMapper the mapper model storage.Course from\to proto courses.Course
+// @Mapper
+type CourseMapper interface {
+	// @Mapping(target="ID", func="stringToUUIDPtr(in.Id)")
+	courseToModel(in *courses.Course) storage.Course
+	// @SliceMapping(target="Course", source="in.Values", this="courseToProto")
+	coursesToProto(in modelCourses) *courses.CoursesResponse
+	// @Mapping(target="Id", func="uuidPtrToString(in.ID)")
+	courseToProto(in storage.Course) *courses.Course
+}
 
 func uuidPtrToString(id *uuid.UUID) string {
 	if id == nil {

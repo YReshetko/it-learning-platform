@@ -25,6 +25,7 @@ type Handler struct {
 	categoryMapper                            CategoryMapper
 	topicMapper                               TopicMapper
 	taskMapper                                TaskMapper
+	courseMapper                              CourseMapper
 	logger                                    *logrus.Entry
 }
 
@@ -323,4 +324,94 @@ func (h *Handler) RemoveTaskTag(_ context.Context, rq *courses.RemoveTaskTagRequ
 		return &courses.TaskResponse{}, status.Error(codes.Internal, "unable to remove tag from task")
 	}
 	return &courses.TaskResponse{Task: h.taskMapper.toProto(task)}, nil
+}
+
+func (h *Handler) CreateCourse(_ context.Context, rq *courses.CreateCourseRequest) (*courses.CourseResponse, error) {
+	logger := h.logger.WithField("method", "CreateCourse").WithField("request", rq)
+
+	if rq.GetCourse() == nil {
+		logger.Error("unable to persist nil course")
+		return &courses.CourseResponse{}, status.Error(codes.InvalidArgument, "unable to persist nil course")
+	}
+	course := h.courseMapper.courseToModel(rq.GetCourse())
+
+	course, err := h.storage.CreateCourse(course)
+	if err != nil {
+		logger.WithError(err).Error("unable to create course")
+		return &courses.CourseResponse{}, status.Error(codes.Internal, "unable to create course")
+	}
+
+	return &courses.CourseResponse{Course: h.courseMapper.courseToProto(course)}, nil
+}
+
+func (h *Handler) GetOwnerCourses(_ context.Context, rq *courses.GetOwnerCoursesRequest) (*courses.CoursesResponse, error) {
+	logger := h.logger.WithField("method", "GetOwnerCourses").WithField("request", rq)
+
+	ownerID, err := uuid.Parse(rq.GetOwnerId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse owner ID")
+		return &courses.CoursesResponse{}, status.Error(codes.InvalidArgument, "unable to parse owner ID")
+	}
+	coursesList, err := h.storage.GetOwnerCourses(ownerID)
+	if err != nil {
+		logger.WithError(err).Error("unable to get courses")
+		return &courses.CoursesResponse{}, status.Error(codes.Internal, "unable to get courses")
+	}
+
+	return h.courseMapper.coursesToProto(modelCourses{coursesList}), nil
+}
+
+func (h *Handler) GetCourse(_ context.Context, rq *courses.GetCourseRequest) (*courses.CourseResponse, error) {
+	logger := h.logger.WithField("method", "GetCourse").WithField("request", rq)
+
+	courseID, err := uuid.Parse(rq.GetCourseId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse course ID")
+		return &courses.CourseResponse{}, status.Error(codes.InvalidArgument, "unable to parse course ID")
+	}
+
+	course, err := h.storage.GetCourse(courseID)
+	if err != nil {
+		logger.WithError(err).Error("unable to get course")
+		return &courses.CourseResponse{}, status.Error(codes.Internal, "unable to get course")
+	}
+
+	return &courses.CourseResponse{Course: h.courseMapper.courseToProto(course)}, nil
+}
+
+func (h *Handler) AddCourseTopic(ctx context.Context, rq *courses.AddCourseTopicRequest) (*courses.CourseResponse, error) {
+	logger := h.logger.WithField("method", "AddCourseTopic").WithField("request", rq)
+
+	courseID, err := uuid.Parse(rq.GetCourseId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse course ID")
+		return &courses.CourseResponse{}, status.Error(codes.InvalidArgument, "unable to parse course ID")
+	}
+
+	topicID, err := uuid.Parse(rq.GetTopicId())
+	if err != nil {
+		logger.WithError(err).Error("unable to parse topic ID")
+		return &courses.CourseResponse{}, status.Error(codes.InvalidArgument, "unable to parse topic ID")
+	}
+
+	seqNo, err := h.storage.GetCourseTopicsCount(courseID)
+	if err != nil {
+		logger.WithError(err).Error("unable to calculate topic seqNo")
+		return &courses.CourseResponse{}, status.Error(codes.Internal, "unable to calculate topic seqNo")
+	}
+	_, err = h.storage.CreateCourseTopic(storage.CourseTopic{
+		CourseID: courseID,
+		Topic: storage.Topic{
+			ID: &topicID,
+		},
+		SeqNo:  seqNo,
+		Active: true,
+	})
+
+	if err != nil {
+		logger.WithError(err).Error("unable to create course topic")
+		return &courses.CourseResponse{}, status.Error(codes.Internal, "unable to create course topic")
+	}
+
+	return h.GetCourse(ctx, &courses.GetCourseRequest{CourseId: rq.GetCourseId()})
 }

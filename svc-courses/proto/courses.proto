@@ -38,6 +38,26 @@ message Task {
   repeated Tag tags = 7;
 }
 
+message CourseTopic {
+  string id = 1;
+  string topic_id = 2;
+  int32  seq_no = 3;
+  string name = 4;
+  string description = 5;
+  bool   active = 6;
+  repeated Tag tags = 7;
+}
+
+message Course {
+  string id = 1;
+  int32  seq_no = 2;
+  string name = 4;
+  string description = 5;
+  bool   active = 6;
+  string owner_id = 7;
+  repeated CourseTopic topics = 8;
+}
+
 message CreateTechnologyRequest {
   Technology technology = 1;
 }
@@ -149,6 +169,31 @@ message TasksResponse {
   repeated Task tasks = 1;
 }
 
+message CreateCourseRequest {
+  Course course = 1;
+}
+
+message GetCourseRequest {
+  string course_id = 1;
+}
+
+message CourseResponse {
+  Course course = 1;
+}
+
+message CoursesResponse {
+  repeated Course course = 1;
+}
+
+message GetOwnerCoursesRequest {
+  string owner_id = 1;
+}
+
+message AddCourseTopicRequest {
+  string course_id = 1;
+  string topic_id = 2;
+}
+
 service CoursesService{
   rpc CreateTechnology(CreateTechnologyRequest) returns (CreateTechnologyResponse){}
   rpc GetTechnologies(google.protobuf.Empty) returns (GetTechnologiesResponse){}
@@ -163,6 +208,11 @@ service CoursesService{
   rpc CreateTask(CreateTaskRequest) returns (TaskResponse){}
   rpc FindTasks(FindTasksRequest) returns (TasksResponse){}
   rpc GetTask(GetTaskRequest) returns (TaskResponse){}
+
+  rpc CreateCourse(CreateCourseRequest) returns (CourseResponse){}
+  rpc GetOwnerCourses(GetOwnerCoursesRequest) returns (CoursesResponse){}
+  rpc GetCourse(GetCourseRequest) returns (CourseResponse) {}
+  rpc AddCourseTopic(AddCourseTopicRequest) returns(CourseResponse) {}
 
   rpc CreateTag(CreateTagRequest) returns (CreateTagResponse){}
   rpc SearchTag(SearchTagsRequest) returns (SearchTagsResponse){}

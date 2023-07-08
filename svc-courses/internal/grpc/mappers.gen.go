@@ -296,3 +296,50 @@ func (_this_ TaskMapperImpl) toTagModel(in *_imp_1.Tag) _imp_3.Tag {
 
 	return out0
 }
+
+var _ CourseMapper = (*CourseMapperImpl)(nil)
+
+type CourseMapperImpl struct{}
+
+func (_this_ CourseMapperImpl) courseToModel(in *_imp_1.Course) _imp_3.Course {
+	out0 := _imp_3.Course{}
+	if in != nil {
+		out0.ID = stringToUUIDPtr(in.Id)
+		out0.SeqNo = func(v int32) int {
+			res := int(v)
+			return res
+		}(in.SeqNo)
+		out0.Name = in.Name
+		out0.Description = in.Description
+		out0.Active = in.Active
+	}
+
+	return out0
+}
+
+func (_this_ CourseMapperImpl) coursesToProto(in modelCourses) *_imp_1.CoursesResponse {
+	out0 := &_imp_1.CoursesResponse{}
+
+	_var_0 := in.Values
+	_var_1 := make([]*_imp_1.Course, len(_var_0), len(_var_0))
+	for _var_2, _var_3 := range _var_0 {
+		_var_1[_var_2] = _this_.courseToProto(_var_3)
+	}
+	out0.Course = _var_1
+
+	return out0
+}
+
+func (_this_ CourseMapperImpl) courseToProto(in _imp_3.Course) *_imp_1.Course {
+	out0 := &_imp_1.Course{}
+	out0.Id = uuidPtrToString(in.ID)
+	out0.SeqNo = func(v int) int32 {
+		res := int32(v)
+		return res
+	}(in.SeqNo)
+	out0.Name = in.Name
+	out0.Description = in.Description
+	out0.Active = in.Active
+
+	return out0
+}

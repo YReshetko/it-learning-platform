@@ -30,6 +30,10 @@ const (
 	CoursesService_CreateTask_FullMethodName       = "/CoursesService/CreateTask"
 	CoursesService_FindTasks_FullMethodName        = "/CoursesService/FindTasks"
 	CoursesService_GetTask_FullMethodName          = "/CoursesService/GetTask"
+	CoursesService_CreateCourse_FullMethodName     = "/CoursesService/CreateCourse"
+	CoursesService_GetOwnerCourses_FullMethodName  = "/CoursesService/GetOwnerCourses"
+	CoursesService_GetCourse_FullMethodName        = "/CoursesService/GetCourse"
+	CoursesService_AddCourseTopic_FullMethodName   = "/CoursesService/AddCourseTopic"
 	CoursesService_CreateTag_FullMethodName        = "/CoursesService/CreateTag"
 	CoursesService_SearchTag_FullMethodName        = "/CoursesService/SearchTag"
 	CoursesService_RemoveTag_FullMethodName        = "/CoursesService/RemoveTag"
@@ -53,6 +57,10 @@ type CoursesServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*TaskResponse, error)
 	FindTasks(ctx context.Context, in *FindTasksRequest, opts ...grpc.CallOption) (*TasksResponse, error)
 	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*TaskResponse, error)
+	CreateCourse(ctx context.Context, in *CreateCourseRequest, opts ...grpc.CallOption) (*CourseResponse, error)
+	GetOwnerCourses(ctx context.Context, in *GetOwnerCoursesRequest, opts ...grpc.CallOption) (*CoursesResponse, error)
+	GetCourse(ctx context.Context, in *GetCourseRequest, opts ...grpc.CallOption) (*CourseResponse, error)
+	AddCourseTopic(ctx context.Context, in *AddCourseTopicRequest, opts ...grpc.CallOption) (*CourseResponse, error)
 	CreateTag(ctx context.Context, in *CreateTagRequest, opts ...grpc.CallOption) (*CreateTagResponse, error)
 	SearchTag(ctx context.Context, in *SearchTagsRequest, opts ...grpc.CallOption) (*SearchTagsResponse, error)
 	RemoveTag(ctx context.Context, in *RemoveTagRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -160,6 +168,42 @@ func (c *coursesServiceClient) GetTask(ctx context.Context, in *GetTaskRequest, 
 	return out, nil
 }
 
+func (c *coursesServiceClient) CreateCourse(ctx context.Context, in *CreateCourseRequest, opts ...grpc.CallOption) (*CourseResponse, error) {
+	out := new(CourseResponse)
+	err := c.cc.Invoke(ctx, CoursesService_CreateCourse_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) GetOwnerCourses(ctx context.Context, in *GetOwnerCoursesRequest, opts ...grpc.CallOption) (*CoursesResponse, error) {
+	out := new(CoursesResponse)
+	err := c.cc.Invoke(ctx, CoursesService_GetOwnerCourses_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) GetCourse(ctx context.Context, in *GetCourseRequest, opts ...grpc.CallOption) (*CourseResponse, error) {
+	out := new(CourseResponse)
+	err := c.cc.Invoke(ctx, CoursesService_GetCourse_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coursesServiceClient) AddCourseTopic(ctx context.Context, in *AddCourseTopicRequest, opts ...grpc.CallOption) (*CourseResponse, error) {
+	out := new(CourseResponse)
+	err := c.cc.Invoke(ctx, CoursesService_AddCourseTopic_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *coursesServiceClient) CreateTag(ctx context.Context, in *CreateTagRequest, opts ...grpc.CallOption) (*CreateTagResponse, error) {
 	out := new(CreateTagResponse)
 	err := c.cc.Invoke(ctx, CoursesService_CreateTag_FullMethodName, in, out, opts...)
@@ -237,6 +281,10 @@ type CoursesServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*TaskResponse, error)
 	FindTasks(context.Context, *FindTasksRequest) (*TasksResponse, error)
 	GetTask(context.Context, *GetTaskRequest) (*TaskResponse, error)
+	CreateCourse(context.Context, *CreateCourseRequest) (*CourseResponse, error)
+	GetOwnerCourses(context.Context, *GetOwnerCoursesRequest) (*CoursesResponse, error)
+	GetCourse(context.Context, *GetCourseRequest) (*CourseResponse, error)
+	AddCourseTopic(context.Context, *AddCourseTopicRequest) (*CourseResponse, error)
 	CreateTag(context.Context, *CreateTagRequest) (*CreateTagResponse, error)
 	SearchTag(context.Context, *SearchTagsRequest) (*SearchTagsResponse, error)
 	RemoveTag(context.Context, *RemoveTagRequest) (*emptypb.Empty, error)
@@ -280,6 +328,18 @@ func (UnimplementedCoursesServiceServer) FindTasks(context.Context, *FindTasksRe
 }
 func (UnimplementedCoursesServiceServer) GetTask(context.Context, *GetTaskRequest) (*TaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
+}
+func (UnimplementedCoursesServiceServer) CreateCourse(context.Context, *CreateCourseRequest) (*CourseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCourse not implemented")
+}
+func (UnimplementedCoursesServiceServer) GetOwnerCourses(context.Context, *GetOwnerCoursesRequest) (*CoursesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOwnerCourses not implemented")
+}
+func (UnimplementedCoursesServiceServer) GetCourse(context.Context, *GetCourseRequest) (*CourseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCourse not implemented")
+}
+func (UnimplementedCoursesServiceServer) AddCourseTopic(context.Context, *AddCourseTopicRequest) (*CourseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddCourseTopic not implemented")
 }
 func (UnimplementedCoursesServiceServer) CreateTag(context.Context, *CreateTagRequest) (*CreateTagResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTag not implemented")
@@ -495,6 +555,78 @@ func _CoursesService_GetTask_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CoursesService_CreateCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCourseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).CreateCourse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_CreateCourse_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).CreateCourse(ctx, req.(*CreateCourseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_GetOwnerCourses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOwnerCoursesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).GetOwnerCourses(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_GetOwnerCourses_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).GetOwnerCourses(ctx, req.(*GetOwnerCoursesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_GetCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCourseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).GetCourse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_GetCourse_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).GetCourse(ctx, req.(*GetCourseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CoursesService_AddCourseTopic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCourseTopicRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoursesServiceServer).AddCourseTopic(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CoursesService_AddCourseTopic_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoursesServiceServer).AddCourseTopic(ctx, req.(*AddCourseTopicRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CoursesService_CreateTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateTagRequest)
 	if err := dec(in); err != nil {
@@ -667,6 +799,22 @@ var CoursesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTask",
 			Handler:    _CoursesService_GetTask_Handler,
+		},
+		{
+			MethodName: "CreateCourse",
+			Handler:    _CoursesService_CreateCourse_Handler,
+		},
+		{
+			MethodName: "GetOwnerCourses",
+			Handler:    _CoursesService_GetOwnerCourses_Handler,
+		},
+		{
+			MethodName: "GetCourse",
+			Handler:    _CoursesService_GetCourse_Handler,
+		},
+		{
+			MethodName: "AddCourseTopic",
+			Handler:    _CoursesService_AddCourseTopic_Handler,
 		},
 		{
 			MethodName: "CreateTag",

@@ -28,6 +28,12 @@ func WithCategoryMapper(v CategoryMapper) HandlerOption {
 	}
 }
 
+func WithCourseMapper(v CourseMapper) HandlerOption {
+	return func(rt *Handler) {
+		rt.courseMapper = v
+	}
+}
+
 func WithLogger(v *logrus.Entry) HandlerOption {
 	return func(rt *Handler) {
 		rt.logger = v

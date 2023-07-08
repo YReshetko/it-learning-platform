@@ -22,6 +22,7 @@ type Courses struct {
 	categoryMapper   mappers.CategoryMapper
 	topicMapper      mappers.TopicMapper
 	taskMapper       mappers.TaskMapper
+	courseMapper     mappers.CourseMapper
 	logger           *logrus.Entry
 }
 
@@ -385,4 +386,40 @@ func (c *Courses) RemoveTaskTag(ctx http.Context, _ models.Empty) (models.Task, 
 	}
 
 	return c.taskMapper.ToModel(task.GetTask()), http.Status{StatusCode: rest.StatusOK}
+}
+
+func (c *Courses) CreateCourse(ctx http.Context, course models.Course) (models.Course, http.Status) {
+	logger := c.logger.WithField("method", "CreateCourse")
+
+	protoCourse := c.courseMapper.CourseToProto(course)
+	protoCourse.OwnerId = ctx.UserID.String()
+
+	rs, err := c.client.CreateCourse(ctx.Context(), &courses.CreateCourseRequest{Course: protoCourse})
+	if err != nil {
+		logger.WithError(err).Error("unable to create course")
+		return models.Course{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to create course",
+		}
+	}
+
+	return c.courseMapper.CourseToModel(rs.GetCourse()), http.Status{StatusCode: rest.StatusCreated}
+}
+
+func (c *Courses) GetOwnerCourses(ctx http.Context, _ models.Empty) (models.Courses, http.Status) {
+	logger := c.logger.WithField("method", "GetOwnerCourses")
+
+	userID := ctx.UserID.String()
+	rs, err := c.client.GetOwnerCourses(ctx.Context(), &courses.GetOwnerCoursesRequest{OwnerId: userID})
+	if err != nil {
+		logger.WithError(err).Error("unable to get owner courses")
+		return models.Courses{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to get owner courses",
+		}
+	}
+
+	return c.courseMapper.CoursesToModel(rs), http.Status{StatusCode: rest.StatusOK}
 }

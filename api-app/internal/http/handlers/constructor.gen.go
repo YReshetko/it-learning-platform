@@ -35,6 +35,12 @@ func WithClient(v clients.CoursesClient) CoursesOption {
 	}
 }
 
+func WithCourseMapper(v mappers.CourseMapper) CoursesOption {
+	return func(rt *Courses) {
+		rt.courseMapper = v
+	}
+}
+
 func WithLogger(v *logrus.Entry) CoursesOption {
 	return func(rt *Courses) {
 		rt.logger = v

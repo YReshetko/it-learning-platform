@@ -88,6 +88,20 @@ type TaskMapper interface {
 	toTagModel(in *courses.Tag) models.Tag
 }
 
+// CourseMapper mapper from proto to API models and vise versa
+// @Mapper
+type CourseMapper interface {
+	// CoursesToModel
+	// @SliceMapping(target="Courses", source="in.Course", this="CourseToModel")
+	CoursesToModel(in *courses.CoursesResponse) models.Courses
+	// CourseToModel
+	// @Mapping(target="ID", func="stringToUUID(in.Id)")
+	CourseToModel(in *courses.Course) models.Course
+	// CourseToProto
+	// @Mapping(target="Id", func="uuidToString(in.ID)")
+	CourseToProto(in models.Course) *courses.Course
+}
+
 func uuidToString(id uuid.UUID) string {
 	if id == emptyUUID {
 		return ""

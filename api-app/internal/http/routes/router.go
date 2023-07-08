@@ -34,10 +34,13 @@ type RouterServices struct {
 }
 
 func (r Router) Init(engine *gin.Engine) {
-	engine.POST("/api/v1/registration/user", protected(r.registration.CreateUser, r.services, []model.Role{model.ADMIN}))
-	engine.POST("/api/v1/registration/users", protected(r.registration.CreateUsers, r.services, []model.Role{model.ADMIN}))
+	// COMMON API
 	engine.GET("/api/v1/self", protected(r.self.GetUserInfo, r.services, model.AllRoles()))
 	engine.POST("/api/v1/logout", protected(r.self.Logout, r.services, model.AllRoles()))
+
+	// ADMIN API
+	engine.POST("/api/v1/registration/users", protected(r.registration.CreateUsers, r.services, []model.Role{model.ADMIN}))
+	engine.POST("/api/v1/registration/user", protected(r.registration.CreateUser, r.services, []model.Role{model.ADMIN}))
 
 	engine.POST("/api/v1/admin/technology", protected(r.courses.CreateTechnology, r.services, []model.Role{model.ADMIN}))
 	engine.GET("/api/v1/admin/technologies", protected(r.courses.GetTechnologies, r.services, []model.Role{model.ADMIN}))
@@ -58,6 +61,10 @@ func (r Router) Init(engine *gin.Engine) {
 	engine.DELETE("/api/v1/admin/topics/:topic_id/tags/:tag_name", protected(r.courses.RemoveTopicTag, r.services, []model.Role{model.ADMIN}))
 	engine.POST("/api/v1/admin/tasks/:task_id/tags", protected(r.courses.AddTaskTag, r.services, []model.Role{model.ADMIN}))
 	engine.DELETE("/api/v1/admin/tasks/:task_id/tags/:tag_name", protected(r.courses.RemoveTaskTag, r.services, []model.Role{model.ADMIN}))
+
+	// TEACHER API
+	engine.POST("/api/v1/teacher/courses", protected(r.courses.CreateCourse, r.services, []model.Role{model.TEACHER}))
+	engine.GET("/api/v1/teacher/courses", protected(r.courses.GetOwnerCourses, r.services, []model.Role{model.TEACHER}))
 }
 
 func protected[Rq any, Rs any](fn http.HandlerFunc[Rq, Rs], service *RouterServices, roles []model.Role) func(*gin.Context) {
