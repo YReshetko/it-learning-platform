@@ -312,6 +312,7 @@ func (_this_ CourseMapperImpl) courseToModel(in *_imp_1.Course) _imp_3.Course {
 		out0.Name = in.Name
 		out0.Description = in.Description
 		out0.Active = in.Active
+		out0.OwnerID = stringToUUID(in.OwnerId)
 	}
 
 	return out0

@@ -107,6 +107,7 @@ type modelCourses struct {
 // @Mapper
 type CourseMapper interface {
 	// @Mapping(target="ID", func="stringToUUIDPtr(in.Id)")
+	// @Mapping(target="OwnerID", func="stringToUUID(in.OwnerId)")
 	courseToModel(in *courses.Course) storage.Course
 	// @SliceMapping(target="Course", source="in.Values", this="courseToProto")
 	coursesToProto(in modelCourses) *courses.CoursesResponse

@@ -24,12 +24,12 @@ const menuItems = {
             {name: "Технологии", label: "admin-technologies"},
             {name: "Задачи", label: "admin-tasks"},
             {name: "Тэги", label: "admin-tags"},
+            {name: "Все курсы", label: "teacher-all-courses"},
         ]
     },
     "TEACHER": {
         label: "Преподаватель",
         menu: [
-            {name: "Все курсы", label: "teacher-all-courses"},
             {name: "Мои курсы", label: "teacher-my-courses"},
             {name: "Мои группы", label: "teacher-my-groups"},
             {name: "Создать группу", label: "teacher-ceate-group"}
@@ -84,12 +84,13 @@ const Workspace = ({user}) => {
         <div>
             <Box sx={{display: 'flex'}}>
                 {/*<AppBar position="fixed" sx={{ width: { sm: `calc(100% - ${drawerWidth}px)` }, ml: { sm: `${drawerWidth}px` }}}>*/}
-                <AppBar position="fixed" sx={{width: {sm: `calc(100% - ${appBarWidth}px)`} , ml: { sm: `${appBarWidth}px` }}}>
+                <AppBar position="fixed"
+                        sx={{width: {sm: `calc(100% - ${appBarWidth}px)`}, ml: {sm: `${appBarWidth}px`}}}>
                     <Toolbar>
                         <IconButton color="inherit" onClick={handleMenuOpen}>
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                        <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
                             {user.firstName} {user.lastName}
                         </Typography>
                         <Button onClick={logout} color="inherit">Выход</Button>
@@ -113,9 +114,9 @@ const Workspace = ({user}) => {
                 </Box>
                 <Box
                     component="main"
-                    sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${appBarWidth}px)` } }}
+                    sx={{flexGrow: 1, p: 3, width: {sm: `calc(100% - ${appBarWidth}px)`}}}
                 >
-                    <Toolbar />
+                    <Toolbar/>
                     <Layout layout={layout}/>
                 </Box>
             </Box>
