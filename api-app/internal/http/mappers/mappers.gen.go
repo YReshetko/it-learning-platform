@@ -340,6 +340,47 @@ func (_this_ CourseMapperImpl) CourseToModel(in *_imp_1.Course) _imp_2.Course {
 			return res
 		}(in.SeqNo)
 		out0.Active = in.Active
+
+		_var_0 := in.Topics
+		_var_1 := make([]_imp_2.CourseTopic, len(_var_0), len(_var_0))
+		for _var_2, _var_3 := range _var_0 {
+			_var_1[_var_2] = _this_.CourseTopicToModel(_var_3)
+		}
+		out0.Topics = _var_1
+
+	}
+
+	return out0
+}
+
+func (_this_ CourseMapperImpl) CourseTopicToModel(in *_imp_1.CourseTopic) _imp_2.CourseTopic {
+	out0 := _imp_2.CourseTopic{}
+	if in != nil {
+		out0.ID = stringToUUID(in.Id)
+		out0.SeqNo = func(v int32) int {
+			res := int(v)
+			return res
+		}(in.SeqNo)
+		out0.Name = in.Name
+		out0.Description = in.Description
+		out0.Active = in.Active
+
+		_var_0 := in.Tags
+		_var_1 := make([]_imp_2.Tag, len(_var_0), len(_var_0))
+		for _var_2, _var_3 := range _var_0 {
+			_var_1[_var_2] = _this_.toTagModel(_var_3)
+		}
+		out0.Tags = _var_1
+
+	}
+
+	return out0
+}
+
+func (_this_ CourseMapperImpl) toTagModel(in *_imp_1.Tag) _imp_2.Tag {
+	out0 := _imp_2.Tag{}
+	if in != nil {
+		out0.Name = in.Name
 	}
 
 	return out0

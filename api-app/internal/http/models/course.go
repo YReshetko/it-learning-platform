@@ -81,3 +81,17 @@ type CourseTopic struct {
 	Active      bool      `json:"active"`
 	Tags        []Tag     `json:"tags"`
 }
+
+type FullTechnologyList struct {
+	Technologies []TechnologyWithCategory `json:"technologies"`
+}
+
+type TechnologyWithCategory struct {
+	Technology Technology           `json:"technology"`
+	Categories []CategoryWithTopics `json:"categories"`
+}
+
+type CategoryWithTopics struct {
+	Category Category `json:"category"`
+	Topics   []Topic  `json:"topics"`
+}

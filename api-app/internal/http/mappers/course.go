@@ -96,7 +96,13 @@ type CourseMapper interface {
 	CoursesToModel(in *courses.CoursesResponse) models.Courses
 	// CourseToModel
 	// @Mapping(target="ID", func="stringToUUID(in.Id)")
+	// @SliceMapping(target="Topics", source="in.Topics", this="CourseTopicToModel")
 	CourseToModel(in *courses.Course) models.Course
+	// CourseTopicToModel
+	// @Mapping(target="ID", func="stringToUUID(in.Id)")
+	// @SliceMapping(target="Tags", source="in.Tags", this="toTagModel")
+	CourseTopicToModel(in *courses.CourseTopic) models.CourseTopic
+	toTagModel(in *courses.Tag) models.Tag
 	// CourseToProto
 	// @Mapping(target="Id", func="uuidToString(in.ID)")
 	CourseToProto(in models.Course) *courses.Course

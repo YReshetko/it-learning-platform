@@ -65,6 +65,8 @@ func (r Router) Init(engine *gin.Engine) {
 	// TEACHER API
 	engine.POST("/api/v1/teacher/courses", protected(r.courses.CreateCourse, r.services, []model.Role{model.TEACHER}))
 	engine.GET("/api/v1/teacher/courses", protected(r.courses.GetOwnerCourses, r.services, []model.Role{model.TEACHER}))
+	engine.GET("/api/v1/teacher/courses/:course_id", protected(r.courses.GetCourse, r.services, []model.Role{model.TEACHER}))
+	engine.GET("/api/v1/teacher/technologies", protected(r.courses.GetFullTechnologyList, r.services, []model.Role{model.TEACHER}))
 }
 
 func protected[Rq any, Rs any](fn http.HandlerFunc[Rq, Rs], service *RouterServices, roles []model.Role) func(*gin.Context) {

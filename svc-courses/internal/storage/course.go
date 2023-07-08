@@ -48,7 +48,7 @@ func (cs *CourseStorage) CreateCourseTopic(courseTopic CourseTopic) (CourseTopic
 
 func (cs *CourseStorage) GetCourseTopics(courseID uuid.UUID) ([]CourseTopic, error) {
 	var courseTopics []CourseTopic
-	rs := *cs.db.Preload("Topic").Where("course_id = ?", courseID.String()).Find(&courseTopics)
+	rs := *cs.db.Preload("Topic").Preload("Topic.Tags").Where("course_id = ?", courseID.String()).Find(&courseTopics)
 	if rs.Error != nil {
 		return courseTopics, fmt.Errorf("unable to course topics: %w", rs.Error)
 	}

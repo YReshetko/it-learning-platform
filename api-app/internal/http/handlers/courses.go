@@ -423,3 +423,70 @@ func (c *Courses) GetOwnerCourses(ctx http.Context, _ models.Empty) (models.Cour
 
 	return c.courseMapper.CoursesToModel(rs), http.Status{StatusCode: rest.StatusOK}
 }
+
+func (c *Courses) GetCourse(ctx http.Context, _ models.Empty) (models.Course, http.Status) {
+	logger := c.logger.WithField("method", "GetCourse")
+
+	courseID := ctx.GinCtx.Param("course_id")
+
+	rs, err := c.client.GetCourse(ctx.Context(), &courses.GetCourseRequest{CourseId: courseID})
+	if err != nil {
+		logger.WithError(err).Error("unable to get course")
+		return models.Course{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to get course",
+		}
+	}
+
+	return c.courseMapper.CourseToModel(rs.GetCourse()), http.Status{StatusCode: rest.StatusOK}
+}
+
+// TODO remove complexity to get the whole data in one request to svc-courses
+func (c *Courses) GetFullTechnologyList(ctx http.Context, _ models.Empty) (models.FullTechnologyList, http.Status) {
+	logger := c.logger.WithField("method", "GetFullTechnologyList")
+
+	response := models.FullTechnologyList{}
+
+	t, err := c.client.GetTechnologies(ctx.Context(), &emptypb.Empty{})
+	if err != nil {
+		logger.WithError(err).Error("unable to get technologies")
+		return models.FullTechnologyList{}, http.Status{
+			Error:      err,
+			StatusCode: rest.StatusInternalServerError,
+			Message:    "unable to get technologies",
+		}
+	}
+
+	for i, technology := range t.GetTechnologies() {
+		cat, err := c.client.GetCategories(ctx.Context(), &courses.GetCategoriesRequest{TechnologyId: technology.GetId()})
+		if err != nil {
+			logger.WithError(err).Error("unable to get categories")
+			return models.FullTechnologyList{}, http.Status{
+				Error:      err,
+				StatusCode: rest.StatusInternalServerError,
+				Message:    "unable to get categories",
+			}
+		}
+
+		response.Technologies = append(response.Technologies, models.TechnologyWithCategory{Technology: c.technologyMapper.ToModel(technology)})
+
+		for _, category := range cat.GetCategories() {
+			topics, err := c.client.GetTopics(ctx.Context(), &courses.GetTopicsRequest{CategoryId: category.GetId()})
+			if err != nil {
+				logger.WithError(err).Error("unable to get topics")
+				return models.FullTechnologyList{}, http.Status{
+					Error:      err,
+					StatusCode: rest.StatusInternalServerError,
+					Message:    "unable to get topics",
+				}
+			}
+			response.Technologies[i].Categories = append(response.Technologies[i].Categories, models.CategoryWithTopics{
+				Category: c.categoryMapper.ToModel(category),
+				Topics:   c.topicMapper.ToModels(topics).Topics,
+			})
+		}
+	}
+
+	return response, http.Status{StatusCode: rest.StatusOK}
+}

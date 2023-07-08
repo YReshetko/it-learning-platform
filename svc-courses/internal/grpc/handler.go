@@ -376,7 +376,33 @@ func (h *Handler) GetCourse(_ context.Context, rq *courses.GetCourseRequest) (*c
 		return &courses.CourseResponse{}, status.Error(codes.Internal, "unable to get course")
 	}
 
-	return &courses.CourseResponse{Course: h.courseMapper.courseToProto(course)}, nil
+	courseTopics, err := h.storage.GetCourseTopics(courseID)
+	if err != nil {
+		logger.WithError(err).Error("unable to get topics")
+		return &courses.CourseResponse{}, status.Error(codes.Internal, "unable to get topics")
+	}
+
+	courseProto := h.courseMapper.courseToProto(course)
+	courseProto.Topics = make([]*courses.CourseTopic, len(courseTopics))
+
+	for i, topic := range courseTopics {
+		tags := make([]*courses.Tag, len(topic.Topic.Tags))
+		for j, tag := range topic.Topic.Tags {
+			tags[j] = h.topicMapper.toTagProto(tag)
+		}
+
+		courseProto.Topics[i] = &courses.CourseTopic{
+			Id:          topic.ID.String(),
+			TopicId:     topic.Topic.ID.String(),
+			SeqNo:       int32(topic.SeqNo),
+			Name:        topic.Topic.Name,
+			Description: topic.Topic.Description,
+			Active:      topic.Active,
+			Tags:        tags,
+		}
+	}
+
+	return &courses.CourseResponse{Course: courseProto}, nil
 }
 
 func (h *Handler) AddCourseTopic(ctx context.Context, rq *courses.AddCourseTopicRequest) (*courses.CourseResponse, error) {
